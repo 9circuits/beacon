@@ -1,0 +1,4 @@
+- Make Gentoo ebuild
+- Support <book> based documents
+- Make DOM Tree more active in terms of rearranging documents
+- Integrate MochiKit (complete) to work with Dojo, and then switch to MochiKit's DnD

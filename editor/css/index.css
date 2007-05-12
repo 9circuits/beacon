@@ -1,0 +1,100 @@
+body {
+    margin:0;
+    padding:0;
+    color:#303030;
+    background:#fafafa;    
+}
+
+#loading {
+    position:absolute;
+    left:47%; top:47%;
+    text-align:center;
+    font:1em;
+    display:block;
+}
+
+#logo img {
+    width:25%;
+}
+
+#centre {
+    background:#7a5ada;
+    color:#ffffff;
+    text-align:center;
+    position:absolute;
+    width:80%; height:auto;
+    left:10%; right:10%; top:40%;
+    font:1.2em arial;
+    display:block;
+}
+
+.box {
+    background:#dddaec;
+    color:#000000;
+    text-align:center;
+    position:absolute;
+    font:1.2em arial;
+    top:47%; width:35%;
+    height:auto;
+    display:block;
+    cursor:pointer;
+}
+
+#newbox {
+    left:10%;
+}
+
+#editbox {
+    left:55%;
+}
+
+#gobox {
+    width:8%;
+    left:46%;
+    display:block;
+}
+
+.menu {
+    position:absolute;
+    width:35%; height:auto; top:52%;
+    background-color: #006699;
+    color: #FFFFFF;
+    overflow:hidden;
+    display:block;
+}
+
+#newmenu {
+    left:10%;
+}
+
+#editmenu {
+    left:55%;
+}
+
+.aform {
+    font: 0.9em arial;
+    margin: 5px;
+}
+
+.aform input, textarea {
+    font: 0.9em arial;
+    border:1px solid #ddd;
+    margin-left:20px;
+    width:200px;
+    background:#707070;
+    outline:none;
+}
+
+.aform table {
+    font: 0.9em arial;
+    border:0;
+    width:100%;
+}
+
+.cancel {
+    position:relative;
+    bottom:2%; right:2%;
+    text-align:right;
+    display:block;
+    cursor:pointer;
+}

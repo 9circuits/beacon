@@ -1,0 +1,6 @@
+<?php
+
+//$confurl = 'http://guidexml.soc.gentoo.org/guidexml/editor/';
+$confurl = 'http://localhost/guidexml/editor/';
+
+?>

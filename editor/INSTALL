@@ -1,0 +1,9 @@
+Beacon v0.1
+~~~~~~~~~~~
+
+Installation is a no-brainer. No web-server writeable directories required. 
+Just copy the `editor' folder to your `htdocs' directory. Make sure you
+change the $confurl variable in the `conf' file to point to the correct
+location of the `editor' directory on your webserver.
+
+You're all good to go!

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repodoc-result xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="repodoc-result.xsd">
+
+    <module id="banned" result="ok">
+        <reason/>
+    </module>
+
+    <module id="header" result="ok">
+        <reason/>
+    </module>
+
+    <module id="length" result="ok">
+        <reason/>
+    </module>
+
+    <module id="links" result="ok">
+        <reason/>
+    </module>
+
+    <module id="path" result="ok">
+        <reason/>
+    </module>
+
+    <module id="utf8" result="ok">
+        <reason/>
+    </module>
+
+    <module id="xml" result="ok">
+        <reason/>
+    </module>
+
+</repodoc-result>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="beacon-config" type="bconfig"/>
+    
+    <xs:complexType name="bconfig">
+	<xs:sequence>
+            <xs:element name="metadata" type="mdata"/>
+	    <xs:element name="tools" type="tdata"/>
+	    <xs:element name="tree" type="tree"/>
+            <xs:element name="inline" type="tinymce"/>
+	    <xs:element name="pre" type="tinymce"/>
+	    <xs:element name="tabs" type="tabs"/>
+	    <xs:element name="footer" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="mdata">
+        <xs:sequence>
+            <xs:element name="field" type="field" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="tabs">
+        <xs:sequence>
+            <xs:element name="tab" type="tfield" maxOccurs="unbounded"/>
+	</xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="tdata">
+        <xs:sequence>
+            <xs:element name="field" type="tool" maxOccurs="unbounded"/>
+	</xs:sequence>
+	<xs:attribute name="label" type="xs:string" use="required"/>
+	<xs:atrribute name="icon" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="tree">
+    	<xs:attribute name="label" type="xs:string" use="required"/>
+	<xs:atrribute name="icon" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="tinymce">
+        
+    </xs:complexType>
+    
+    <xs:complexType name="tfield">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="label" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="tool">
+        <xs:attribute name="label" type="xs:string" use="required"/>
+        <xs:attribute name="caption" type="xs:string" use="required"/>
+        <xs:attribute name="guide" type="xs:string" use="required"/>
+        <xs:attribute name="icon" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="field">
+        <xs:attribute name="label" type="xs:string" use="required"/>
+        <xs:attribute name="caption" type="xs:string" use="required"/>
+        <xs:attribute name="guide" type="xs:string" use="required"/>
+        <xs:attribute name="fnote" type="xs:string" use="required"/>
+        <xs:attribute name="icon" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+</xs:schema>
