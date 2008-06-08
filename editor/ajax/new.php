@@ -2,10 +2,11 @@
 
 if (isset($_POST['isedit']) and $_POST['isedit'] == '1') {
     $template = DOMDocument::load($_FILES['xmlf']['tmp_name']);
+//echo "edit mode\n";
 } else {
     $fields = array('title', 'author', 'abstract', 'date');
     $template = DOMDocument::load('../xml/new-template.xml');
-
+	//echo "new mode\n";
     foreach ($fields as $field) {
 	$value = $_POST[$field];
 	$node =  $template->getElementsByTagName($field)->item(0);
@@ -79,6 +80,7 @@ fwrite($treeFile, $tree);
 fclose($treeFile);
 
 /* Let's go! */
+//echo "Am done!";
 header('Location: ../editor.php?id='.urlencode($tmpName));
 
 ?>

@@ -1,0 +1,109 @@
+* {
+	
+}
+
+body {
+	margin: 0;
+	background: #e0eff3 url(../images/page-bg.jpg) top left repeat;
+
+}
+
+#container {
+	margin: 0px auto 0px auto;
+	width: 950px;
+}
+
+#header {
+	width: 950px;
+	height: 225px;
+	background: url(../images/header.png) top left no-repeat;
+}
+
+#content {
+	width: 950px;
+	height: 450px;
+	background: url(../images/content-bg.png) top left no-repeat;
+}
+
+#left {
+	float: left;
+	width: 272px;
+	height: 400px;
+	margin: 25px 0px 0px 25px;
+	/*border: 1px solid #000;*/
+}
+
+#right {
+	float: right;
+	width: 620px;
+	height: 400px;
+	margin: 25px 25px 0px 0px;
+	/*border: 1px solid #000;*/
+}
+
+.breaker {
+	display: block;
+	width: 272px;
+	height: 5px;
+	background: url(../images/breaker.jpg) top left no-repeat;
+}
+.newlink {
+	display: block;
+	width: 270px;
+	height: 125px;
+	background: url(../images/new-button.png) top left no-repeat;
+}
+
+.editlink {
+	display: block;
+	width: 270px;
+	height: 125px;
+	background: url(../images/edit-button.png) top left no-repeat;
+}
+
+.recentlink {
+	display: block;
+	width: 270px;
+	height: 125px;
+	background: url(../images/recent-button.png) top left no-repeat;
+}
+
+#initial{
+	font: 18pt normal "Helvetica";
+	text-align: center;
+}
+
+#newform,#editform table{
+	margin: 15px 0px 0px 25px;
+}
+
+
+#newform,#editform td{
+	padding: 0px 0px 5px 5px;
+}
+
+.button
+{
+width: 75px;
+height:35px;
+border: 3px double #999999;
+border-top-color: #CCCCCC;
+border-left-color: #CCCCCC;
+padding: 0.25em;
+background-color: #FFFFFF;
+background: #fff url(../images/go.png) right;
+background-repeat: no-repeat;
+color: #333333;
+text-align: left;
+font: 12pt bold "Trebuchet MS";
+}
+
+.button:active
+{
+border: 3px double #CCCCCC;
+border-top-color: #999999;
+border-left-color: #999999;
+}
+
+
+
