@@ -82,6 +82,16 @@ body {
 	padding: 0px 0px 5px 5px;
 }
 
+#upload_target {
+	margin: 0px 0px 0px 25px;
+}
+
+#cool {
+	text-align: center;
+	margin: 10px;
+}
+
+
 .button
 {
 width: 75px;

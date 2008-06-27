@@ -3,7 +3,7 @@
                xsi:noNamespaceSchemaLocation="config.xsd">
     
     <!-- No need to translate! -->           
-    <version>0.2</version>
+    <version>0.3</version>
 
     <!-- Translate only label, caption and fnote -->
     <metadata cancelLabel="Cancel" cancelIcon="cancel.png" errorIcon="error.png">

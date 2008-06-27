@@ -36,6 +36,18 @@ $version = $version->item(0)->nodeValue;
 		dojo.require("dijit.form.Textarea");
     </script>
 
+	<script language="javascript" type="text/javascript">
+
+
+
+	function stopUpload(val){
+	     
+		  document.getElementById('var').value = val;
+	      return true;   
+	}
+
+	</script>
+
 </head>
 
 <body class="tundra">
@@ -50,8 +62,8 @@ $version = $version->item(0)->nodeValue;
 				<div class="breaker"></div>
 				<a href="#" class="editlink" onclick="dijit.byId('form').setHref('edit-form.php')"></a>
 				<div class="breaker"></div>
-				<a href="#" class="recentlink"></a>
-				<div class="breaker"></div>
+				<!--<a href="#" class="recentlink"></a>
+				<div class="breaker"></div>-->
 			</div>
 			
 			<div id="right">
@@ -59,12 +71,10 @@ $version = $version->item(0)->nodeValue;
 		                <div id="initial">Select a task.</div>
 		        </div>
 		
-				<div id="new" style="display:none">
-					Form to create a new document!
-				</div>
+		
 				
-
 			</div>
+			
 			
 		</div>
 	</div>

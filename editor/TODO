@@ -1,4 +1,6 @@
-- Make Gentoo ebuild
-- Support <book> based documents
-- Make DOM Tree more active in terms of rearranging documents
-- Integrate MochiKit (complete) to work with Dojo, and then switch to MochiKit's DnD
+Last updated on 27 June, 2008, Beacon Version 0.3
+
+- Complete the Rich Text Editor
+- Enable more actions via the DOM tree
+- Cleanup editor.js
+- Complete HTML to GuideXML XSLT

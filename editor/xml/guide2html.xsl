@@ -1,94 +1,308 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"> 
 
-<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
+	<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 
-<xsl:template match="guide">
-    <div id="guide" link="{@link}">
-	<div id="sideContent">
-	    <div class="date"><hr/><b>Updated</b><br/><div dojoType="inlineEditBox"><xsl:value-of select="date"/></div></div>
-	    <div class="abstract"><hr/>	
-		<b>Summary</b><br/>
-		<p dojoType="inlineEditBox" mode="textarea">
-		    <xsl:value-of select="abstract"/>
-		</p>
-	    </div>
-	    <div class="authors">
-		<hr/>
-		<xsl:for-each select="author">
-		    <div class="author">
-			<xsl:choose>
-			    <xsl:when test="mail">
-				<xsl:for-each select="mail">
-				    <a class="mail" href="{@link}" dojoType="inlineEditBox"><xsl:value-of select="."/></a><br/>
-				</xsl:for-each>
-			    </xsl:when>
-			    <xsl:otherwise>
-				<a class="mail" dojoType="inlineEditBox"><xsl:value-of select="."/></a><br/>
-			    </xsl:otherwise>
-			</xsl:choose>
-			<i dojoType="inlineEditBox"><xsl:value-of select="@title"/></i><br/><br/>
-		    </div>
-		</xsl:for-each>
-		<hr/>
-	    </div>
-	</div>
-	<div id="mainContent">
-	    <div class="title">
-		<h1 dojoType="inlineEditBox"><xsl:value-of select="title"/></h1>
-	    </div>
-	    <xsl:for-each select="chapter">
-		<div class="chapter">
-		    <h2 dojoType="inlineEditBox"><xsl:value-of select="title"/></h2>
-		    <xsl:for-each select="section">
-			<div class="section">
-			    <h3 dojoType="inlineEditBox"><xsl:value-of select="title"/></h3>
-			    <xsl:for-each select="body">
-				<xsl:for-each select="descendant::*">
-				    <xsl:if test="local-name() = 'p'">
-					<div class="p" dojoType="inlineEditBox" mode="textarea">
-					    <xsl:copy-of select="."/>
-					</div>
-				    </xsl:if>
-				    <xsl:if test="local-name() = 'pre'">
-					<div class="code">
-					    <div class="codeTitle">
-					    <table border="0" width="100%">
-						<tr>
-						    <td width="10%">Code Listing: </td>
-						    <td><div dojoType="inlineEditBox"><xsl:value-of select="@caption"/></div></td>
-						</tr>
-					    </table>
-					    </div>
-					    <div dojoType="inlineEditBox" mode="textarea">
-						<xsl:copy-of select="."/>
-					    </div>
-					</div>
-				    </xsl:if>
-				    <xsl:if test="local-name() = 'note'">
-					<div class="note" dojoType="inlineEditBox">
-					    <xsl:copy-of select="."/>
-					</div>
-				    </xsl:if>
-				    <xsl:if test="local-name() = 'warn'">
-					<div class="warn" dojoType="inlineEditBox">
-					    <xsl:copy-of select="."/>
-					</div>
-				    </xsl:if>
-				    <xsl:if test="local-name() = 'impo'">
-					<div class="impo" dojoType="inlineEditBox">
-					    <xsl:copy-of select="."/>
-					</div>
-				    </xsl:if>
-				</xsl:for-each>
-			    </xsl:for-each>
+	<xsl:template match="/">
+		<xsl:apply-templates select="guide"/>
+	</xsl:template>
+
+	<xsl:template match="guide">
+			<style type="text/css" media="all">
+			@import "../css/guide.css";
+		</style>
+		<body>
+		<div id="guide" link="{@link}">
+			<div id="sideContent">
+				<hr/>
+				<xsl:apply-templates select="date" />
+				<hr />
+				<xsl:apply-templates select="abstract" />
+				<hr />
+				<xsl:apply-templates select="author" />
+				<hr />		
+				<xsl:apply-templates select="version" />
 			</div>
-		    </xsl:for-each>
+			<div id="mainContent">
+				<h1 id="doc_chap0"><xsl:value-of select="title" /></h1>
+				<xsl:apply-templates select="chapter" />
+			</div>
 		</div>
-	    </xsl:for-each>
-	</div>
-    </div>
+		<xsl:apply-templates select="version" />
+	</body>
+	</xsl:template>
+	
+	<xsl:template match="date">
+		<p title="guideDate" class="alttext" align="center">Updated <span title="guideDateValue"><xsl:apply-templates /></span></p>
+	</xsl:template>
+
+	<xsl:template match="abstract">
+		<p title="guideAbstract" class="alttext"><b>Summary: </b> <span title="guideAbstractValue"><xsl:apply-templates /></span></p>
+	</xsl:template>
+
+	<xsl:template match="author">
+		<p title="guideAuthor" class="alttext"><xsl:apply-templates /><br /><i title="guideAuthorTitle"><xsl:value-of select="@title"/></i></p><br />
+	</xsl:template>
+
+	<xsl:template match="version">
+		<div title="guideVersion" class="version"><xsl:apply-templates /></div>
+	</xsl:template>
+
+	<xsl:template match="mail">
+		<xsl:choose>
+			<xsl:when test="string-length(text()) &gt; 0">
+				<a title="guideMail" linkval="{@link}" href="mailto:{@link}" class="altlink"><b title="guideMailValue"><xsl:apply-templates /></b></a>
+			</xsl:when>
+			<xsl:otherwise>
+				<a title="guideMail"><b title="guideMailValue"><xsl:value-of select="@link"/></b></a>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+<xsl:template match="title">
 </xsl:template>
 
+	<xsl:template match="chapter">
+		<xsl:variable name="chid">
+		   <xsl:value-of select="count(//guide/chapter) - count(following::chapter)"/> 
+		</xsl:variable>
+		<div id="doc_chap{$chid}" title="guideChapter">
+			<p title="guideChapterTitle" class="chaphead">
+				<xsl:value-of select="title" />
+			</p>
+			<xsl:apply-templates />
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="section">
+		<xsl:variable name="secid">
+		   <xsl:value-of select="1+count(preceding-sibling::section)"/> 
+		</xsl:variable>
+		<xsl:variable name="chid">
+		   <xsl:value-of select="count(//guide/chapter) - count(following::chapter)"/> 
+		</xsl:variable>
+		<div id="doc_chap{$chid}_sec{$secid}" title="guideSection">
+			<p title="guideSectionTitle" class="secthead">
+				<xsl:value-of select="title" />
+			</p>
+			<xsl:apply-templates />
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="body">
+		<div title="guideBody">
+			<xsl:apply-templates />
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="p">
+		<xsl:choose>
+			<xsl:when test="string-length(@by) &gt; 0">
+				<p title="guideEpigraph" class="epigraph"><xsl:apply-templates />
+				<br /><br /><span title="guideSignature" class="episig">- <xsl:value-of select="@by" /></span><br /><br /></p>
+			</xsl:when>
+			<xsl:otherwise>
+				<p title="guideParagraph">
+					<xsl:apply-templates />
+				</p>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template match="uri">
+		<xsl:choose>
+			<xsl:when test="string-length(@link) &gt; 0">
+				<a title="guideLink" href="{@link}" linkval="{@text}">
+					<xsl:apply-templates />
+				</a>
+			</xsl:when>
+			<xsl:otherwise>
+				<a title="guideLink" href="{text()}">
+					<xsl:apply-templates />
+				</a>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template match="pre">
+		<div title="guideBlock">
+			<div title="guidePreHeader" class="codetitle" style="background: #7a5ada; margin: 0px;">
+				Code Listing: <span title="guidePreTitle"><xsl:value-of select="@caption"/></span>
+			</div>
+			<div title="guidePreCode" style="background: #eeeeff;">
+				<pre title="guideCodeBox"><xsl:apply-templates /></pre>
+			</div>
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="i">
+		<span title="guideCodeInput" class="code-input">
+			<xsl:apply-templates />
+		</span>
+	</xsl:template>
+	
+	<xsl:template match="path">
+		<span title="guideCodepath" class="path" dir="ltr">
+			<xsl:apply-templates />
+		</span>
+	</xsl:template>
+	
+	<xsl:template match="note">
+		<div title="guideBlock">
+		<p title="guideBlock" class="ncontent" style="background:#bbffbb;">
+			<span title="guideNote" class="note">
+				<b>Note: </b>
+				<span title="guideNoteValue"><xsl:apply-templates /></span>
+			</span>
+		</p>
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="warn">
+		<div title="guideBlock">
+		<p title="guideBlock" class="ncontent" style="background:#ffbbbb;">
+			<span title="guideWarning" class="warn">
+				<b>Warning: </b>
+				<span title="guideWarnValue"><xsl:apply-templates /></span>
+			</span>
+		</p>
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="impo">
+		<div title="guideBlock">
+		<p title="guideBlock" class="ncontent" style="background:#ffffbb;">
+			<span title="guideImportant" class="impo">
+				<b>Important: </b>
+				<span title="guideImpoValue"><xsl:apply-templates /></span>
+			</span>
+		</p>
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="comment">
+		<span title="guideComment" class="code-comment">
+			<xsl:apply-templates />
+		</span>
+	</xsl:template>
+	
+	<xsl:template match="c">
+		<span title="guideCode" class="code" dir="ltr">
+			<xsl:apply-templates />
+		</span>
+	</xsl:template>
+	
+	<xsl:template match="e">
+		<span title="guideEm" class="emphasis">
+			<xsl:apply-templates />
+		</span>
+	</xsl:template>
+	
+	<xsl:template match="keyword">
+		<span title="guideKeyword" class="code-keyword">
+			<xsl:apply-templates />
+		</span>
+	</xsl:template>
+	
+	<xsl:template match="ident">
+		<span title="guideIdentifier" class="code-identifier">
+			<xsl:apply-templates />
+		</span>
+	</xsl:template>
+	
+	<xsl:template match="const">
+		<span title="guideConstant" class="code-constant">
+			<xsl:apply-templates />
+		</span>
+	</xsl:template>
+	
+	<xsl:template match="stmt">
+		<span title="guideStatement" class="code-statement">
+			<xsl:apply-templates />
+		</span>
+	</xsl:template>
+	
+	<xsl:template match="var">
+		<span title="guideVariable" class="code-variable">
+			<xsl:apply-templates />
+		</span>
+	</xsl:template>
+	
+	<xsl:template match="sub">
+		<sub>
+			<xsl:apply-templates />
+		</sub>
+	</xsl:template>
+	
+	<xsl:template match="sup">
+		<sup>
+			<xsl:apply-templates />
+		</sup>
+	</xsl:template>
+	
+	<xsl:template match="b">
+		<b>
+			<xsl:apply-templates />
+		</b>
+	</xsl:template>
+	
+	<xsl:template match="table">
+		<table class="ntable">
+			<xsl:apply-templates />
+		</table>
+	</xsl:template>
+	
+	<xsl:template match="tr">
+		<tr>
+			<xsl:apply-templates />
+		</tr>
+	</xsl:template>
+	
+	<xsl:template match="th">
+		<th colspan="{@colspan}" rowspan="{@rowspan}" align="{@align}" class="infohead" >
+			<xsl:apply-templates />
+		</th>
+	</xsl:template>
+	
+	<xsl:template match="ti">
+		<td colspan="{@colspan}" rowspan="{@rowspan}" align="{@align}" class="tableinfo" >
+			<xsl:apply-templates />
+		</td>
+	</xsl:template>
+	
+	<xsl:template match="ul">
+		<ul title="guideBlock">
+			<xsl:apply-templates />
+		</ul>
+	</xsl:template>
+	
+	<xsl:template match="ol">
+		<ol title="guideBlock">
+			<xsl:apply-templates />
+		</ol>
+	</xsl:template>
+	
+	<xsl:template match="li">
+		<li>
+			<xsl:apply-templates />
+		</li>
+	</xsl:template>
+	
+	<xsl:template match="dl">
+		<dl>
+			<xsl:apply-templates />
+		</dl>
+	</xsl:template>
+	
+	<xsl:template match="dt">
+		<dt>
+			<xsl:apply-templates />
+		</dt>
+	</xsl:template>
+	
+	<xsl:template match="dd">
+		<dd>
+			<xsl:apply-templates />
+		</dd>
+	</xsl:template>
+	
 </xsl:stylesheet>

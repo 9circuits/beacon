@@ -8,7 +8,9 @@ $fields = $metadata->getElementsByTagName('field');
 ?>
 
 <div id="newform">
-	<form name="newform" action="ajax/new.php" method="POST">
+	<form enctype="multipart/form-data" name="editform" action="ajax/new.php" method="POST">
+		<input type="hidden" name="isnew" value="1"/>
+		
         <table>
         <?php
             for ($i = 0; $i < $fields->length; $i++) {
@@ -55,6 +57,10 @@ $fields = $metadata->getElementsByTagName('field');
             }
         ?>
 		<tr><td align="center" colspan ="2"><input class="button" type="submit" value="Go!"></td></tr>
+
         </table>
+
     </form>
+
 </div>
+
