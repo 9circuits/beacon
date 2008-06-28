@@ -21,7 +21,10 @@ $version = $version->item(0)->nodeValue;
  
 <link rel="stylesheet" href="css/editor.css" type="text/css" media="screen" />
 
-<!--<script language="Javascript" type="text/javascript" src="js/edit_area/edit_area_full.js"></script>-->
+<script language="Javascript" type="text/javascript" src="js/edit_area/edit_area_full.js"></script>
+<link rel="stylesheet" href="css/lightbox.css" type="text/css" />
+<script language="JavaScript" src="js/prototype.js" type="text/javascript"></script>
+<script language="JavaScript" src="js/lightbox.js" type="text/javascript"></script>
 
 <script language="JavaScript" type="text/JavaScript" src="js/editor.js"></script>
 
@@ -60,20 +63,12 @@ $version = $version->item(0)->nodeValue;
 					<div id="designview" >
 
 					<div class="toolbar">
-					<input class="button" type="button" value="Get HTML" onClick="getHTML();" /> 
+					<a class="lbOn" href="dialogs/sourceview.html">Get Source</a> 
 					<input class="button" type="button" value="Get Text" onClick="alert(getText());" />
-					<span class="separator">|</span>
-					<input class="button" type="button" value="Copy" id="copy" onClick="execute(this, null);"  />
-					<input class="button" type="button" value="Paste" id="paste" onClick="execute(this, null);" />
-					<span class="separator">|</span>
-					<input class="button" type="button" value="Undo" id="undo" onClick="execute(this, null);" />
-					<input class="button" type="button" value="Redo" id="redo" onClick="execute(this, null);" />
-					<span class="separator">|</span>
-					<input class="button" type="button" value="Clear Formatting" id="removeformat" onClick="execute(this, null);" />
 					<hr />
 
-					<input class="button" type="button" value="Insert Chapter" id="chapter" onClick="execute(this, 'chapter');" />
-					<input class="button" type="button" value="Insert Section" id="section" onClick="execute(this, 'section');" />
+					<a class="lbOn" href="dialogs/addchapter.html">Add Chapter</a> 
+					<a class="lbOn" href="dialogs/addsection.html">Add Section</a> 
 					<span class="separator">|</span>
 					<input class="button" type="button" value="Insert Paragraph" id="paragraph" onClick="execute(this, 'paragraph');" />
 					<span class="separator">|</span>
@@ -95,11 +90,11 @@ $version = $version->item(0)->nodeValue;
 					<span class="separator">|</span>
 					</div>
 
-					<iframe class="iframe" src="tmp/gethtml.php?id=<?php echo $_REQUEST['id']; ?>" id="design">
+					<iframe onclick="klick(event);" class="iframe" src="tmp/gethtml.php?id=<?php echo $_REQUEST['id']; ?>" id="design">
 					</iframe>
 
 					<div class="statusbar">
-						<p id="status">Ready</p>
+						<p><span id="location"></span> | <span id="status"></span></p>
 					</div>
 
 					</div>

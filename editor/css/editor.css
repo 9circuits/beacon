@@ -98,7 +98,7 @@ body
 
 }
 
-.button
+.button,.lbOn
 {
 padding: 3px;
 background-color: #f0ede0;
@@ -109,22 +109,48 @@ color: #333333;
 text-align: left;
 font: 9pt normal "Trebuchet MS";
 outline: none;
+text-decoration: none;
 }
 
-.button:hover {
+.button:hover,.lbOn:hover {
 	background: #c4c9d9;
 	border: 1px solid #17357b;
 	cursor: pointer;
 	outline: none;
 }
 
-.button:active
+.button:active,.lbOn:active
 {
 	background: #9aa4c1;
 	border: 1px solid #17357b;
 	outline: none;
 }
 
+.lbAction
+{
+	text-decoration: none;
+	border: 3px double #999999;
+	border-top-color: #CCCCCC;
+	border-left-color: #CCCCCC;
+	padding: 0.25em;
+	background-color: #FFFFFF;
+	/*background: #fff url(../images/go.png) right;*/
+	background-repeat: no-repeat;
+	color: #333333;
+	text-align: left;
+	font: 9pt bold "Trebuchet MS";
+}
+
+.lbAction:active
+{
+	border: 3px double #CCCCCC;
+	border-top-color: #999999;
+	border-left-color: #999999;
+}
+
+#box p {
+	margin: 4px;
+}
 
 #tree {
 
@@ -145,7 +171,7 @@ outline: none;
 	width: 100%;
 }
 
-#tree .header{
+.header{
 	border: 2px outset #fff;
 	margin-bottom: 5px;
 	padding: 3px;
@@ -166,4 +192,14 @@ outline: none;
 	cursor: pointer;
 	cursor: hand;
 }
+
+.form table{
+	margin: 15px 5px 0px 5px;
+}
+
+
+.form td{
+	padding: 0px 0px 5px 5px;
+}
+
 

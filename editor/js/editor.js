@@ -5,14 +5,7 @@ closedImg.src = "images/closed.gif";
 
 var src;
 
-/*editAreaLoader.init({
-	id: "source"	// id of the textarea to transform		
-	,start_highlight: true	// if start with highlight
-	,allow_resize: "no"
-	,allow_toggle: false
-	,language: "en"
-	,syntax: "brainfuck"	
-});*/
+/* */
 
 function initEditor() 
 {
@@ -23,6 +16,7 @@ function initEditor()
 	if (document.addEventListener)
     {
        document.getElementById("design").contentWindow.document.addEventListener("keydown",keydown,false);
+       //document.getElementById("design").contentWindow.document.addEventListener("onclick",klick,false);
     }
  	else if (document.attachEvent)
     {
@@ -33,66 +27,162 @@ function initEditor()
        document.getElementById("design").contentWindow.document.onkeydown = keydown;
     }
 	
+	//document.getElementById("design").contentWindow.document.getElementById("guide").onclick = klick;
+  	
 	createTree();
 	
 	document.body.style.overflow = 'hidden';
 
 }
 
-function keydown(e)
+function klick(e) 
 {
+	var theSelection = document.getElementById("design").contentWindow.getSelection();
+	var theRange = theSelection.getRangeAt(0);
 	
-	if (!e) e = event;
+	start = theRange.startOffset;
+	end = theRange.endOffset;
 	
-	if (e.keyCode == '8') 
+	var text = theRange.commonAncestorContainer;
+	
+	var status = 'Status: title = '+text.title;
+	status += ', startOffset = '+start;
+	status += ', endOffset = '+end;
+	status += ', nodeName = '+text.nodeName;
+	status += ', nodeLength = '+text.length;
+	
+	document.getElementById("status").innerHTML = status;
+	
+	var status = 'Location: ';
+	
+	while (text.title != 'guideChapter')
+		text = text.parentNode;
+		
+	if (text.title == 'guideChapter')
 	{
+		status += 'Chapter '+text.id.charAt(text.id.length-1)+' ';
+	}
 	
-		var theSelection = document.getElementById("design").contentWindow.getSelection();
-		var theRange = theSelection.getRangeAt(0);
-		
-		start = theRange.startOffset;
-		end = theRange.endOffset;
-		
-		var text = theRange.commonAncestorContainer;
-		
-		var status = 'Status: title = '+text.title;
-		status += ', startOffset = '+start;
-		status += ', endOffset = '+end;
-		status += ', nodeName = '+text.nodeName;
-		status += ', nodeLength = '+text.length;
-		
-		document.getElementById("status").innerHTML = status;
-		
-		if (start == 0 || text.length == null)
-		{
-			if (e.preventDefault) e.preventDefault();
-			if (e.stopPropagation) e.stopPropagation();
-		}
-
-		else
-		{
-		}
-
-		var parent = text.parentNode;
-	}
-
-	else if (e.keyCode == '13')
+	text = theRange.commonAncestorContainer;
+	
+	while (text.title != 'guideSection')
+		text = text.parentNode;
+	
+	if (text.title == 'guideSection')
 	{
-		if (e.preventDefault) e.preventDefault();
-		if (e.stopPropagation) e.stopPropagation();
-		
-		addParagraph();
+		status += ', Section: '+text.id.charAt(text.id.length-1);
 	}
-	return;
+		
+	document.getElementById("location").innerHTML = status;
 }
 
-/* Set the focus of the cursor to the given node. Currently working only in Safari! */
-function setFocus(node, flag) 
+
+function checkNodePath(node, allowed)
+{
+	var check = node;
+	try {
+		while (check.title != 'guideBody')
+		{
+			for (var i=0; i < allowed.length; i++)
+			{
+				if (check.title == allowed[i])
+					return check;
+			}
+			check = check.parentNode;
+		}
+	}
+	catch(err) {
+		return null;
+	}
+	
+	return null;
+}
+
+function keydown(e)
+{
+	if (!e) e = event;
+	
+	var theSelection = document.getElementById("design").contentWindow.getSelection();
+	var theRange = theSelection.getRangeAt(0);
+	
+	var start = theRange.startOffset;
+	var end = theRange.endOffset;
+	
+	var text = theRange.commonAncestorContainer;
+	
+	var status = 'Status: title = '+text.title;
+	status += ', startOffset = '+start;
+	status += ', endOffset = '+end;
+	status += ', nodeName = '+text.nodeName;
+	status += ', nodeLength = '+text.length;
+	
+	/* This RTE is kinda like fill in the blanks. Only certain areas are editable. 
+	This list will increase as the RTE is further developed */
+	
+	var allowed = new Array("guideParagraph", 
+							"guideChapterTitle", 
+							"guideSectionTitle", 
+							"guideList", 
+							"guideDateValue", 
+							"guideAbstractValue",
+							"guideAuthorTitle",
+							"guideMailValue",
+							"guideCodeBox",
+							"guidePreTitle",
+							"guideNoteValue",
+							"guideWarnValue",
+							"guideImpoValue");
+	
+	var path = checkNodePath(text, allowed);
+	
+	if (path!=null)
+		status += ', PATH = '+path.title;
+	
+	document.getElementById("status").innerHTML = status;
+	
+	if (path == null) {
+		if (e.preventDefault) e.preventDefault();
+		if (e.stopPropagation) e.stopPropagation();
+		return;
+	}
+	
+	switch(e.keyCode)
+	{
+		//The three most damaging keys: DEL, BKSPCE, ENTER
+		case 8:
+		case 46:
+			if (e.preventDefault) e.preventDefault();
+			if (e.stopPropagation) e.stopPropagation();
+			break;
+			
+		case 13:
+			switch(path.title){
+				case 'guideDateValue':
+				case 'guideAbstractValue':
+				case 'guideMailValue':
+				case 'guideChapterTitle':
+				case 'guideSectionTitle':
+				case 'guideAuthorTitle':
+				case 'guidePreTitle':
+					if (e.preventDefault) e.preventDefault();
+					if (e.stopPropagation) e.stopPropagation();
+			}
+			break;
+			
+		default:
+			break;
+				
+	}
+
+}
+
+/* Set the focus of the cursor to the given node. Currently working only in Safari! (In Moz: Sets the cursor right outta the node) */
+function setFocus(node, flag, index) 
 {
 	s = document.getElementById("design").contentWindow.getSelection();
 	var r1 = document.getElementById("design").contentWindow.document.createRange();
-	r1.setStart(node, 0);
-	r1.setEnd(node, 0);
+	r1.setStart(node.childNodes[index], 0);
+	r1.setEnd(node.childNodes[index], 0);
 	//r1.selectNode(node);
 	//r1.setStartBefore(node.childNodes[1]);
 	
@@ -101,22 +191,62 @@ function setFocus(node, flag)
 	s.addRange(r1);
 
 	document.getElementById("design").contentWindow.focus();
-}
-
-function checkPre() {
 	
+	if (flag!=false)
+	{
+		node.scrollIntoView();
+	
+		document.getElementById("design").contentWindow.scrollBy(0, -100);
+		
+		colorFade(node.id,'background','b4d5fe','ffffff', 50,20);
+	}
 }
 
-function getCurrentNode()
+
+
+
+
+// Past this point: Completed functions and *sigh* well working...
+
+/* Hmmm... This is what I have to do to get the GET variable */
+function getVar(name)
 {
-	var elementList = new Array("guideChapterTitle", "guideSectionTitle");
+	get_string = document.location.search;         
+	return_value = '';
+
+	do 
+	{ //This loop is made to catch all instances of any get variable.
+		name_index = get_string.indexOf(name + '=');
+
+		if(name_index != -1)
+		{
+			get_string = get_string.substr(name_index + name.length + 1, get_string.length - name_index);
+
+			end_of_value = get_string.indexOf('&');
+			if(end_of_value != -1)                
+			value = get_string.substr(0, end_of_value);                
+			else                
+			value = get_string;                
+
+			if(return_value == '' || value == '')
+			return_value += value;
+			else
+			return_value += ', ' + value;
+		}
+	} while(name_index != -1)
+
+	//Restores all the blank spaces.
+	space = return_value.indexOf('+');
+	while(space != -1)
+	{ 
+		return_value = return_value.substr(0, space) + ' ' + 
+		return_value.substr(space + 1, return_value.length);
+
+		space = return_value.indexOf('+');
+	}
+
+	return(return_value);        
 }
-
-
-
-
-
-// Past this point: Completed functions
 
 /* Built in browser exec command running BLAH BLAH BLAH! Will get replaced by self written functions */
 function execute(command, value) 
@@ -174,7 +304,7 @@ function addNote(command, value)
 	insertText += '<span title="'+pTitle+'" class="'+pClass+'"><b>'+bText+': </b>';
 	insertText += '<span title="'+spanTitle+'">'+spanText+'</span></span></p>';	
 
-	addBlockType(getSel(), getSel(), insertText);
+	addBlockType(getSel(), getSel(), insertText, 'null', true, 0);
 }
 
 
@@ -188,7 +318,7 @@ function addCode()
 	insertText += '<div title="guidePreCode" style="background: #eeeeff;">';
 	insertText += '<pre title="guideCodeBox">Insert Code Here</pre></div>';
 	
-	addBlockType(getSel(), getSel(), insertText);
+	addBlockType(getSel(), getSel(), insertText, 'null', true, 1);
 }
 
 
@@ -198,24 +328,26 @@ function addList(value)
 {
 	var insertText;
 	insertText = "<li>Sample List Item</li>";
-	addBlockType(getSel(), getSel(), insertText, value);
+	addBlockType(getSel(), getSel(), insertText, value, true, 0);
 }
 
 
 
 /* Adds a Paragraph */
-function addParagraph()
+function addParagraph(flag, text)
 {
-	var insertText;
-	insertText = '&nbsp;';
+	var insertText = '&nbsp;';
 	
-	return addBlockType(getSel(), getSel(), insertText, 'para');
+	if (text)
+		insertText = text;
+	
+	return addBlockType(getSel(), getSel(), insertText, 'para', flag, 0);
 }
 
 
 
 /* Add a block type element. Includes: Paragraph, List, Note/Warn/Impo, Pre. Not called directly!*/
-function addBlockType(theAnchorNode, theBody, insertText, type)
+function addBlockType(theAnchorNode, theBody, insertText, type, flag, index)
 {
 	var insert = 0;
 	
@@ -246,28 +378,33 @@ function addBlockType(theAnchorNode, theBody, insertText, type)
 	{
 		var newNode = document.createElement('p');
 		newNode.title = 'guideParagraph';
+		newNode.innerHTML = insertText;
 	}
 	
 	else if (type == 'ol' || type == 'ul')
 	{
-		var newNode = document.createElement(type);
+		var newNode = document.createElement('div');
 		newNode.title = 'guideBlock';
+		var list = document.createElement(type);
+		list.title = 'guideList';
+		list.innerHTML = insertText;
+		newNode.appendChild(list);
 	}
 	
 	else 
 	{
 		var newNode = document.createElement('div');
 		newNode.title = 'guideBlock';
+		newNode.innerHTML = insertText;
 	}
 
-	newNode.innerHTML = insertText;
 		
 	if (insert == 1)
 		theBody.insertBefore(newNode, theAnchorNode.nextSibling);
 	else
 		theBody.appendChild(newNode);	
 		
-	setFocus(newNode, false); 
+	setFocus(newNode, flag, index); 
 	
 		
 	return newNode;
@@ -276,16 +413,16 @@ function addBlockType(theAnchorNode, theBody, insertText, type)
 
 
 /* Adds a Chapter */
-function addChapter() 
+function addChapter(chapterTitle, sectionTitle) 
 {
 	var theAnchorNode = getAnchor('guideChapter', 'doc_chap0');
 	var mainContent = getParent('mainContent', theAnchorNode);
 
 	var insertText;
 	insertText = '<p title="guideChapterTitle" class="chaphead">';
-	insertText += 'Sample Chapter Title</p>';
+	insertText += chapterTitle+'</p>';
 	insertText += '<div id="doc_chap_sec1" title="guideSection"><p title="guideSectionTitle" class="secthead">';
-	insertText += 'Sample Section Title</p>';
+	insertText += sectionTitle+'</p>';
 	insertText += '<div title="guideBody"><p title="guideParagraph">Insert Content Here!</p></div></div>';
 
 	var theChapter = document.createElement("div");
@@ -306,7 +443,8 @@ function addChapter()
 	//document.getElementById("design").contentWindow.focus();
 	
 	// Scroll the Iframe to bring our chapter into view
-	theChapter.scrollIntoView();
+	setFocus(theChapter, true, 0);
+	
 }
 
 
@@ -340,7 +478,7 @@ function reFactorChapters(mainContent)
 
 
 /* Adds a Section */
-function addSection() 
+function addSection(sectionTitle) 
 {
 	var theAnchorNode = getAnchor('guideSection', 'doc_chap_sec0');
 	var mainContent = theAnchorNode.parentNode;
@@ -352,7 +490,7 @@ function addSection()
 	
 	var insertText;
 	insertText = '<p title="guideSectionTitle" class="secthead">';
-	insertText += 'Sample Section Title</p>';
+	insertText += sectionTitle+'</p>';
 	insertText += '<div title="guideBody"><p title="guideParagraph">Insert Content Here!</p></div>';
 
 	var theSection = document.createElement("div");
@@ -373,7 +511,7 @@ function addSection()
 	//document.getElementById("design").contentWindow.focus();
 	
 	// Scroll the Iframe to bring our chapter into view
-	theSection.scrollIntoView();
+	setFocus(theSection, true, 0)
 }
 
 
@@ -510,7 +648,7 @@ function createTree()
 					{
 						var idc = "'"+mainContent.childNodes[i].id+"'";
 						var id = mainContent.childNodes[i].id;
-						tree += '<div class="trigger" onclick="showBranch('+idc+');">';
+						tree += '<div class="trigger" id="t_'+id+'" onclick="showBranch('+idc+', true, this);">';
 						tree += '<img src="images/closed.gif" id="I'+id+'" name="I'+id+'"> ';
 						tree += mainContent.childNodes[i].childNodes[z].innerHTML+'<br /></div>';
 						tree += '<div class="branch" id="'+id+'">';
@@ -527,7 +665,7 @@ function createTree()
 						tree += '<p class="leaf"><img src="images/doc.gif">';
 						tree += '<a onclick="showBranch('+qid+');">'+section.childNodes[k].innerHTML+'</a><br /></p>';
 					}
-				}
+				} 
 				tree += '</div>';
 			}
 		}
@@ -540,24 +678,31 @@ function createTree()
 	
 }
 
-
-
 /* Shows/Hides a branch in our nifty DOM tree */
-function showBranch(branch)
+function showBranch(branch, dflag)
 {
+	if (dflag != false)
 	
+	{
+		document.getElementById("design").contentWindow.document.getElementById(branch).scrollIntoView();
 	
-	document.getElementById("design").contentWindow.document.getElementById(branch).scrollIntoView();
-	
-	//document.body.style.overflow = 'visible';
-	
-	var objBranch = document.getElementById(branch).style;
-	if(objBranch.display=="block")
-		objBranch.display="none";
-	else {
-		objBranch.display="block";
+		var objBranch = document.getElementById(branch).style;
+		if(objBranch.display=="block")
+		{
+
+			objBranch.display="none";
+		}
+		else 
+		{
+			objBranch.display="block";
+
+		}
+		swapFolder('I' + branch);
 	}
-	swapFolder('I' + branch);
+	else 
+	{
+		
+	}
 }
 
 
@@ -571,6 +716,94 @@ function swapFolder(img)
 	else
 		objImg.src = closedImg.src;
 }
+
+
+// main function to process the fade request //
+function colorFade(id,element,start,end,steps,speed) {
+  var startrgb,endrgb,er,eg,eb,step,rint,gint,bint,step;
+  var target = document.getElementById("design").contentWindow.document.getElementById(id);
+  steps = steps || 20;
+  speed = speed || 20;
+  clearInterval(target.timer);
+  endrgb = colorConv(end);
+  er = endrgb[0];
+  eg = endrgb[1];
+  eb = endrgb[2];
+  if(!target.r) {
+    startrgb = colorConv(start);
+    r = startrgb[0];
+    g = startrgb[1];
+    b = startrgb[2];
+    target.r = r;
+    target.g = g;
+    target.b = b;
+  }
+  rint = Math.round(Math.abs(target.r-er)/steps);
+  gint = Math.round(Math.abs(target.g-eg)/steps);
+  bint = Math.round(Math.abs(target.b-eb)/steps);
+  if(rint == 0) { rint = 1 }
+  if(gint == 0) { gint = 1 }
+  if(bint == 0) { bint = 1 }
+  target.step = 1;
+  target.timer = setInterval( function() { animateColor(id,element,steps,er,eg,eb,rint,gint,bint) }, speed);
+}
+
+// incrementally close the gap between the two colors //
+function animateColor(id,element,steps,er,eg,eb,rint,gint,bint) {
+  var target = document.getElementById("design").contentWindow.document.getElementById(id);
+  var color;
+  if(target.step <= steps) {
+    var r = target.r;
+    var g = target.g;
+    var b = target.b;
+    if(r >= er) {
+      r = r - rint;
+    } else {
+      r = parseInt(r) + parseInt(rint);
+    }
+    if(g >= eg) {
+      g = g - gint;
+    } else {
+      g = parseInt(g) + parseInt(gint);
+    }
+    if(b >= eb) {
+      b = b - bint;
+    } else {
+      b = parseInt(b) + parseInt(bint);
+    }
+    color = 'rgb(' + r + ',' + g + ',' + b + ')';
+    if(element == 'background') {
+      target.style.backgroundColor = color;
+    } else if(element == 'border') {
+      target.style.borderColor = color;
+    } else {
+      target.style.color = color;
+    }
+    target.r = r;
+    target.g = g;
+    target.b = b;
+    target.step = target.step + 1;
+  } else {
+    clearInterval(target.timer);
+    color = 'rgb(' + er + ',' + eg + ',' + eb + ')';
+    if(element == 'background') {
+      target.style.backgroundColor = color;
+    } else if(element == 'border') {
+      target.style.borderColor = color;
+    } else {
+      target.style.color = color;
+    }
+  }
+}
+
+// convert the color to rgb from hex //
+function colorConv(color) {
+  var rgb = [parseInt(color.substring(0,2),16), 
+    parseInt(color.substring(2,4),16), 
+    parseInt(color.substring(4,6),16)];
+  return rgb;
+}
+
 
 
 
@@ -597,7 +830,17 @@ function tabs(view,hide) {
 }
 
 function getHTML() {
-	document.getElementById('htmlDisplay').value = document.getElementById("design").contentWindow.document.body.innerHTML;
+/*	var args='width=800,height=600,left=325,top=100,toolbar=0,';
+	args+='location=0,status=0,menubar=0,scrollbars=1,resizable=0';
+	
+	var text = document.getElementById("design").contentWindow.document.body.innerHTML;
+	DialogWindow = window.open("","",args); 
+	DialogWindow.document.open(); 
+	DialogWindow.document.write('<a href="#" onclick="window.close();">Close</a><br />');
+	DialogWindow.document.write('<textarea style="width: 770px; height: 600px;">'+text+'</textarea>');*/
+	//document.getElementById("getHTML").value = document.getElementById("design").contentWindow.document.body.innerHTML;
+	alert('hello');
+	
 }
 
 function getText(){
@@ -611,4 +854,66 @@ function getText(){
 	return userSelection;
 }
 
+function junk() {
+		if (e.keyCode == '8') 
+		{
+			if (e.preventDefault) e.preventDefault();
+			if (e.stopPropagation) e.stopPropagation();
 
+			//alert(start);
+			/*if (start == 0)
+			{
+				if (e.preventDefault) e.preventDefault();
+				if (e.stopPropagation) e.stopPropagation();
+			}
+
+			else if(text == null)
+			{
+				if (e.preventDefault) e.preventDefault();
+				if (e.stopPropagation) e.stopPropagation();
+			}*/
+
+			//var parent = text.parentNode;
+		}
+
+		// Handle Carriage Return
+		else if (e.keyCode == '13')
+		{
+			//var node = text.parentNode;
+
+			//if (node.title)
+
+			if (e.preventDefault) e.preventDefault();
+			if (e.stopPropagation) e.stopPropagation();
+
+
+			/*if (start == end)
+			{
+				if ((end == text.length-1 || end == text.length))
+					addParagraph(false);
+			}*/
+
+			//document.getElementById("status").innerHTML = status;
+
+	/*		if (start == 0)
+			{
+				var nodeText = text.parentNode.innerHTML;
+				alert(nodeText);
+				//addParagraph(false, text.parentNode.innerHTML);
+				//text.parentNode.innerHTML = "&nbsp;";
+			}
+			else if (end == text.length-1)
+				addParagraph(false);
+			else 
+			{
+				addParagraph(false, text.parentNode.innerHTML.substring(start, text.length-1));
+
+				text.parentNode.innerHTML = text.parentNode.innerHTML.substring(0, start);
+
+				while (text.title != 'guideSection')
+					text = text.parentNode;
+			}*/
+		}
+		else 
+		return;
+}

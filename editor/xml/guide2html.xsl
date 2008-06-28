@@ -270,15 +270,19 @@
 	</xsl:template>
 	
 	<xsl:template match="ul">
-		<ul title="guideBlock">
-			<xsl:apply-templates />
-		</ul>
+		<div title="guideBlock">
+			<ul title="guideList">
+				<xsl:apply-templates />
+			</ul>
+		</div>
 	</xsl:template>
 	
 	<xsl:template match="ol">
-		<ol title="guideBlock">
-			<xsl:apply-templates />
-		</ol>
+		<div title="guideBlock">
+			<ol title="guideList">
+				<xsl:apply-templates />
+			</ol>
+		</div>
 	</xsl:template>
 	
 	<xsl:template match="li">

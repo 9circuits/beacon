@@ -86,13 +86,13 @@ dt {
 
 .secthead {
 	font-size: 1.1em;
-	color: #5a3aca; background: white;
+	color: #5a3aca;
 	font-weight: bold;
 	font-family: sans-serif, Verdana, Arial, Helvetica;
 }
 
 .subsecthead {
-	color: #7a5ada; background: white;
+	color: #7a5ada;
 	font-size: 1.0em;
 	font-weight: bold;
 	font-family: sans-serif, Verdana, Arial, Helvetica;
