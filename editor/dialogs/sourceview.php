@@ -11,11 +11,9 @@ editAreaLoader.init({
 </script>
 <div id="box" style="text-align: center;">
 	<p class="header">Source View</p>
-	<form class="form">
-		<table>
-			<tr><td colspan="2"><textarea id="source" style="width: 600px; height: 390px;"></textarea></td></tr>
+		<table class="form">
+			<tr><td colspan="2"><textarea id="source" style="width: 760px; height: 450px;"></textarea></td></tr>
 
 			<tr><td align="center"><a href="#" id="update" class="lbAction" rel="deactivate">Update</a></td></tr>
 		</table>
-	</form>	
 </div>

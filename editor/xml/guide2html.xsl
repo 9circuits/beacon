@@ -23,7 +23,7 @@
 				<xsl:apply-templates select="version" />
 			</div>
 			<div id="mainContent">
-				<h1 id="doc_chap0"><xsl:value-of select="title" /></h1>
+				<h1 title="guideTitle" id="doc_chap0"><xsl:value-of select="title" /></h1>
 				<xsl:apply-templates select="chapter" />
 			</div>
 		</div>
@@ -95,17 +95,19 @@
 	</xsl:template>
 	
 	<xsl:template match="p">
-		<xsl:choose>
-			<xsl:when test="string-length(@by) &gt; 0">
-				<p title="guideEpigraph" class="epigraph"><xsl:apply-templates />
-				<br /><br /><span title="guideSignature" class="episig">- <xsl:value-of select="@by" /></span><br /><br /></p>
-			</xsl:when>
-			<xsl:otherwise>
-				<p title="guideParagraph">
-					<xsl:apply-templates />
-				</p>
-			</xsl:otherwise>
-		</xsl:choose>
+	    <div title="guideBlock">
+    		<xsl:choose>
+    			<xsl:when test="string-length(@by) &gt; 0">
+    				<p title="guideEpigraph" class="epigraph"><xsl:apply-templates />
+    				<br /><br /><span title="guideSignature" class="episig">- <xsl:value-of select="@by" /></span><br /><br /></p>
+    			</xsl:when>
+    			<xsl:otherwise>
+    				<p title="guideParagraph">
+    					<xsl:apply-templates />
+    				</p>
+    			</xsl:otherwise>
+    		</xsl:choose>
+        </div>
 	</xsl:template>
 	
 	<xsl:template match="uri">
@@ -148,34 +150,34 @@
 	
 	<xsl:template match="note">
 		<div title="guideBlock">
-		<p title="guideBlock" class="ncontent" style="background:#bbffbb;">
-			<span title="guideNote" class="note">
-				<b>Note: </b>
-				<span title="guideNoteValue"><xsl:apply-templates /></span>
-			</span>
-		</p>
+    		<p class="ncontent" style="background:#bbffbb;">
+    			<span title="guideNote" class="note">
+    				<b>Note: </b>
+    				<span title="guideNoteValue"><xsl:apply-templates /></span>
+    			</span>
+    		</p>
 		</div>
 	</xsl:template>
 	
 	<xsl:template match="warn">
 		<div title="guideBlock">
-		<p title="guideBlock" class="ncontent" style="background:#ffbbbb;">
-			<span title="guideWarning" class="warn">
-				<b>Warning: </b>
-				<span title="guideWarnValue"><xsl:apply-templates /></span>
-			</span>
-		</p>
+    		<p class="ncontent" style="background:#ffbbbb;">
+    			<span title="guideWarning" class="warn">
+    				<b>Warning: </b>
+    				<span title="guideWarnValue"><xsl:apply-templates /></span>
+    			</span>
+    		</p>
 		</div>
 	</xsl:template>
 	
 	<xsl:template match="impo">
 		<div title="guideBlock">
-		<p title="guideBlock" class="ncontent" style="background:#ffffbb;">
-			<span title="guideImportant" class="impo">
-				<b>Important: </b>
-				<span title="guideImpoValue"><xsl:apply-templates /></span>
-			</span>
-		</p>
+    		<p class="ncontent" style="background:#ffffbb;">
+    			<span title="guideImportant" class="impo">
+    				<b>Important: </b>
+    				<span title="guideImpoValue"><xsl:apply-templates /></span>
+    			</span>
+    		</p>
 		</div>
 	</xsl:template>
 	

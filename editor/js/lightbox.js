@@ -177,13 +177,13 @@ lightbox.prototype = {
 /*-----------------------------------------------------------------------------------------------*/
 function checkSubmit()
 {
-	if (document.getElementById('update'))
-		alert('update!');						// Write AJAX code to update the iframe
+	if (document.getElementById('update'));
+		//alert('update!');						// Write AJAX code to update the iframe
 		
 	else if (document.getElementById('addChapter'))
 	{
 		try {
-		addChapter(document.getElementById('chapterTitle').value, document.getElementById('sectionTitle').value)
+		    addChapter(document.getElementById('chapterTitle').value, document.getElementById('sectionTitle').value);
 		}
 		catch(e){
 			return;
@@ -192,7 +192,16 @@ function checkSubmit()
 	else if (document.getElementById("addSection"))
 	{
 		try {
-		addSection(document.getElementById('sectionTitle').value)
+		    addSection(document.getElementById('sectionTitle').value);
+		}
+		catch(e){
+			return;
+		}
+	}
+	else if (document.getElementById("addLink"))
+	{
+		try {
+		    insertLink(document.getElementById('displayText').value, document.getElementById('link').value);
 		}
 		catch(e){
 			return;
