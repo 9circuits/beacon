@@ -121,6 +121,7 @@ lightbox.prototype = {
 	
 	// Begin Ajax request based off of the href of the clicked linked
 	loadInfo: function() {
+	    //alert(this.content);
 		var myAjax = new Ajax.Request(
         this.content,
         {method: 'post', parameters: "", onComplete: this.processInfo.bindAsEventListener(this)}

@@ -60,8 +60,12 @@ $version = $version->item(0)->nodeValue;
                 <div id="designview" >
                     <div class="toolbar">
                             <div class="toolholder">
-                                <a id="getSource" class="lbOn" href="dialogs/sourceview.php">
-                                    <img src="images/sourceview.png" border="none" />
+                                <a class="lbOn" id="save" href="dialogs/savedocument.php?id=<?php echo $_GET['id']; ?>">
+                                    <img src="images/save.png" border="none" />
+                                </a>    
+                                <div class="separator"></div>
+                                <a id="getSource" class="lbOn" href="dialogs/sourceview.php?id=<?php echo $_GET['id']; ?>">
+                                        <img src="images/sourceview.png" border="none" />
                                 </a>
                                 <div class="separator"></div>
                                 <a class="lbOn" href="dialogs/addchapter.php">
@@ -124,7 +128,7 @@ $version = $version->item(0)->nodeValue;
                             </div>
                     </div>
 
-                    <iframe onclick="klick(event);" class="iframe" src="tmp/gethtml.php?id=<?php echo $_REQUEST['id']; ?>" id="design">
+                    <iframe onclick="klick(event);" class="iframe" src="ajax/gethtml.php?id=<?php echo $_REQUEST['id']; ?>" id="design">
                     </iframe>
 
                     <div class="statusbar">

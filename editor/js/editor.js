@@ -199,17 +199,43 @@ function keydown(e)
         break;
 
         case 13:
-            switch(path.title){
-                case 'guideDateValue':
-                case 'guideAbstractValue':
-                case 'guideMailValue':
-                case 'guideChapterTitle':
+            switch(path.title)
+            {
                 case 'guideSectionTitle':
-                case 'guideAuthorTitle':
-                case 'guidePreTitle':
-                case 'guideTitle':
-                if (e.preventDefault) e.preventDefault();
-                if (e.stopPropagation) e.stopPropagation();
+                    if (e.preventDefault) e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
+                    addParagraph(false);
+                    break;
+                
+                case 'guideParagraph':
+                    if (e.preventDefault) e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
+                    //alert(text.innerHTML);
+                    if ((end == text.length || end == text.length-1) && e.type == 'keydown')
+                        addParagraph(false);
+                    else if (start == end && e.type == 'keydown')
+                    {
+                        addParagraph(false, path.innerHTML.substring(start, text.length));
+                        path.innerHTML = path.innerHTML.substring(0, start);
+                    }
+                    break;
+                    
+                case 'guideList':
+                    break;
+                
+                case 'guideCodeBox':
+                    if (e.preventDefault) e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
+                
+                    if (e.type == 'keydown')
+                        iframe.document.execCommand('inserthtml', true, '\n');
+                
+                    break;
+                    
+                default:
+                    if (e.preventDefault) e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
+                    break;
             }
             break;
 
@@ -260,7 +286,9 @@ function setFocus(node, flag, index)
 
 
 
+
 // Past this point: Completed functions and *sigh* well working...
+
 
 /* Removes the anchor off the selected text */
 function removeLink()
@@ -519,9 +547,12 @@ function addBlockType(theAnchorNode, theBody, insertText, type, flag, index)
 
     if (type == "para")
     {
-        var newNode = document.createElement('p');
-        newNode.title = 'guideParagraph';
-        newNode.innerHTML = insertText;
+        var newNode = document.createElement('div');
+        newNode.title = 'guideBlock';
+        var para = document.createElement('p');
+        para.title = 'guideParagraph';
+        para.innerHTML = insertText;
+        newNode.appendChild(para);
     }
 
     else if (type == 'ol' || type == 'ul')
