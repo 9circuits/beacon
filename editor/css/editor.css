@@ -160,6 +160,10 @@ body
     border-left-color: #999999;
 }
 
+.spanButton {
+    margin-top: 5px;
+}
+
 #box p {
     margin: 4px;
 }

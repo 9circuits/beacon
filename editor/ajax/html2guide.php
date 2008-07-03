@@ -9,9 +9,9 @@ $text = str_replace('<br>', '<br />', $text);
 
 $tidy = clean_html_code($text); //I want clean code!
 
-echo $tidy;
+//echo $tidy;
 
-/*$html = fopen($id.".html", "w+");
+$html = fopen($id.".html", "w+");
 
 fwrite($html, $text);
 
@@ -36,7 +36,7 @@ $html = fopen($id.".html", "w+");
 
 fwrite($html, $text);
 
-fclose($html);*/
+fclose($html);
 
 ?>
 

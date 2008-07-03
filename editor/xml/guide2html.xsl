@@ -40,7 +40,9 @@
 	</xsl:template>
 
 	<xsl:template match="author">
-		<p title="guideAuthor" class="alttext"><xsl:apply-templates /><br /><i title="guideAuthorTitle"><xsl:value-of select="@title"/></i></p><br />
+		<p title="guideAuthor" class="alttext">
+		    <span title="guideAuthorName"><xsl:apply-templates /></span><br />
+		    <i title="guideAuthorTitle"><xsl:value-of select="@title"/></i></p><br />
 	</xsl:template>
 
 	<xsl:template match="version">
@@ -99,7 +101,7 @@
     		<xsl:choose>
     			<xsl:when test="string-length(@by) &gt; 0">
     				<p title="guideEpigraph" class="epigraph"><xsl:apply-templates />
-    				<br /><br /><span title="guideSignature" class="episig">- <xsl:value-of select="@by" /></span><br /><br /></p>
+    				<br /><br />- <span title="guideSignature" class="episig"><xsl:value-of select="@by" /></span><br /><br /></p>
     			</xsl:when>
     			<xsl:otherwise>
     				<p title="guideParagraph">
@@ -143,7 +145,7 @@
 	</xsl:template>
 	
 	<xsl:template match="path">
-		<span title="guideCodepath" class="path" dir="ltr">
+		<span title="guideCodePath" class="path" dir="ltr">
 			<xsl:apply-templates />
 		</span>
 	</xsl:template>
@@ -230,15 +232,15 @@
 	</xsl:template>
 	
 	<xsl:template match="sub">
-		<sub>
+		<span title="guideSub" class="subspan">
 			<xsl:apply-templates />
-		</sub>
+		</span>
 	</xsl:template>
 	
 	<xsl:template match="sup">
-		<sup>
+		<span title="guideSup" class="supspan">
 			<xsl:apply-templates />
-		</sup>
+		</span>
 	</xsl:template>
 	
 	<xsl:template match="b">

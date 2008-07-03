@@ -3,6 +3,18 @@ openImg.src = "images/open.gif";
 var closedImg = new Image();
 closedImg.src = "images/closed.gif";
 
+var spans = new Array("guideCodeInput",
+                      "guideCodepath",
+                      "guideComment",
+                      "guideCode",
+                      "guideEm",
+                      "guideKeyword",
+                      "guideIdentifier",
+                      "guideConstant",
+                      "guideStatement",
+                      "guideVariable",
+                      "guideLink");
+
 var src;
 
 var iframe;
@@ -19,25 +31,20 @@ function initEditor()
     iframe.document.designMode = 'On'; 
     iframe.document.getElementById("guide").style.margin = '5px';
 
-    if (document.addEventListener)
-    {
+    if (document.addEventListener) {
         iframe.document.addEventListener("keydown",keydown,false);
         //iframe.document.addEventListener("onclick",klick,false);
         iframe.document.addEventListener("keypress",keydown,false);
         iframe.document.addEventListener("keyup",keydown,false);
         
         
-    }
-    else if (document.attachEvent)
-    {
+    } else if (document.attachEvent) {
         iframe.document.attachEvent("onkeydown", keydown);
-    }
-    else
-    {
+    } else {
         iframe.document.onkeydown = keydown;
     }
 
-    //iframe.document.getElementById("guide").onclick = klick;
+    iframe.document.getElementById("guide").onclick = klick;
  
     
     createTree();
@@ -122,7 +129,9 @@ function keydown(e)
 
     var start = theRange.startOffset;
     var end = theRange.endOffset;
-
+    
+    
+    
     var text = theRange.commonAncestorContainer;
 
     var status = 'Status: title = '+text.title;
@@ -142,19 +151,21 @@ function keydown(e)
                             "guideAbstractValue",
                             "guideAuthorTitle",
                             "guideMailValue",
+                            "guideAuthorName",
                             "guideCodeBox",
                             "guidePreTitle",
                             "guideNoteValue",
                             "guideWarnValue",
                             "guideImpoValue",
-                            "guideTitle");
+                            "guideTitle",
+                            "guideBlock");
 
     var path = checkNodePath(text, allowed);
 
     if (path!=null)
-    status += '<br /> PATH = '+path.title;
+        status += '<br /> PATH = '+path.title;
     else 
-    status += '<br /> ERROR = This Part in not editable!';
+        status += '<br /> ERROR = This Part/Block/Selection in not editable!';
     
     document.getElementById("status").innerHTML = status;
 
@@ -168,29 +179,21 @@ function keydown(e)
         return;
     }
 
-    switch(e.keyCode)
-    {
+    switch(e.keyCode) {
         //The three most damaging keys: DEL, BKSPCE, ENTER
         case 8:
         case 46:
-            switch(path.title)
-            {
-                case "guideParagraph": 
+            switch(path.title) {
+                
                 case "guideList": 
                 case "guideCodeBox":
-                case "guidePreTitle":
-                case "guideNoteValue":
-                case "guideWarnValue":
-                case "guideImpoValue":
                     break;
-
+                
                 default:
-                    if (start == 0)
-                    {
+                    if (start == 0) {
                         if(end == text.length);
                         
-                        else if (start == end)
-                        {                
+                        else if (start == end) {                
                             if (e.preventDefault) e.preventDefault();
                             if (e.stopPropagation) e.stopPropagation();
                         }
@@ -199,40 +202,70 @@ function keydown(e)
         break;
 
         case 13:
-            switch(path.title)
-            {
+            switch(path.title) {
                 case 'guideSectionTitle':
                     if (e.preventDefault) e.preventDefault();
                     if (e.stopPropagation) e.stopPropagation();
                     addParagraph(false);
                     break;
                 
+                case 'guideBlock':
+                    addParagraph(false);
+                    break;
+                    
                 case 'guideParagraph':
-                    if (e.preventDefault) e.preventDefault();
+                    //alert(path.childNodes.length);
+                    /*if (e.preventDefault) e.preventDefault();
                     if (e.stopPropagation) e.stopPropagation();
                     //alert(text.innerHTML);
                     if ((end == text.length || end == text.length-1) && e.type == 'keydown')
                         addParagraph(false);
+                    
+                    //Buggy >:p
                     else if (start == end && e.type == 'keydown')
                     {
-                        addParagraph(false, path.innerHTML.substring(start, text.length));
-                        path.innerHTML = path.innerHTML.substring(0, start);
-                    }
+                        iframe.document.execCommand('inserthtml', false, '<div title="guideBlock"><p title="guideParagraph"></p></div>');
+                        //alert(path.innerHTML.substring(start, path.innerHTML.length));
+                        //alert(path.innerHTML.substring(0, start));
+                        //addParagraph(false, path.innerHTML.substring(start, path.innerHTML.length));
+                        //path.innerHTML = path.innerHTML.substring(0, start);
+                    }*/
                     break;
                     
                 case 'guideList':
                     break;
                 
                 case 'guideCodeBox':
-                    if (e.preventDefault) e.preventDefault();
-                    if (e.stopPropagation) e.stopPropagation();
-                
-                    if (e.type == 'keydown')
-                        iframe.document.execCommand('inserthtml', true, '\n');
-                
+    
+                    if(e.type == "keydown") {
+                       // iframe.document.execCommand('inserthtml', false, '<br />');
+                        
+                        /*var cpath = checkNodePath(path, new Array("guidePreCode"));
+                        var html = "";
+                        
+                        for (var i=0; i<cpath.childNodes.length; i++)
+                        {
+                            //alert(cpath.childNodes[i].innerHTML);
+                        
+                            if(cpath.childNodes[i].title=="guideCodeBox")
+                                html+=cpath.childNodes[i].innerHTML+'\n';   
+                        }
+                    
+                        cpath.innerHTML = "";
+                    
+                        pre = iframe.document.createElement("pre");
+                        pre.title="guideCodeBox";
+                        pre.innerHTML = html;
+                    
+                        cpath.appendChild(pre);*/
+                    }
+                    //alert(cpath.innerHTML);
+                    //setFocus(cpath, false);
                     break;
                     
                 default:
+                    //iframe.document.execCommand('inserthtml', false, '<br />');
+                    
                     if (e.preventDefault) e.preventDefault();
                     if (e.stopPropagation) e.stopPropagation();
                     break;
@@ -244,8 +277,7 @@ function keydown(e)
     }
     
 
-    switch(path.title)
-    {
+    switch(path.title) {
         case 'guideChapterTitle':
             document.getElementById('C_'+path.parentNode.id).innerHTML = path.innerHTML;            
             break;
@@ -258,7 +290,7 @@ function keydown(e)
 
 
 
-/* Set the focus of the cursor to the given node. Edit: Problem apparently solved. */
+// Set the focus of the cursor to the given node. Edit: Problem apparently solved.
 function setFocus(node, flag, index) 
 {
     s = iframe.getSelection();
@@ -274,23 +306,93 @@ function setFocus(node, flag, index)
 
     iframe.focus();
 
-    if (flag!=false)
-    {
+    if (flag!=false) {
         node.scrollIntoView();
 
         iframe.scrollBy(0, -100);
 
-        colorFade(node.id,'background','b4d5fe','ffffff', 50,20);
+        colorFade(node.id,'background','008C00','ffffff', 50,20);
     }
 }
 
 
+// Add a a little color to dull text :P
+function addSpan(spanTitle, spanClass, spanDir)
+{
+    var allowed = new Array("guideParagraph", 
+                            "guideList",
+                            "guideNoteValue",
+                            "guideWarnValue",
+                            "guideImpoValue",
+                            "guideCodeBox");
+                            
+    var theSelection = iframe.getSelection();
+    var theRange = theSelection.getRangeAt(0);
 
+    var text = theRange.commonAncestorContainer;  
+                   
+    var path = checkNodePath(text, allowed);       
+    
+    if (path == null)
+        return;
+    
+    var span;
+     
+    span = '<span';
+    if (spanTitle)
+        span += ' title="'+spanTitle+'"';
+    if (spanClass)
+        span += ' class="'+spanClass+'"';
+    if (spanDir)
+        span += ' dir="'+spanDir+'"';
+    span += '>';
+    span += theSelection;
+    span += '</span>';
+
+
+    var start = theRange.startOffset;
+    var end = theRange.endOffset;
+    
+    if (start == end)
+        return;
+        
+    iframe.document.execCommand('inserthtml', false, span);
+    //alert('hello');
+}
+
+// Removes all styling from a text selection. Note: I need to find a better way to do this. Currently just a hack.
+function clearFormat()
+{
+    var allowed = new Array("guideParagraph", 
+                            "guideList",
+                            "guideNoteValue",
+                            "guideWarnValue",
+                            "guideImpoValue",
+                            "guideCodeBox");
+                            
+    var theSelection = iframe.getSelection();
+    var theRange = theSelection.getRangeAt(0);
+
+    var text = theRange.commonAncestorContainer;  
+                   
+    var path = checkNodePath(text, allowed);       
+    
+    if (path == null)
+        return;
+        
+    var start = theRange.startOffset;
+    var end = theRange.endOffset;
+
+    if (start == end)
+        return;
+
+    iframe.document.execCommand('inserthtml', false, "</span>"+theSelection+"<span>");
+}
 
 // Past this point: Completed functions and *sigh* well working...
 
 
-/* Removes the anchor off the selected text */
+// Removes the anchor off the selected text
 function removeLink()
 {
     var theSelection = iframe.getSelection();
@@ -311,7 +413,7 @@ function removeLink()
 
 
 
-/* Add a link to selected text or where the cursor is. Takes care of guideXML formatting */
+// Add a link to selected text or where the cursor is. Takes care of guideXML formatting
 function insertLink(displayText, link) 
 {       
     var theSelection = iframe.getSelection();
@@ -336,40 +438,39 @@ function insertLink(displayText, link)
     link += '>';
 	link +=	displayText+'</a>';
 	
-	if(path != null)
-	{
+	if(path != null) {
 	    iframe.document.execCommand('inserthtml', false, link);
 	}
 }
 
 
 
-/* Deletes a node: Passed as a parameter or based on the current cursor position */
+// Deletes a node: Passed as a parameter or based on the current cursor position
 function deleteNode(node)
 {
     if (node!=null)
         var text = node;
-    else 
-    {
+    else  {
         var theSelection = iframe.getSelection();
         var theRange = theSelection.getRangeAt(0);
         var text = theRange.commonAncestorContainer;
     }
     
-    var allowed = new Array("guideBlock", 
+    var allowed = new Array("guideBlock",
+                            "guideParagraph", 
                             "guideChapter", 
                             "guideSection");
                             
+    
     var path = checkNodePath(text, allowed);    
     
     var content = iframe.document.getElementById('mainContent');
     
-    if(path!=null)
-    {
-        if (window.confirm('Are you sure you want to delete current node?')) 
-        {
-            switch(path.title) 
-            {
+    if(path!=null) {
+        path.style.background = '#D01F3C';
+        
+        if (window.confirm('Are you sure you want to delete current node?')) {
+            switch(path.title) {
                 case 'guideChapter':
                     content.removeChild(path);
                     reFactorChapters(content);
@@ -379,10 +480,9 @@ function deleteNode(node)
                 case 'guideSection':
                     allowed = new Array("guideChapter");
                     var chapter = checkNodePath(path, allowed);
-                    if (chapter!=null)
-                    {
+                    if (chapter!=null) {
                         chapter.removeChild(path);
-                        reFactorSections(content);
+                        reFactorSections(chapter);
                         createTree();
                     }
                     break;
@@ -391,16 +491,25 @@ function deleteNode(node)
                     allowed = new Array("guideBody");
                     var body = checkNodePath(path, allowed);
                     //alert(body.childNodes[1].innerHTML);
-                    if (body!=null)
-                    {
+                    if (body!=null) {
+                        body.removeChild(path);
+                    }
+                    break;
+                
+                case 'guideParagraph':
+                    allowed = new Array("guideBlock");
+                    var body = checkNodePath(path, allowed);
+                    //alert(body.childNodes[1].innerHTML);
+                    if (body!=null) {
                         body.removeChild(path);
                     }
                     break;
             }
         }
+        else
+            path.style.background = '#FFF';
     }
-    else
-    {
+    else {
         alert('You cannot delete this node!');
     }
 
@@ -408,18 +517,16 @@ function deleteNode(node)
 
 
 
-/* Hmmm... This is what I have to do to get the GET variable */
+// Hmmm... This is what I have to do to get the GET variable
 function getVar(name)
 {
     get_string = document.location.search;         
     return_value = '';
 
-    do 
-    { //This loop is made to catch all instances of any get variable.
+    do { //This loop is made to catch all instances of any get variable.
         name_index = get_string.indexOf(name + '=');
 
-        if(name_index != -1)
-        {
+        if(name_index != -1) {
             get_string = get_string.substr(name_index + name.length + 1, get_string.length - name_index);
 
             end_of_value = get_string.indexOf('&');
@@ -437,8 +544,7 @@ function getVar(name)
 
     //Restores all the blank spaces.
     space = return_value.indexOf('+');
-    while(space != -1)
-    { 
+    while(space != -1) { 
         return_value = return_value.substr(0, space) + ' ' + 
         return_value.substr(space + 1, return_value.length);
 
@@ -450,34 +556,29 @@ function getVar(name)
 
 
 
-/* Built in browser exec command running BLAH BLAH BLAH! Will get replaced by self written functions */
+// Built in browser exec command running BLAH BLAH BLAH! Will get replaced by self written functions
 function execute(command, value) 
 {
-    if (value == null) 
-    {
+    if (value == null)  {
         iframe.document.execCommand(command.id, false, null);
     }
-    else if (value == 'note' || value == 'impo' || value == 'warn')
-    {
+    else if (value == 'note' || value == 'impo' || value == 'warn') {
         addNote(command, value);
     }
-    else if (value == 'paragraph')
-    {
+    else if (value == 'paragraph') {
         addParagraph();
     }
-    else if (value == 'code')
-    {
+    else if (value == 'code') {
         addCode();
     }
-    else if (value == 'ol' || value == 'ul')
-    {
+    else if (value == 'ol' || value == 'ul') {
         addList(value);
     }
 }
 
 
 
-/* Adds Note/Warn/Impo */
+// Adds Note/Warn/Impo
 function addNote(command, value) 
 {
 
@@ -533,7 +634,7 @@ function addParagraph(flag, text)
     var insertText = '&nbsp;';
 
     if (text)
-    insertText = text;
+        insertText = text;
 
     return addBlockType(getSel(), getSel(), insertText, 'para', flag, 0);
 }
@@ -545,28 +646,21 @@ function addBlockType(theAnchorNode, theBody, insertText, type, flag, index)
 {
     var insert = 0;
 
-    if (type == "para")
-    {
+    if (type == "para") {
         var newNode = document.createElement('div');
         newNode.title = 'guideBlock';
         var para = document.createElement('p');
         para.title = 'guideParagraph';
         para.innerHTML = insertText;
         newNode.appendChild(para);
-    }
-
-    else if (type == 'ol' || type == 'ul')
-    {
+    } else if (type == 'ol' || type == 'ul') {
         var newNode = document.createElement('div');
         newNode.title = 'guideBlock';
         var list = document.createElement(type);
         list.title = 'guideList';
         list.innerHTML = insertText;
         newNode.appendChild(list);
-    }
-
-    else 
-    {
+    } else  {
         var newNode = document.createElement('div');
         newNode.title = 'guideBlock';
         newNode.innerHTML = insertText;
@@ -581,16 +675,14 @@ function addBlockType(theAnchorNode, theBody, insertText, type, flag, index)
     if(path == null || theAnchorNode == null)
         return;    
     
-    switch(path.title)
-    {
+    switch(path.title) {
         case 'guideSectionTitle':
             while (path.title != 'guideBody')
                 path = path.nextSibling;
                 
             if (path.title != 'guideBody')
                 return;
-            else
-            {
+            else {
                 path.insertBefore(newNode, path.childNodes[0].nextSibling);
                 setFocus(newNode, flag, index);
             }
@@ -600,8 +692,7 @@ function addBlockType(theAnchorNode, theBody, insertText, type, flag, index)
             cleanUp(path);
             if (path.childNodes.length == 0)
                 path.appendChild(newNode);	
-            else 
-            {
+            else {
                 allowed = new Array("guideBlock");
                 theAnchorNode = checkNodePath(theAnchorNode, allowed);
                 if (theAnchorNode != null)
@@ -635,7 +726,7 @@ function addChapter(chapterTitle, sectionTitle)
     insertText += chapterTitle+'</p>';
     insertText += '<div id="doc_chap_sec1" title="guideSection"><p title="guideSectionTitle" class="secthead">';
     insertText += sectionTitle+'</p>';
-    insertText += '<div title="guideBody"><p title="guideParagraph">Insert Content Here!</p></div></div>';
+    insertText += '<div title="guideBody"><div title="guideBlock"><p title="guideParagraph">Insert Content Here!</p></div></div></div>';
 
     var theChapter = document.createElement("div");
     theChapter.id = "doc_chap";
@@ -668,18 +759,13 @@ function addChapter(chapterTitle, sectionTitle)
 function reFactorChapters(mainContent)
 {
     var j = 1; 
-    for (var i = 0; i < mainContent.childNodes.length; i++)
-    {	
-        if(mainContent.childNodes[i].innerHTML != null)
-        {
-            if (mainContent.childNodes[i].title == 'guideChapter')
-            {
+    for (var i = 0; i < mainContent.childNodes.length; i++) {	
+        if(mainContent.childNodes[i].innerHTML != null) {
+            if (mainContent.childNodes[i].title == 'guideChapter') {
                 mainContent.childNodes[i].id = "doc_chap"+j;
                 var x = 1;
-                for (var z = 0; z < mainContent.childNodes[i].childNodes.length; z++)
-                {
-                    if (mainContent.childNodes[i].childNodes[z].title == 'guideSection')
-                    {
+                for (var z = 0; z < mainContent.childNodes[i].childNodes.length; z++) {
+                    if (mainContent.childNodes[i].childNodes[z].title == 'guideSection') {
                         mainContent.childNodes[i].childNodes[z].id = "doc_chap"+j+"_sec"+x; 
                         x++;
                     }
@@ -698,15 +784,14 @@ function addSection(sectionTitle)
    
     var mainContent = getSel();
 
-    while (mainContent.title != 'guideChapter')
-    { 
+    while (mainContent.title != 'guideChapter') { 
         mainContent = mainContent.parentNode;
     }
 
     var insertText;
     insertText = '<p title="guideSectionTitle" class="secthead">';
     insertText += sectionTitle+'</p>';
-    insertText += '<div title="guideBody"><p title="guideParagraph">Insert Content Here!</p></div>';
+    insertText += '<div title="guideBody"><div title="guideBlock"><p title="guideParagraph">Insert Content Here!</p></div></div>';
 
     var theSection = document.createElement("div");
     theSection.id = "doc_chap_sec";
@@ -744,12 +829,9 @@ function reFactorSections(mainContent)
     var last_char = mainContent.id.charAt(the_length-1);
 
     var j = 1; 
-    for (var i = 0; i < mainContent.childNodes.length; i++)
-    {	
-        if(mainContent.childNodes[i].innerHTML != null)
-        {
-            if (mainContent.childNodes[i].title == 'guideSection')
-            {	
+    for (var i = 0; i < mainContent.childNodes.length; i++) {	
+        if(mainContent.childNodes[i].innerHTML != null) {
+            if (mainContent.childNodes[i].title == 'guideSection') {	
                 mainContent.childNodes[i].id = 'doc_chap'+last_char+'_sec'+j;
                 j++;
             }
@@ -774,15 +856,12 @@ function getAnchor(nodeTitle, nodeId)
 {
     var theAnchorNode = getSel();
 
-    while (theAnchorNode.title != nodeTitle)
-    {
-        if (theAnchorNode.id == nodeId)
-        {
+    while (theAnchorNode.title != nodeTitle) {
+        if (theAnchorNode.id == nodeId) {
             break;
         }
         theAnchorNode = theAnchorNode.parentNode;
-        if (theAnchorNode.id == 'sideContent') 
-        {
+        if (theAnchorNode.id == 'sideContent') {
             alert('You cannot insert this type of a node here!');
             return;
         }
@@ -798,8 +877,7 @@ function getParent(parentTitle, node)
 {
     var parent  = node.parentNode;
 
-    while (parent.id != parentTitle)
-    { 
+    while (parent.id != parentTitle) { 
         parent = parent.parentNode;
     }
 
@@ -812,8 +890,7 @@ function getParent(parentTitle, node)
 /* Cleanup the body removing useless tags */
 function cleanUp(theBody) 
 {
-    for (var i = 0; i < theBody.childNodes.length; i++)
-    {
+    for (var i = 0; i < theBody.childNodes.length; i++) {
         var node = theBody.childNodes[i];
         if (node.nodeName.toLowerCase() == 'div')
         if (node.id == '')
@@ -829,10 +906,8 @@ function checkBlock(title)
 {
     var elementList = new Array("guideParagraph", "guideBlock");
 
-    for (var i = 0; i < elementList.length; i++)
-    {
-        if (title == elementList[i])
-        {
+    for (var i = 0; i < elementList.length; i++) {
+        if (title == elementList[i]) {
             return true;
         }
     }
@@ -856,16 +931,11 @@ function createTree()
 
     tree = "<div>";
 
-    for (var i = 0; i < mainContent.childNodes.length; i++)
-    {
-        if(mainContent.childNodes[i].innerHTML != null)
-        {
-            if (mainContent.childNodes[i].title == 'guideChapter')
-            {
-                for (var z = 0; z < mainContent.childNodes[i].childNodes.length; z++)
-                {
-                    if (mainContent.childNodes[i].childNodes[z].title == 'guideChapterTitle')
-                    {
+    for (var i = 0; i < mainContent.childNodes.length; i++) {
+        if(mainContent.childNodes[i].innerHTML != null) {
+            if (mainContent.childNodes[i].title == 'guideChapter') {
+                for (var z = 0; z < mainContent.childNodes[i].childNodes.length; z++) {
+                    if (mainContent.childNodes[i].childNodes[z].title == 'guideChapterTitle') {
                         var idc = "'"+mainContent.childNodes[i].id+"'";
                         var id = mainContent.childNodes[i].id;
                         tree += '<div class="trigger" id="t_'+id+'" onclick="showBranch('+idc+', true, this);">';
@@ -873,12 +943,10 @@ function createTree()
                         tree += '<span id="C_'+id+'">'+mainContent.childNodes[i].childNodes[z].innerHTML+'</span><br /></div>';
                         tree += '<div class="branch" id="'+id+'">';
                     }
-                    if (mainContent.childNodes[i].childNodes[z].title == 'guideSection')
-                    {
+                    if (mainContent.childNodes[i].childNodes[z].title == 'guideSection') {
                         section = mainContent.childNodes[i].childNodes[z];
                         var k = 0;
-                        while (section.childNodes[k].title != 'guideSectionTitle')
-                        {
+                        while (section.childNodes[k].title != 'guideSectionTitle') {
                             k++;
                         }
                         var qid = "'"+section.id+"'";
@@ -902,27 +970,19 @@ function createTree()
 /* Shows/Hides a branch in our nifty DOM tree */
 function showBranch(branch, dflag)
 {
-    if (dflag != false)
-
-    {
+    if (dflag != false) {
         iframe.document.getElementById(branch).scrollIntoView();
 
         var objBranch = document.getElementById(branch).style;
-        if(objBranch.display=="block")
-        {
+        if(objBranch.display=="block") {
 
             objBranch.display="none";
         }
-        else 
-        {
+        else {
             objBranch.display="block";
 
         }
         swapFolder('I' + branch);
-    }
-    else 
-    {
-
     }
 }
 
@@ -933,15 +993,16 @@ function swapFolder(img)
 {
     objImg = document.getElementById(img);
     if(objImg.src.indexOf('closed.gif')>-1)
-    objImg.src = openImg.src;
+        objImg.src = openImg.src;
     else
-    objImg.src = closedImg.src;
+        objImg.src = closedImg.src;
 }
 
 
 
 // main function to process the fade request //
-function colorFade(id,element,start,end,steps,speed) {
+function colorFade(id,element,start,end,steps,speed) 
+{
     var startrgb,endrgb,er,eg,eb,step,rint,gint,bint,step;
     var target = iframe.document.getElementById(id);
     steps = steps || 20;
@@ -973,7 +1034,8 @@ function colorFade(id,element,start,end,steps,speed) {
 
 
 // incrementally close the gap between the two colors //
-function animateColor(id,element,steps,er,eg,eb,rint,gint,bint) {
+function animateColor(id,element,steps,er,eg,eb,rint,gint,bint) 
+{
     var target = iframe.document.getElementById(id);
     var color;
     if(target.step <= steps) {
@@ -1023,7 +1085,8 @@ function animateColor(id,element,steps,er,eg,eb,rint,gint,bint) {
 
 
 // convert the color to rgb from hex //
-function colorConv(color) {
+function colorConv(color) 
+{
     var rgb = [parseInt(color.substring(0,2),16), 
     parseInt(color.substring(2,4),16), 
     parseInt(color.substring(4,6),16)];

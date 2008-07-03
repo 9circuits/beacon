@@ -3,7 +3,7 @@ body
 {
     background:#fff;
     font-family:'Lucida Grande', 'Tahoma', Arial, sans-serif;
-    font-size:85%;
+    font-size:81%;
     margin: 0px;
 }
 
@@ -380,6 +380,17 @@ SPAN.episig {
 }
 
 SUP, SUB {font-size:xx-small;}
+
+.subspan {
+    vertical-align: sub;
+    font-size:xx-small;
+}
+
+.supspan {
+    vertical-align: super;
+    font-size:xx-small;
+}
+
 
 .contentbox {
     margin-left: 5%;
