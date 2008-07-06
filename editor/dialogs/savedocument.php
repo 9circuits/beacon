@@ -37,7 +37,7 @@ var myAjax = new Ajax.Request(
         <tr><td align="center">
             Saved!
         </td></tr>
-        <tr><td align="center"> <a href="#" id="update" class="lbAction" rel="deactivate">Ok</a></td></tr>
+        <tr><td align="center"> <a href="#" id="save" class="lbAction" rel="deactivate">Ok</a></td></tr>
     </table>
     </div>
 </div>

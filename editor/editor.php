@@ -2,7 +2,7 @@
 
 if ($_GET['id'] == '')
 {
-    //echo 'Boohoo! No File selected??? Press the back button and try again!';
+    //echo 'Boohoo! No File selected???';
     header('Location: index.php');
 }
 require_once 'conf';

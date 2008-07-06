@@ -38,6 +38,13 @@
     <a class="button" id="paragraph" onClick="execute(this, 'paragraph');" title="Paragraph">
         <img src="images/paragraph.png" border="none" />
     </a>
+    <a class="button" id="paragraph" onClick="execute(this, 'epigraph');" title="Paragraph">
+        <img src="images/epi.png" border="none" />
+    </a>
+    <div class="separator"></div>
+    <a class="lbOn" href="dialogs/addauthor.php" title="Delete Current Node">
+        <img src="images/authors.png" border="none" />
+    </a>
     <div class="separator"></div>
     <a class="button" id="delete" onClick="deleteNode();" title="Delete Current Node">
         <img src="images/cancel.png" border="none" />

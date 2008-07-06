@@ -25,6 +25,9 @@ if ($flag == 1)
 {
 	/* Store raw XML */
 	$tmpName = tempnam(null, null);
+	
+	system('rm -rf '.getDirName($tmpName.'.html').'*.html '.getDirName($tmpName.'.xml').'*.xml ');
+	
 	$handle = fopen($tmpName.".xml", "w+");
 	fwrite($handle, $template->saveXML());
 	fclose($handle);
@@ -54,7 +57,42 @@ if ($flag == 1)
 		</div>
 		<?php
 		echo '</div>';
-	}
+    }
 }
+?>
+<?php
+function getDirName($dir)
+{
+    $mainUrl = $dir; 
+
+    $urlExplode = explode("/", $mainUrl); 
+
+    $fileName = end($urlExplode); 
+
+    $fileExplode = explode(".", $fileName); 
+
+    $questExplode = explode("?", $fileName); 
+
+    if(count($fileExplode) > 1) {
+        $endIsFile = $fileExplode[1];}else{$endIsFile = "";
+    } 
+
+    if(count($questExplode) > 1) {
+        $endIsQuest = $questExplode[1];}else{$endIsQuest = "";
+    } 
+    
+    if ($endIsFile!= ""){  
+        $resultUrl = str_replace($fileName, "", $mainUrl); 
+        return $resultUrl; 
+        } elseif ($endIsQuest!= "") { 
+            $resultUrl = str_replace($fileName, "", $mainUrl); 
+            return $resultUrl; 
+        } else { 
+            if(substr($mainUrl,-1,1)!= "/") { 
+                $mainUrl .= "/"; 
+            } 
+            return $mainUrl; 
+        } 
+    }
 ?>
 <script language="javascript" type="text/javascript">window.top.window.stopUpload("<?php echo urlencode($tmpName); ?>")</script>   

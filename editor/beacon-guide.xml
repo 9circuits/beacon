@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<guide>
+<title>Beacon User Guide</title>
+
+<author title="Author">
+                               <mail link="n9986.mali@gmail.com">Nandeep Mali</mail>
+</author>
+
+
+<abstract>This guide shows you how to set up and use Beacon, a GuideXML Editor. GuideXML is a syntax which is used as official format for Gentoo documentation. This document itself was created using Beacon.</abstract>
+
+<date>2008-07-07</date>
+
+
+
+<chapter>
+<title>Introduction</title>
+<section>
+<title>Beacon Design Goals</title>
+<body>
+
+
+
+
+
+
+
+<p>Beacon is a web based WYSIWYG editor for authoring GuideXML documents. It allows you to rapidly create or edit documents without knowing the GuideXML syntax by providing a Rich Text Editor Environment. It also allows the user to directly edit the underlying XML for custom changes.</p>
+
+
+
+
+
+
+
+</body>
+</section>
+
+<section>
+<title>Further Resources</title>
+<body>
+
+
+
+
+
+
+
+<p>The following links should tell you more about the Gentoo Documentation and GuideXML syntax:
+</p>
+
+<ul>
+<li><uri link="http://gdp.gentoo.org">Gentoo Documentation Project</uri></li>
+<li><uri link="http://www.gentoo.org/doc/en/xml-guide.xml">GuideXML Guide</uri></li>
+</ul>
+
+<p>You can play around with the source code of this document that can be found in the editor's folder.
+</p>
+
+
+
+
+
+
+
+</body>
+</section>
+
+</chapter>
+
+<chapter>
+<title>Getting Started</title>
+<section>
+<title>Installation</title>
+<body>
+
+
+
+
+
+
+
+<p>Beacon needs a PHP enabled web server and a JavaScript enabled browser. Currently supported browsers are:
+</p>
+
+<ul>
+
+<li>Firefox 2/3
+</li>
+<li>Safari 3</li>
+
+</ul>
+
+<p>Start off with fetching a copy of Beacon directly from the webserver using GIT.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<pre caption="Fetching a copy of git"># <i>git clone git://git.tuxfamily.org/gitroot/beacon/trunk.git
+</i></pre>
+
+
+
+
+
+
+
+<p>Navigate to the <path>trunk/editor/</path> directory. This is the folder that you have to move to your Webserver's httpdocs and you are done!</p>
+
+
+
+
+
+
+
+</body>
+</section>
+
+<section>
+<title>Running Beacon</title>
+<body>
+
+
+
+
+
+
+<p>Point your browser to the folder you have put Beacon in with the correct address. For example if you have put it in <path>httpdocs/beacon/ </path>you would access it by typing <path>http://www.localhost.com/beacon</path>.</p>
+<p>You will be presented with the the landing page of Beacon. Here you can choose to create a new document or edit an existing document.</p>
+<p> On clicking New you will be presented with a form with the following fields:
+</p>
+<ol>
+<li>Title of the Document: This is what your document will be called. Try to keep it short and sweet. Can be changed later.</li>
+<li>
+Author of the Document: Add your name here. Additional authors and email information later.</li>
+<li>Abstract: A summary of the document. Readers should be able to tell with one look what your document is all about.</li>
+<li>Date: Use the standard YYYY-MM-DD format! If you didn't you can change it later.</li>
+</ol>
+<p>Click Go! to proceed to the editor screen.</p>
+<p>On clicking Edit you will be presented with a file upload form. Choose a valid GuideXML file. Click upload and you will be presented with a preview of the document. Click on Go! to proceed to the Editor.
+</p>
+
+
+
+
+
+
+</body>
+</section>
+
+</chapter>
+
+
+</guide>
+

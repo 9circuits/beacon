@@ -2,7 +2,7 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"> 
 
-<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
+<xsl:output method="xml" encoding="UTF-8" indent="no"/>
 
 <xsl:template match="/">
 	<guide>
@@ -21,9 +21,9 @@
 </xsl:template>
 
 <xsl:template match="div[@id='sideContent']">
-	<xsl:text>&#10;</xsl:text><xsl:apply-templates select="p[@title='guideAuthor']"/>
-	<xsl:text>&#10;&#10;</xsl:text><xsl:apply-templates select="p[@title='guideAbstract']"/>
-	<xsl:text>&#10;&#10;</xsl:text><xsl:apply-templates select="p[@title='guideDate']"/>
+	<xsl:text>&#10;</xsl:text><xsl:apply-templates select="div[@title='guideAuthor']"/>
+	<xsl:text>&#10;&#10;</xsl:text><xsl:apply-templates select="div[@title='guideAbstract']"/>
+	<xsl:text>&#10;&#10;</xsl:text><xsl:apply-templates select="div[@title='guideDate']"/>
 	<xsl:text>&#10;</xsl:text><xsl:apply-templates select="div[@title='guideVersion']"/>
 </xsl:template>
 
@@ -56,21 +56,21 @@
 		</xsl:for-each>
 </xsl:template>
 
-<xsl:template match="p[@title='guideAuthor']">
+<xsl:template match="div[@title='guideAuthor']">
 	<xsl:variable name="title">
-		<xsl:value-of select="i[@title='guideAuthorTitle']" />
+		<xsl:value-of select="div[@title='guideAuthorTitle']" />
 	</xsl:variable>
 	<author title="{$title}">
 	    <!--<xsl:text></xsl:text><xsl:apply-templates /> -->
-	        <xsl:apply-templates select="span[@title='guideAuthorName']" />
+	        <xsl:apply-templates select="div[@title='guideAuthorName']" />
     </author><xsl:text>&#10;</xsl:text>
 </xsl:template>
 
-<xsl:template match="span[@title='guideAuthorName']">
+<xsl:template match="div[@title='guideAuthorName']">
     <xsl:apply-templates />
 </xsl:template>
 
-<xsl:template match="i[@title='guideAuthorTitle']">
+<xsl:template match="div[@title='guideAuthorTitle']">
 </xsl:template>
 
 <xsl:template match="b[@title='guideMailValue']">
@@ -91,12 +91,27 @@
 	</xsl:choose>
 </xsl:template>
 
-<xsl:template match="p[@title='guideDate']">
-	<date><xsl:value-of select="span[@title='guideDateValue']" /></date>
+<xsl:template match="a[@title='guideLink']">
+    	<xsl:choose>
+    		<xsl:when test="string-length(@linkval) &gt; 0">
+    			<uri link="{@linkval}">
+    				<xsl:apply-templates />
+    			</uri>
+    		</xsl:when>
+    		<xsl:otherwise>
+    			<uri>
+    				<xsl:apply-templates />
+    			</uri>
+    		</xsl:otherwise>
+    	</xsl:choose>
 </xsl:template>
 
-<xsl:template match="p[@title='guideAbstract']">
-	<abstract><xsl:apply-templates select="span[@title='guideAbstractValue']"/></abstract>
+<xsl:template match="div[@title='guideDate']">
+	<date><xsl:value-of select="div[@title='guideDateValue']" /></date>
+</xsl:template>
+
+<xsl:template match="div[@title='guideAbstract']">
+	<abstract><xsl:apply-templates select="div[@title='guideAbstractValue']"/></abstract>
 </xsl:template>
 
 <xsl:template match="span[@title='guideAbstractValue']">
@@ -113,32 +128,36 @@
 </xsl:template>
 
 <xsl:template match="ul[@title='guideList']">
-    <ul><xsl:text>&#10;</xsl:text>
+    <ul>
 	    <xsl:apply-templates />
-	</ul><xsl:text>&#10;</xsl:text>
+	</ul>
 </xsl:template>
 
 <xsl:template match="ol[@title='guideList']">
-    <ol><xsl:text>&#10;</xsl:text>
+    <ol>
 	    <xsl:apply-templates />
-	</ol><xsl:text>&#10;</xsl:text>
+	</ol>
 </xsl:template>
 
 <xsl:template match="li">
 	<li>
 		<xsl:apply-templates />
-	</li><xsl:text>&#10;</xsl:text>
+	</li>
 </xsl:template>
 
 <xsl:template match="div[@title='guidePreCode']">
     <xsl:variable name="caption">
 		<xsl:value-of select="preceding-sibling::div[@title='guidePreHeader']/span[@title='guidePreTitle']" />
 	</xsl:variable>
-	<pre caption="{$caption}"><xsl:text>&#10;</xsl:text>
+	<pre caption="{$caption}">
 	    <xsl:for-each select="pre[@title='guideCodeBox']">
-	        <xsl:text>&#10;</xsl:text><xsl:apply-templates />
+	        <xsl:apply-templates />
 	    </xsl:for-each>
 	</pre>
+</xsl:template>
+
+<xsl:template match="br">
+    <xsl:text>&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="p[@class='ncontent']">
@@ -148,7 +167,7 @@
 <xsl:template match="span[@title='guideWarning']">
     <note>
         <xsl:apply-templates select="span[@title='guideWarnValue']"/>
-    </note><xsl:text>&#10;</xsl:text>
+    </note>
 </xsl:template>
 
 <xsl:template match="span[@title='guideWarnValue']">
@@ -158,7 +177,7 @@
 <xsl:template match="span[@title='guideNote']">
     <warn>
         <xsl:apply-templates select="span[@title='guideNoteValue']"/>
-    </warn><xsl:text>&#10;</xsl:text>
+    </warn>
 </xsl:template>
 
 <xsl:template match="span[@title='guideNoteValue']">
@@ -168,7 +187,7 @@
 <xsl:template match="span[@title='guideImportant']">
     <impo>
         <xsl:apply-templates select="span[@title='guideImpoValue']"/>
-    </impo><xsl:text>&#10;</xsl:text>
+    </impo>
 </xsl:template>
 
 <xsl:template match="span[@title='guideImpoValue']">
@@ -176,14 +195,14 @@
 </xsl:template>
    
 <xsl:template match="p[@title='guideParagraph']">
-	<p><xsl:apply-templates /></p><xsl:text>&#10;</xsl:text>
+	<p><xsl:apply-templates /></p>
 </xsl:template>
 
 <xsl:template match="p[@title='guideEpigraph']">
     <xsl:variable name="by">
 		<xsl:value-of select="span[@title='guideSignature']" />
 	</xsl:variable>
-	<p by="{$by}"><xsl:apply-templates /></p><xsl:text>&#10;</xsl:text>
+	<p by="{$by}"><xsl:apply-templates /></p>
 </xsl:template>
 
 <xsl:template match="span[@title='guideComment']">
@@ -259,9 +278,9 @@
 </xsl:template>
 
 <xsl:template match="table">
-	<table><xsl:text>&#10;</xsl:text>
+	<table>
 		<xsl:apply-templates />
-	</table><xsl:text>&#10;</xsl:text>
+	</table>
 </xsl:template>
 
 <xsl:template match="tr">
@@ -276,28 +295,28 @@
 	</th>
 </xsl:template>
 
-<xsl:template match="ti">
-	<td colspan="{@colspan}" rowspan="{@rowspan}" align="{@align}" class="tableinfo" >
+<xsl:template match="td">
+	<ti colspan="{@colspan}" rowspan="{@rowspan}" align="{@align}" class="tableinfo" >
 		<xsl:apply-templates />
-	</td>
+	</ti>
 </xsl:template>
 
 <xsl:template match="dl">
-	<dl><xsl:text>&#10;</xsl:text>
+	<dl>
 		<xsl:apply-templates />
-	</dl><xsl:text>&#10;</xsl:text>
+	</dl>
 </xsl:template>
 
 <xsl:template match="dt">
-	<dt><xsl:text>&#10;</xsl:text>
+	<dt>
 		<xsl:apply-templates />
-	</dt><xsl:text>&#10;</xsl:text>
+	</dt>
 </xsl:template>
 
 <xsl:template match="dd">
-	<dd><xsl:text>&#10;</xsl:text>
+	<dd>
 		<xsl:apply-templates />
-	</dd><xsl:text>&#10;</xsl:text>
+	</dd>
 </xsl:template>
 
 <xsl:template match="b">

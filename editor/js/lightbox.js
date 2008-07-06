@@ -178,9 +178,39 @@ lightbox.prototype = {
 /*-----------------------------------------------------------------------------------------------*/
 function checkSubmit()
 {
-	if (document.getElementById('update'));
-		//alert('update!');						// Write AJAX code to update the iframe
+	if (document.getElementById('update')) {
+	    
+	    var text = document.getElementById("source").value;
+	    
+	    var gid = getVar('id');
+	    
+        text = encodeURIComponent(text);
+        
+	    var myAjax = new Ajax.Request(
+        "ajax/update.php", 
+        {
+            method: 'post', 
+            parameters: "id="+gid+"&text="+text, 
+            onComplete: function() {
+                //alert(myAjax.transport.responseText);
+                iframe.document.body.innerHTML = myAjax.transport.responseText;
+                iframe.document.getElementById("guide").style.margin = '5px';
+            }
+        }
+        );
+	}
 		
+	else if (document.getElementById("addAuthor"))
+	{
+		try {
+		    addAuthor(document.getElementById('authorName').value, 
+		                document.getElementById('authorTitle').value, 
+		                document.getElementById('authorMail').value);
+		}
+		catch(e){
+			return;
+		}
+	}
 	else if (document.getElementById('addChapter'))
 	{
 		try {
@@ -208,6 +238,7 @@ function checkSubmit()
 			return;
 		}
 	}
+
 }
 
 // Onload, make all links that need to trigger a lightbox active

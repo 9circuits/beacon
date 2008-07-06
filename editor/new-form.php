@@ -29,21 +29,11 @@ $fields = $metadata->getElementsByTagName('field');
                 switch ($guide) {
                 case 'abstract' : echo '<td><textarea name="'.$guide.'" style="width:300px; height:100px;">Enter abstract here.</textarea></td>'; 
                                   break;
-				case 'date'		: echo '<td><input type="text" name="'.$guide.'" value="2008-12-12" 
-											 dojoType="dijit.form.DateTextBox" 
-											 required="true" /></td>';
+				case 'date'		: echo '<td><input type="text" name="'.$guide.'" value="2008-12-12" /></td>';
 								break;
-				case 'author'	: echo '<td><input type="text" name="'.$guide.'" value="Author"
-							               	 dojoType="dijit.form.ValidationTextBox"
-											 required="true" 
-								             trim="true"
-								             propercase="true" invalidMessage="Required Field"/></td>';
+				case 'author'	: echo '<td><input type="text" name="'.$guide.'" value="Author" /></td>';
 								break;
-				case 'title'	: echo '<td><input type="text" name="'.$guide.'" value="Title"
-							                dojoType="dijit.form.ValidationTextBox"
-											required="true" 
-							                trim="true"
-							                propercase="true" invalidMessage="Required Field"/></td>';
+				case 'title'	: echo '<td><input type="text" name="'.$guide.'" value="Title" /></td>';
 								break;
                 }
                 

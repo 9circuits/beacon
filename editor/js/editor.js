@@ -44,7 +44,7 @@ function initEditor()
         iframe.document.onkeydown = keydown;
     }
 
-    iframe.document.getElementById("guide").onclick = klick;
+    //iframe.document.getElementById("guide").onclick = klick;
  
     
     createTree();
@@ -130,28 +130,37 @@ function keydown(e)
     var start = theRange.startOffset;
     var end = theRange.endOffset;
     
-    
-    
     var text = theRange.commonAncestorContainer;
+    
+    var fullPath = getFullPath(text);
+    
+    //alert(path.length);
 
     var status = 'Status: title = '+text.title;
     status += ', startOffset = '+start;
     status += ', endOffset = '+end;
     status += ', nodeName = '+text.nodeName;
-    status += ', nodeLength = '+text.length;
+    status += ', nodeLength = '+text.length+'<br />';
 
+    for (var i=0; i<fullPath.length; i++) {
+        if (fullPath[i].title)
+            status += fullPath[i].title+' &gt; '; 
+        else 
+            status += fullPath[i].id+' &gt; ';
+            //alert(path.innerHTML);
+    }
+    
     /* This RTE is kinda like fill in the blanks. Only certain areas are editable. 
     This list will increase as the RTE is further developed */
 
     var allowed = new Array("guideParagraph", 
                             "guideChapterTitle", 
                             "guideSectionTitle", 
-                            "guideList", 
+                            "guideList",
+                            "guideAuthorTitle",
+                            "guideAuthorName", 
                             "guideDateValue", 
                             "guideAbstractValue",
-                            "guideAuthorTitle",
-                            "guideMailValue",
-                            "guideAuthorName",
                             "guideCodeBox",
                             "guidePreTitle",
                             "guideNoteValue",
@@ -166,7 +175,7 @@ function keydown(e)
         status += '<br /> PATH = '+path.title;
     else 
         status += '<br /> ERROR = This Part/Block/Selection in not editable!';
-    
+
     document.getElementById("status").innerHTML = status;
 
     //Let the Arrow keys run free!
@@ -179,96 +188,133 @@ function keydown(e)
         return;
     }
 
+    //if (e.preventDefault) e.preventDefault();
+    //if (e.stopPropagation) e.stopPropagation();
+    
     switch(e.keyCode) {
         //The three most damaging keys: DEL, BKSPCE, ENTER
-        case 8:
-        case 46:
-            switch(path.title) {
-                
-                case "guideList": 
-                case "guideCodeBox":
-                    break;
-                
-                default:
-                    if (start == 0) {
-                        if(end == text.length);
-                        
-                        else if (start == end) {                
-                            if (e.preventDefault) e.preventDefault();
-                            if (e.stopPropagation) e.stopPropagation();
-                        }
-                    }
-            }
-        break;
-
         case 13:
             switch(path.title) {
-                case 'guideSectionTitle':
+
+                case 'guideCodeBox':
+                    if(e.type == "keydown") {
+                    //iframe.document.execCommand('inserthtml', false, "");
+                    // get current selection
+                    var html = '<br /> ';
+                    var insertNode = document.createElement('span');
+                    insertAtSelection(html, insertNode);
+                    }
+                    
                     if (e.preventDefault) e.preventDefault();
                     if (e.stopPropagation) e.stopPropagation();
-                    addParagraph(false);
-                    break;
-                
-                case 'guideBlock':
-                    addParagraph(false);
+                    
                     break;
                     
                 case 'guideParagraph':
-                    //alert(path.childNodes.length);
-                    /*if (e.preventDefault) e.preventDefault();
-                    if (e.stopPropagation) e.stopPropagation();
-                    //alert(text.innerHTML);
-                    if ((end == text.length || end == text.length-1) && e.type == 'keydown')
-                        addParagraph(false);
-                    
-                    //Buggy >:p
-                    else if (start == end && e.type == 'keydown')
-                    {
-                        iframe.document.execCommand('inserthtml', false, '<div title="guideBlock"><p title="guideParagraph"></p></div>');
-                        //alert(path.innerHTML.substring(start, path.innerHTML.length));
-                        //alert(path.innerHTML.substring(0, start));
-                        //addParagraph(false, path.innerHTML.substring(start, path.innerHTML.length));
-                        //path.innerHTML = path.innerHTML.substring(0, start);
-                    }*/
-                    break;
-                    
-                case 'guideList':
-                    break;
-                
-                case 'guideCodeBox':
-    
-                    if(e.type == "keydown") {
-                       // iframe.document.execCommand('inserthtml', false, '<br />');
+                    if(e.type == "keydown" && start == end) {
                         
-                        /*var cpath = checkNodePath(path, new Array("guidePreCode"));
-                        var html = "";
+                        var index = pathHas(fullPath, path.title);
                         
-                        for (var i=0; i<cpath.childNodes.length; i++)
-                        {
-                            //alert(cpath.childNodes[i].innerHTML);
+                        var newText;
+                        var oldText;
                         
-                            if(cpath.childNodes[i].title=="guideCodeBox")
-                                html+=cpath.childNodes[i].innerHTML+'\n';   
+                        var flag = 0;
+                                                
+                        for (var i=0; i < fullPath[index].childNodes.length; i++) {
+                            if (fullPath[index].childNodes[i] == text.parentNode) {
+                                newText = text.parentNode.innerHTML.substring(start, text.parentNode.innerHTML.length);
+                                oldText = text.parentNode.innerHTML.substring(0, start);
+                                flag = 1;
+                                break;
+                            }
                         }
-                    
-                        cpath.innerHTML = "";
-                    
-                        pre = iframe.document.createElement("pre");
-                        pre.title="guideCodeBox";
-                        pre.innerHTML = html;
-                    
-                        cpath.appendChild(pre);*/
+                        
+                        var knode = iframe.document.createElement('div');
+                        var pnode = iframe.document.createElement('div');
+                        
+                        if (flag == 1) {
+                            var beforeNode = text.parentNode.cloneNode(false);
+                            beforeNode.innerHTML = newText;
+                            knode.appendChild(beforeNode);
+                            for (var j=i+1; j < fullPath[index].childNodes.length; j++) 
+                                knode.appendChild(fullPath[index].childNodes[j].cloneNode(true));
+                                
+                            var afterNode = beforeNode.cloneNode(false);
+
+                            afterNode.innerHTML = oldText;
+                            pnode.appendChild(afterNode);
+
+                            for (var k=i-1; k >= 0; k--)
+                               pnode.insertBefore(fullPath[index].childNodes[k].cloneNode(true), pnode.childNodes[0]);
+                               
+                        } else {
+                            var textNode = iframe.document.createTextNode(text.data.substring(start, text.data.length));
+                            knode.appendChild(textNode);
+                            var vtext = text.nextSibling;
+                            while (vtext != null) {
+                                knode.appendChild(vtext.cloneNode(true));                               
+                                vtext = vtext.nextSibling;
+                            }
+                            
+                            textNode = iframe.document.createTextNode(text.data.substring(0, start));
+                            pnode.appendChild(textNode);
+                            var ptext = text.previousSibling;
+                            while (ptext != null) {
+                                pnode.insertBefore(ptext.cloneNode(true), pnode.childNodes[0]);
+                                ptext = ptext.previousSibling;
+                            }
+                        }
+                    addParagraph(false, knode.innerHTML);
+                    path.innerHTML = pnode.innerHTML;
+                    //alert(pnode.innerHTML);
+                    //alert(knode.innerHTML);
                     }
-                    //alert(cpath.innerHTML);
-                    //setFocus(cpath, false);
-                    break;
-                    
-                default:
-                    //iframe.document.execCommand('inserthtml', false, '<br />');
                     
                     if (e.preventDefault) e.preventDefault();
                     if (e.stopPropagation) e.stopPropagation();
                     break;
+                    
+                case 'guideSectionTitle':
+                    addParagraph(false);
+                    if (e.preventDefault) e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
+                    break;
+                    
+                case 'guideList':
+                    if(e.type == "keydown") {
+                        if (text.childNodes[0].innerHTML.length == 0 && text.nextSibling == null) {
+                            addParagraph(false);
+                            text.parentNode.removeChild(text);
+                        } else if (text.previousSibling == null) {
+                                var li = iframe.document.createElement('li');
+                                li.innerHTML = "&nbsp;";
+                                text.parentNode.insertBefore(li, text);
+                        } else {
+                                var li = iframe.document.createElement('li');
+                                li.innerHTML = "&nbsp;";
+                                text.parentNode.insertBefore(li, text);
+                        }
+                        if (e.preventDefault) e.preventDefault();
+                        if (e.stopPropagation) e.stopPropagation();
+                    }
+                    break;
+                
+                default:
+                    if (e.preventDefault) e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
+            }
+            break;
+
+        case 8:
+        case 46:
+            switch(path.title) {
+                case 'guideList':
+                    break;
+                default:
+                    if (start == 0) {
+                        if (e.preventDefault) e.preventDefault();
+                        if (e.stopPropagation) e.stopPropagation();  
+                    }
             }
             break;
 
@@ -276,7 +322,7 @@ function keydown(e)
             break;
     }
     
-
+    
     switch(path.title) {
         case 'guideChapterTitle':
             document.getElementById('C_'+path.parentNode.id).innerHTML = path.innerHTML;            
@@ -284,11 +330,121 @@ function keydown(e)
         case 'guideSectionTitle':
             document.getElementById('S_'+path.parentNode.id).innerHTML = path.innerHTML;
             break;
-
     }
+    
+}
+
+function insertAtSelection(html, insertNode)
+{
+    var sel = iframe.getSelection();   
+
+    // get the first range of the selection
+    // (there's almost always only one range)
+    var range = sel.getRangeAt(0);
+
+    // insert specified HTML into the node passed by argument
+    insertNode.innerHTML = html;  
+
+    // deselect everything
+    sel.removeAllRanges();
+
+    // remove content of current selection from document
+    range.deleteContents();
+
+    // get location of current selection
+    var container = range.startContainer;
+    var pos = range.startOffset;
+
+    // make a new range for the new selection
+    range=document.createRange();
+
+    var afterNode;
+    //container.insertData(pos, insertNode.nodeValue);
+
+    if (container.nodeType==3 && insertNode.nodeType==3) {
+
+      // if we insert text in a textnode, do optimized insertion
+      container.insertData(pos, insertNode.nodeValue);
+
+    } else {
+
+
+      if (container.nodeType==3) {
+
+        // when inserting into a textnode
+        // we create 2 new textnodes
+        // and put the insertNode in between
+
+        var textNode = container;
+        container = textNode.parentNode;
+        var text = textNode.nodeValue;
+
+        // text before the split
+        var textBefore = text.substr(0,pos);
+        // text after the split
+        var textAfter = text.substr(pos);
+
+        var beforeNode = document.createTextNode(textBefore);
+        var afterNode = document.createTextNode(textAfter);
+
+        // insert the 3 new nodes before the old one
+        container.insertBefore(afterNode, textNode);
+        container.insertBefore(insertNode, afterNode);
+        container.insertBefore(beforeNode, insertNode);
+
+        // remove the old node
+        container.removeChild(textNode);
+
+      } else {
+
+        // else simply insert the node
+        afterNode = container.childNodes[pos];
+        container.insertBefore(insertNode, afterNode);
+      }
+    }
+
+    // select the modified html
+    s = iframe.getSelection();
+    var r1 = iframe.document.createRange();
+    
+    r1.setStart(insertNode, 1);
+    r1.setEnd(insertNode, 1);
+
+    s.removeAllRanges(); 
+    s.addRange(r1);
+
+    iframe.focus();
 }
 
 
+function pathHas(fullPath, title)
+{
+    for (i=0; i<fullPath.length; i++)
+        if (fullPath[i].title == title)
+            return i;
+    return null;
+}
+
+
+function getFullPath(node)
+{
+    var path = new Array();
+    var i = 0;
+    
+    while (node.id != 'guide') {
+        path[i] = node;
+        i++;
+        node = node.parentNode;
+        
+    }
+    
+    return path;
+}
+
+
+
+
+// Past this point: Completed functions and *sigh* well working...
 
 // Set the focus of the cursor to the given node. Edit: Problem apparently solved.
 function setFocus(node, flag, index) 
@@ -314,6 +470,7 @@ function setFocus(node, flag, index)
         colorFade(node.id,'background','008C00','ffffff', 50,20);
     }
 }
+
 
 
 // Add a a little color to dull text :P
@@ -360,6 +517,8 @@ function addSpan(spanTitle, spanClass, spanDir)
     //alert('hello');
 }
 
+
+
 // Removes all styling from a text selection. Note: I need to find a better way to do this. Currently just a hack.
 function clearFormat()
 {
@@ -389,7 +548,40 @@ function clearFormat()
     iframe.document.execCommand('inserthtml', false, "</span>"+theSelection+"<span>");
 }
 
-// Past this point: Completed functions and *sigh* well working...
+
+
+//Adds an Author
+function addAuthor(authorName, authorTitle, authorMail)
+{
+    var text = "";
+    
+    text = '\n<div title="guideAuthorName">';
+
+    if (authorMail.length > 0) {
+        text += '\n<a title="guideMail" linkval="'+authorMail+'" href="mailto:'+authorMail+'" class="altlink">';
+        text += '<b title="guideMailValue">'+authorName+'</b></a>';
+    } else {
+        text += '\n<a title="guideMail" class="altlink">';
+        text += '<b title="guideMailValue">'+authorName+'</b></a>';
+    }
+    
+    /*else 
+        text += authorName;*/
+
+    text += '\n</div>';
+    text += '\n<div title="guideAuthorTitle">'+authorTitle+'</div>';
+    text += '\n</div><br />';
+    
+    var side = iframe.document.getElementById('sideContent');
+    
+    var author = iframe.document.createElement('div');
+    author.title = "guideAuthor";
+    author.className = "alttext";
+    author.innerHTML = text;
+        
+    side.insertBefore(author, iframe.document.getElementById('authorBreak'));    
+}
+
 
 
 // Removes the anchor off the selected text
@@ -428,18 +620,19 @@ function insertLink(displayText, link)
                             
     var path = checkNodePath(text, allowed);
     
-    var link = '<a title="guideLink" href="'+link+'"';
+    var linkText = '<a title="guideLink" href="'+link+'"';
     
     if (displayText.length != 0)
-        link += 'linkval="'+link+'"';
+        linkText += ' linkval="'+link+'"';
     else
-        displayText = link;
+        linkText = displayText;
     
-    link += '>';
-	link +=	displayText+'</a>';
+    linkText += '>';
+	linkText +=	displayText+'</a>';
 	
 	if(path != null) {
-	    iframe.document.execCommand('inserthtml', false, link);
+	    iframe.document.execCommand('inserthtml', false, linkText);
+	    //alert(linkText);
 	}
 }
 
@@ -459,12 +652,14 @@ function deleteNode(node)
     var allowed = new Array("guideBlock",
                             "guideParagraph", 
                             "guideChapter", 
-                            "guideSection");
+                            "guideSection",
+                            "guideAuthor");
                             
     
     var path = checkNodePath(text, allowed);    
     
     var content = iframe.document.getElementById('mainContent');
+    var side = iframe.document.getElementById('sideContent');
     
     if(path!=null) {
         path.style.background = '#D01F3C';
@@ -504,7 +699,11 @@ function deleteNode(node)
                         body.removeChild(path);
                     }
                     break;
+                case 'guideAuthor':
+                    side.removeChild(path);
+                    break;
             }
+            
         }
         else
             path.style.background = '#FFF';
@@ -568,6 +767,9 @@ function execute(command, value)
     else if (value == 'paragraph') {
         addParagraph();
     }
+    else if (value == 'epigraph') {
+        addEpigraph();
+    }
     else if (value == 'code') {
         addCode();
     }
@@ -623,7 +825,7 @@ function addList(value)
 {
     var insertText;
     insertText = "<li>Sample List Item</li>";
-    addBlockType(getSel(), getSel(), insertText, value, true, 0);
+    addBlockType(getSel(), getSel(), insertText, value, false, 1);
 }
 
 
@@ -631,12 +833,29 @@ function addList(value)
 /* Adds a Paragraph */
 function addParagraph(flag, text)
 {
-    var insertText = '&nbsp;';
+    var insertText = 'Sample Paragraph';
 
     if (text)
         insertText = text;
 
     return addBlockType(getSel(), getSel(), insertText, 'para', flag, 0);
+}
+
+
+/* Adds a Paragraph */
+function addEpigraph(flag, text)
+{
+    var insertText = '\n<p title="guideEpigraph" class="epigraph">';
+    
+    insertText += 'I am an Epigraph!';
+    insertText += '<br /><br />- <span title="guideSignature" class="episig">';
+    insertText += 'Epigraph';
+	insertText += '</span><br /><br /></p>';
+
+    if (text)
+        insertText = text;
+
+    return addBlockType(getSel(), getSel(), insertText, 'null', flag, 0);
 }
 
 
