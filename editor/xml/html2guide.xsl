@@ -30,24 +30,24 @@
 <xsl:template match="div[@id='mainContent']">
 		<xsl:for-each select="child::*">
 			<xsl:if test="@title='guideChapter'">
-				<xsl:text>&#10;&#10;</xsl:text><chapter><xsl:text>&#10;</xsl:text>
+				<xsl:text>&#10;&#10;</xsl:text><chapter>
 				<xsl:for-each select="child::*">
 					<xsl:if test="@title='guideSection'">
-						<xsl:text>&#10;</xsl:text><section><xsl:text>&#10;</xsl:text>
+						<xsl:text>&#10;</xsl:text><section>
 						<xsl:for-each select="child::*">
 							<xsl:if test="@title='guideBody'">
-								<xsl:text>&#10;</xsl:text><body><xsl:text>&#10;</xsl:text>
+								<xsl:text>&#10;</xsl:text><body>
 								    <xsl:apply-templates />
-								<xsl:text>&#10;</xsl:text></body>
+								</body>
 							</xsl:if>
 							<xsl:if test="@title='guideSectionTitle'">
-								<title><xsl:apply-templates /></title>
+								<xsl:text>&#10;</xsl:text><title><xsl:apply-templates /></title>
 							</xsl:if>
 						</xsl:for-each>
 						<xsl:text>&#10;</xsl:text></section><xsl:text>&#10;</xsl:text>
 					</xsl:if>
 					<xsl:if test="@title='guideChapterTitle'">
-						<title><xsl:apply-templates /></title>
+						<xsl:text>&#10;</xsl:text><title><xsl:apply-templates /></title>
 					</xsl:if>
 					
 				</xsl:for-each>

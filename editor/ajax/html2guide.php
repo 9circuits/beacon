@@ -13,7 +13,7 @@ $tidy = clean_html_code($text); //I want clean code!
 
 $html = fopen($id.".html", "w+");
 
-fwrite($html, $text);
+fwrite($html, $tidy);
 
 fclose($html);
 
@@ -61,7 +61,7 @@ function fix_newlines_for_clean_html($fixthistext)
 function clean_html_code($uncleanhtml)
 {
 	//Set wanted indentation
-	$indent = "  ";
+	$indent = "";
 
 
 	//Uses previous function to seperate tags

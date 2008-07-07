@@ -283,9 +283,16 @@ function keydown(e)
                 case 'guideList':
                     if(e.type == "keydown") {
                         //alert(text.parentNode.nodeName);
+                        
+                        for (var i=0; i < path.childNodes.length; i++)
+                            if (path.childNodes[i].nodeType == 3)
+                                path.removeChild(path.childNodes[i]);
+                        
                         while (text.nodeName.toLowerCase() != 'li')
                             text = text.parentNode;
                             
+                        //alert(text.nextSibling);
+                        
                         if (text.nextSibling == null) {
                             if (text.innerHTML == '-- Item --') {
                                 addParagraph(false);
@@ -321,6 +328,10 @@ function keydown(e)
         case 46:
             switch(path.title) {
                 case 'guideList':
+                    for (var i=0; i < path.childNodes.length; i++)
+                        if (path.childNodes[i].nodeType == 3)
+                            path.removeChild(path.childNodes[i]);
+                        
                     while (text.nodeName.toLowerCase() != 'li')
                         text = text.parentNode;
                     
@@ -864,7 +875,8 @@ function addParagraph(flag, text)
 }
 
 
-/* Adds a Paragraph */
+
+/* Adds an Epigraph */
 function addEpigraph(flag, text)
 {
     var insertText = '\n<p title="guideEpigraph" class="epigraph">';
@@ -925,6 +937,7 @@ function addBlockType(theAnchorNode, theBody, insertText, type, flag, index)
                 return;
             else {
                 path.insertBefore(newNode, path.childNodes[0].nextSibling);
+                //path.insertBefore(iframe.document.createTextNode("\n\n"), newNode);
                 setFocus(newNode, flag, index);
             }
             break;
@@ -939,10 +952,13 @@ function addBlockType(theAnchorNode, theBody, insertText, type, flag, index)
                 if (theAnchorNode != null)
                     path.insertBefore(newNode, theAnchorNode.nextSibling);
             }
+            path.insertBefore(iframe.document.createTextNode("\n\n"), newNode);
+            //path.insertBefore(iframe.document.createTextNode("\n\n"), newNode.nextSibling);
+            
             setFocus(newNode, flag, index);
     }
 
-
+    
     /*if (insert == 1)
     theBody.insertBefore(newNode, theAnchorNode.nextSibling);
     else

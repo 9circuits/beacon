@@ -1,6 +1,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"> 
 
-	<xsl:output method="html" encoding="UTF-8" indent="yes"/>
+	<xsl:output method="xml" encoding="UTF-8" indent="no"/>
 
 	<xsl:template match="/">
 		<xsl:apply-templates select="guide"/>
@@ -242,9 +242,9 @@
 	</xsl:template>
 	
 	<xsl:template match="b">
-		<b>
+		<span title="guideBold" class="boldtext">
 			<xsl:apply-templates />
-		</b>
+		</span>
 	</xsl:template>
 	
 	<xsl:template match="table">
