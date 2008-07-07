@@ -259,6 +259,13 @@
 	</e>
 </xsl:template>
 
+<xsl:template match="span[@title='guideBold']">
+    <b>
+	    <xsl:apply-templates />
+	</b>
+</xsl:template>
+
+
 <xsl:template match="span[@title='guideCodeInput']">
 	<i>
 		<xsl:apply-templates />

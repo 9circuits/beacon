@@ -346,6 +346,10 @@ pre {
     font-style: italic;
 }
 
+.boldtext {
+    font-weight: bold;
+}
+
 .missing-value {
     font-style: italic;
     font-weight: lighter;

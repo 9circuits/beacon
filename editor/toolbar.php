@@ -51,10 +51,10 @@
     </a>
 </div>
 <div class="toolholder">
-    <a class="button" id="bold" onClick="execute(this, null);" title="Bold (Ctrl+B)">
+    <a class="button" id="bold" onClick="addSpan('guideBold', 'boldtext');" title="Bold">
         <img src="images/bold.png" border="none" />
     </a>
-    <a class="button" id="italic" onClick="execute(this, null);" title="Italic (Ctrl+I)">
+    <a class="button" id="italic" onClick="addSpan('guideEm', 'emphasis');" title="Italic">
         <img src="images/italic.png" border="none" />
     </a>
     <div class="separator"></div>

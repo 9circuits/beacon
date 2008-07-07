@@ -282,21 +282,33 @@ function keydown(e)
                     
                 case 'guideList':
                     if(e.type == "keydown") {
-                        if (text.childNodes[0].innerHTML.length == 0 && text.nextSibling == null) {
-                            addParagraph(false);
-                            text.parentNode.removeChild(text);
-                        } else if (text.previousSibling == null) {
+                        //alert(text.parentNode.nodeName);
+                        while (text.nodeName.toLowerCase() != 'li')
+                            text = text.parentNode;
+                            
+                        if (text.nextSibling == null) {
+                            if (text.innerHTML == '-- Item --') {
+                                addParagraph(false);
+                                text.parentNode.removeChild(text);
+                            }
+                            else {
                                 var li = iframe.document.createElement('li');
-                                li.innerHTML = "&nbsp;";
-                                text.parentNode.insertBefore(li, text);
-                        } else {
-                                var li = iframe.document.createElement('li');
-                                li.innerHTML = "&nbsp;";
-                                text.parentNode.insertBefore(li, text);
+                                li.innerHTML = "-- Item --";
+                                text.parentNode.appendChild(li);
+                                setFocus(li, false, 0);
+                            }
                         }
-                        if (e.preventDefault) e.preventDefault();
-                        if (e.stopPropagation) e.stopPropagation();
+                        else {
+                            var li = iframe.document.createElement('li');
+                            li.innerHTML = "-- Item --";
+                            text.parentNode.insertBefore(li, text);
+                            setFocus(li, false, 0);
+                            
+                        }
                     }
+                    
+                    if (e.preventDefault) e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
                     break;
                 
                 default:
@@ -309,7 +321,17 @@ function keydown(e)
         case 46:
             switch(path.title) {
                 case 'guideList':
+                    while (text.nodeName.toLowerCase() != 'li')
+                        text = text.parentNode;
+                    
+                    if (start == 0) {
+                        if (text.previousSibling == null) {
+                            if (e.preventDefault) e.preventDefault();
+                            if (e.stopPropagation) e.stopPropagation();
+                        }
+                    }    
                     break;
+                    
                 default:
                     if (start == 0) {
                         if (e.preventDefault) e.preventDefault();
@@ -514,7 +536,7 @@ function addSpan(spanTitle, spanClass, spanDir)
         return;
         
     iframe.document.execCommand('inserthtml', false, span);
-    //alert('hello');
+    //alert(span);
 }
 
 

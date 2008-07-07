@@ -247,9 +247,9 @@
 	</xsl:template>
 	
 	<xsl:template match="b">
-		<b>
+		<span title="guideBold" class="boldtext">
 			<xsl:apply-templates />
-		</b>
+		</span>
 	</xsl:template>
 	
 	<xsl:template match="table">
