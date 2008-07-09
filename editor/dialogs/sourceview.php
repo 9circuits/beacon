@@ -16,8 +16,8 @@ var myAjax = new Ajax.Request(
         document.getElementById("loadingGif").style.display = 'none';
         document.getElementById("source").value = myAjax.transport.responseText;
         
-        /* The editor + modal window is having a funny effect in Safari... For now it's off.
-        editAreaLoader.init({
+        // The editor + modal window is having a funny effect in Safari... For now it's off.
+        /*editAreaLoader.init({
         	id: "source"	// id of the textarea to transform		
         	,start_highlight: true	// if start with highlight
         	,allow_resize: "no"

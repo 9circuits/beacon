@@ -3,99 +3,84 @@ openImg.src = "images/open.gif";
 var closedImg = new Image();
 closedImg.src = "images/closed.gif";
 
-var spans = new Array("guideCodeInput",
-                      "guideCodepath",
-                      "guideComment",
-                      "guideCode",
-                      "guideEm",
-                      "guideKeyword",
-                      "guideIdentifier",
-                      "guideConstant",
-                      "guideStatement",
-                      "guideVariable",
-                      "guideLink");
-
 var src;
 
 var iframe;
-/* */
+
+/* Say hello to everyone! */
 function hello()
 {
     alert('hello');
 }
 
 function initEditor() 
-{
+{       
+    //Get the iframe's content window
     iframe = document.getElementById("design").contentWindow;
-    //iframe.document.body.contentEditable = true;
+    
+    //Make the document Editable
     iframe.document.designMode = 'On'; 
+    //iframe.document.body.contentEditable = true;
+    
+    //Style the editable document
     iframe.document.getElementById("guide").style.margin = '5px';
-
+    
+    //Attach Event Listeners
     if (document.addEventListener) {
         iframe.document.addEventListener("keydown",keydown,false);
-        //iframe.document.addEventListener("onclick",klick,false);
         iframe.document.addEventListener("keypress",keydown,false);
         iframe.document.addEventListener("keyup",keydown,false);
         
-        
     } else if (document.attachEvent) {
-        iframe.document.attachEvent("onkeydown", keydown);
+        iframe.document.attachEvent("keydown", keydown);
+        iframe.document.attachEvent("keypress",keydown);
+        iframe.document.attachEvent("keyup",keydown);
     } else {
         iframe.document.onkeydown = keydown;
+        iframe.document.onkeypress = keydown;
+        iframe.document.onkeyup = keydown;
     }
 
-    //iframe.document.getElementById("guide").onclick = klick;
- 
-    
+    //Create the Document Tree
     createTree();
+    
+    //Save the contents every one minute
+    window.setInterval(autoSave, 60000);
 
     //setFocus(iframe.document.getElementById('mainContent'), false, 0);
-    
     //document.body.style.overflow = 'hidden';
+    //iframe.document.getElementById("guide").onclick = klick;
 }
 
-function klick(e) 
+function autoSave() 
 {
-    var theSelection = iframe.getSelection();
-    var theRange = theSelection.getRangeAt(0);
+    var gid = getVar('id');
 
-    start = theRange.startOffset;
-    end = theRange.endOffset;
+    // Add the missing style
+    var style= '<?xml version="1.0" encoding="UTF-8"?><style type="text/css" media="all">';
+    style += '@import "../css/guide.css";';
+    style += '</style><body>';
+    var text = style+iframe.document.body.innerHTML+'</body>';
 
-    var text = theRange.commonAncestorContainer;
+    text = encodeURIComponent(text);
 
-    var status = 'Status: title = '+text.title;
-    status += ', startOffset = '+start;
-    status += ', endOffset = '+end;
-    status += ', nodeName = '+text.nodeName;
-    status += ', nodeLength = '+text.length;
-
-    document.getElementById("status").innerHTML = status;
-
-    var status = 'Location: ';
-
-    while (text.title != 'guideChapter')
-    text = text.parentNode;
-
-    if (text.title == 'guideChapter')
+    /* Thanks to the prototpye library AJAX is so much easier! XD */
+    var myAjax = new Ajax.Request(
+    "ajax/save.php", 
     {
-        status += 'Chapter '+text.id.charAt(text.id.length-1)+' ';
+        method: 'post', 
+        parameters: "id="+gid+"&text="+text, 
+        onComplete: function() {
+            var exp = new Date();
+            var time = exp.getHours()+":"+exp.getMinutes()+":"+exp.getSeconds();
+            document.getElementById("savedStatus").innerHTML = "Draft Last Saved at - "+time;
+            document.getElementById("source").value = myAjax.transport.responseText;
+        }
     }
-
-    text = theRange.commonAncestorContainer;
-
-    while (text.title != 'guideSection')
-    text = text.parentNode;
-
-    if (text.title == 'guideSection')
-    {
-        status += ', Section: '+text.id.charAt(text.id.length-1);
-    }
-
-    document.getElementById("location").innerHTML = status;
+    );
 }
 
-
+// The Core Function for checking user cursor location
 function checkNodePath(node, allowed)
 {
     var check = node;
@@ -172,9 +157,9 @@ function keydown(e)
     var path = checkNodePath(text, allowed);
 
     if (path!=null)
-        status += '<br /> PATH = '+path.title;
+        status += 'PATH = '+path.title;
     else 
-        status += '<br /> ERROR = This Part/Block/Selection in not editable!';
+        status += 'ERROR = This Part/Block/Selection in not editable!';
 
     document.getElementById("status").innerHTML = status;
 
@@ -264,8 +249,8 @@ function keydown(e)
                                 ptext = ptext.previousSibling;
                             }
                         }
-                    addParagraph(false, knode.innerHTML);
-                    path.innerHTML = pnode.innerHTML;
+                        addParagraph(false, knode.innerHTML);
+                        path.innerHTML = pnode.innerHTML;
                     //alert(pnode.innerHTML);
                     //alert(knode.innerHTML);
                     }
@@ -343,10 +328,42 @@ function keydown(e)
                     }    
                     break;
                     
-                default:
+                case 'guideAbstractValue':
                     if (start == 0) {
                         if (e.preventDefault) e.preventDefault();
-                        if (e.stopPropagation) e.stopPropagation();  
+                        if (e.stopPropagation) e.stopPropagation();
+                    }
+                    break;
+                    
+                default:          
+                    //alert(text.parentNode.nodeName.toLowerCase());
+                    
+                    var sallowed = new Array("guideNoteValue",
+                                         "guideWarnValue",
+                                         "guideImpoValue",
+                                         "guidePreTitle");
+                                     
+                    var spath = checkNodePath(text, sallowed);
+                
+                    if (spath!=null) // This solution ! working in Safari
+                        if (start == 0) {
+                            if (e.preventDefault) e.preventDefault();
+                            if (e.stopPropagation) e.stopPropagation();
+                        }
+                        
+                        
+                    if (start == 0) {
+                        switch (text.parentNode.nodeName.toLowerCase()) {
+                            case 'span':
+                                break;
+                                
+                            case 'a':
+                                break;
+                            default:
+                                if (e.preventDefault) e.preventDefault();
+                                if (e.stopPropagation) e.stopPropagation();
+                                break;
+                        }
                     }
             }
             break;
@@ -354,7 +371,6 @@ function keydown(e)
         default:
             break;
     }
-    
     
     switch(path.title) {
         case 'guideChapterTitle':
@@ -364,7 +380,6 @@ function keydown(e)
             document.getElementById('S_'+path.parentNode.id).innerHTML = path.innerHTML;
             break;
     }
-    
 }
 
 function insertAtSelection(html, insertNode)
@@ -1463,4 +1478,45 @@ function junk()
     }
     else 
     return;
+}
+
+function klick(e) 
+{
+    var theSelection = iframe.getSelection();
+    var theRange = theSelection.getRangeAt(0);
+
+    start = theRange.startOffset;
+    end = theRange.endOffset;
+
+    var text = theRange.commonAncestorContainer;
+
+    var status = 'Status: title = '+text.title;
+    status += ', startOffset = '+start;
+    status += ', endOffset = '+end;
+    status += ', nodeName = '+text.nodeName;
+    status += ', nodeLength = '+text.length;
+
+    document.getElementById("status").innerHTML = status;
+
+    var status = 'Location: ';
+
+    while (text.title != 'guideChapter')
+    text = text.parentNode;
+
+    if (text.title == 'guideChapter')
+    {
+        status += 'Chapter '+text.id.charAt(text.id.length-1)+' ';
+    }
+
+    text = theRange.commonAncestorContainer;
+
+    while (text.title != 'guideSection')
+    text = text.parentNode;
+
+    if (text.title == 'guideSection')
+    {
+        status += ', Section: '+text.id.charAt(text.id.length-1);
+    }
+
+    document.getElementById("location").innerHTML = status;
 }

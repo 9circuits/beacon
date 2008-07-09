@@ -66,7 +66,10 @@ $version = $version->item(0)->nodeValue;
                     </iframe>
 
                     <div class="statusbar">
-                        <p><span id="location"></span><span id="status"></span></p>
+                        <p>
+                            <span id="savedStatus"></span><br />
+                            <span id="location"></span><span id="status"></span>
+                        </p>
                     </div>
 
                 </div>

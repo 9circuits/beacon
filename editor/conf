@@ -3,4 +3,18 @@
 //$confurl = 'http://guidexml.soc.gentoo.org/guidexml/editor/';
 $confurl = 'http://localhost/beacondist/';
 
+/*
+* -- Database configuration variable --
+* 
+* The wrapper exists in editor/database/
+* 
+* How to use:
+* 1. Assign a string to $confdb
+* 2. Write up a database wrapper with the same 
+*    named php file and put it in /editor/database/
+* 3. Be sure to implement all required functions!
+*/
+
+$confdb = 'flatfile';
+
 ?>

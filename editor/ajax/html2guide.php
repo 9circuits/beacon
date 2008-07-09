@@ -1,5 +1,7 @@
 <?php
 
+require_once "../database/database.php";
+
 $text = urldecode($_POST['text']);
 $text = stripslashes($text);
 $id = urldecode($_POST['id']);
@@ -11,14 +13,17 @@ $tidy = clean_html_code($text); //I want clean code!
 
 //echo $tidy;
 
-$html = fopen($id.".html", "w+");
+/*$html = fopen($id.".html", "w+");
 
 fwrite($html, $tidy);
 
-fclose($html);
+fclose($html);*/
 
-$template = DOMDocument::load($id.".html");
-$theXSL = DOMDocument::load('../xml/html2guide.xsl');
+write($id.".html", $tidy);
+
+
+$template = loadDOM($id.".html");
+$theXSL = loadDOM('../xml/html2guide.xsl');
 $xslt = new XSLTProcessor();
 
 $xslt->importStylesheet($theXSL);    
@@ -26,17 +31,17 @@ $output = $xslt->transformToXML($template);
 
 echo $output;
 
-//TODO: write the save feature here! 
-
 $text = '<?xml version="1.0" encoding="UTF-8"?><style type="text/css" media="all">
         @import "../css/guide.css";
         </style>'.$text;
-        
-$html = fopen($id.".html", "w+");
+
+write($id.".html", $text);
+   
+/*$html = fopen($id.".html", "w+");
 
 fwrite($html, $text);
 
-fclose($html);
+fclose($html);*/
 
 ?>
 

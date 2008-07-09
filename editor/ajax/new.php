@@ -1,5 +1,7 @@
 <?php
 
+require_once "../database/database.php";
+
 $flag = 0;
 
 if (isset($_POST['isedit']) and $_POST['isedit'] == '1') 
@@ -11,7 +13,7 @@ if (isset($_POST['isedit']) and $_POST['isedit'] == '1')
 else if(isset($_POST['isnew']) and $_POST['isnew'] == '1') 
 {
 	$fields = array('title', 'author', 'abstract', 'date');
-	$template = DOMDocument::load('../xml/new-template.xml');
+	$template = loadDOM('../xml/new-template.xml');
 	//echo "new mode\n";
 	foreach ($fields as $field) {
 		$value = $_POST[$field];
@@ -24,16 +26,14 @@ else if(isset($_POST['isnew']) and $_POST['isnew'] == '1')
 if ($flag == 1)
 {
 	/* Store raw XML */
-	$tmpName = tempnam(null, null);
+	$tmpName = createStorage();
 	
-	system('rm -rf '.getDirName($tmpName.'.html').'*.html '.getDirName($tmpName.'.xml').'*.xml ');
+	//system('rm -rf '.getDirName($tmpName.'.html').'*.html '.getDirName($tmpName.'.xml').'*.xml ');
 	
-	$handle = fopen($tmpName.".xml", "w+");
-	fwrite($handle, $template->saveXML());
-	fclose($handle);
-
+	write($tmpName.".xml", $template->saveXML());
+    
 	/* Store equivalent HTML */
-	$theXSL = DOMDocument::load('../xml/guide2html.xsl');
+	$theXSL = loadDOM('../xml/guide2html.xsl');
 	$xslt = new XSLTProcessor();
 	$xslt->importStylesheet($theXSL);    
 	$output = $xslt->transformToXML($template);
@@ -41,10 +41,9 @@ if ($flag == 1)
 		echo "Oops! An Error Occured";
 		exit;
 	}
-	$html = fopen($tmpName.".html", "w+");
-	fwrite($html, $output);
-	fclose($html);
-
+	
+	write($tmpName.".html", $output);
+	
 	if(isset($_POST['isnew']))
 		header('Location: ../editor.php?id='.urlencode($tmpName));
 	else
@@ -81,18 +80,18 @@ function getDirName($dir)
         $endIsQuest = $questExplode[1];}else{$endIsQuest = "";
     } 
     
-    if ($endIsFile!= ""){  
+    if ($endIsFile!= "") {  
         $resultUrl = str_replace($fileName, "", $mainUrl); 
         return $resultUrl; 
-        } elseif ($endIsQuest!= "") { 
-            $resultUrl = str_replace($fileName, "", $mainUrl); 
-            return $resultUrl; 
-        } else { 
-            if(substr($mainUrl,-1,1)!= "/") { 
-                $mainUrl .= "/"; 
-            } 
-            return $mainUrl; 
+    } elseif ($endIsQuest!= "") { 
+        $resultUrl = str_replace($fileName, "", $mainUrl); 
+        return $resultUrl; 
+    } else { 
+        if(substr($mainUrl,-1,1)!= "/") { 
+            $mainUrl .= "/"; 
         } 
-    }
+        return $mainUrl; 
+    } 
+}
 ?>
 <script language="javascript" type="text/javascript">window.top.window.stopUpload("<?php echo urlencode($tmpName); ?>")</script>   
