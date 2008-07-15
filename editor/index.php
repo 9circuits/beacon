@@ -1,5 +1,7 @@
 <?php
 
+require_once 'conf';
+
 $theXML = DOMDocument::load('xml/default-config.xml');
 $metadata = $theXML->getElementsByTagName('metadata');
 $metadata = $metadata->item(0);
@@ -12,6 +14,7 @@ $version = $theXML->getElementsByTagName('version');
 $version = $version->item(0)->nodeValue;
 
 ?>
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
     <title>Beacon v<?php echo $version; ?></title>
@@ -21,12 +24,22 @@ $version = $version->item(0)->nodeValue;
     <meta name="description" content="Beacon: The GuideXML Editor" />
     <link rel="stylesheet" href="css/pagestyle.css" type="text/css" media="screen" />
 
-	<style type="text/css">
-	        @import "js/dojoroot/dijit/themes/tundra/tundra.css";
-	        @import "js/dojoroot/dojo/resources/dojo.css";
-	</style>
-    <script type="text/javascript" src="js/dojoroot/dojo/dojo.js"
-		djConfig="isDebug: false, parseOnLoad: true"></script>
+    <?php if ($confdojo == 'local') { ?>
+    	<style type="text/css">
+    	        @import "js/dojoroot/dijit/themes/tundra/tundra.css";
+    	        @import "js/dojoroot/dojo/resources/dojo.css";
+    	</style>
+        <script type="text/javascript" src="js/dojoroot/dojo/dojo.js"
+    		djConfig="isDebug: false, parseOnLoad: true"></script>
+	<?php } else if ($confdojo == 'remote') { ?>
+	    <style type="text/css">
+            @import "http://o.aolcdn.com/dojo/1.0.0/dijit/themes/tundra/tundra.css";
+            @import "http://o.aolcdn.com/dojo/1.0.0/dojo/resources/dojo.css";
+        </style>
+        <script type="text/javascript" src="http://o.aolcdn.com/dojo/1.0.0/dojo/dojo.xd.js" 
+            djConfig="parseOnLoad: true"></script>
+	<?php } ?>
+		
     <script type="text/javascript">
        	dojo.require("dojo.parser");
     	dojo.require("dijit.form.ValidationTextBox");
@@ -37,7 +50,7 @@ $version = $version->item(0)->nodeValue;
     </script>
 
 	<script language="javascript" type="text/javascript">
-
+    
 
 
 	function stopUpload(val){

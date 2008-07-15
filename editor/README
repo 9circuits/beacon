@@ -1,3 +1,15 @@
+Beacon v0.31
+~~~~~~~~~~~~~
+
+Changelog:
+
+- RTE improved a lot
+- Added a conf val to choose the source of Dojo Toolkit. So should run out of the
+box with a standard Server and PHP with XSL support. 
+- Other minor changes.
+
+
+
 Beacon v0.3
 ~~~~~~~~~~~~~
 

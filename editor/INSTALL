@@ -5,7 +5,7 @@ Installation is a no-brainer.
 
 1. Just copy the `editor' folder to your `htdocs' directory. 
 
-2. Make sure you change the $confurl variable in the `conf' file to point to the correct location of the `editor' directory on your webserver.
+2. Set up the required variables in 'conf' file.
 
 3. Get a snack.
 

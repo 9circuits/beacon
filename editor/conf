@@ -3,6 +3,17 @@
 //$confurl = 'http://guidexml.soc.gentoo.org/guidexml/editor/';
 $confurl = 'http://localhost/beacondist/';
 
+
+/* 
+* Selects which source of Dojo to be used 
+* Values: 
+* remote - selects the AOL CDN network. No need of a local copy of Dojo Toolkit
+* local - selects a local copy of Dojo Toolkit. This copy should be put in editor/js/dojoroot
+*/
+
+$confdojo = 'remote';
+
+
 /*
 * -- Database configuration variable --
 * 

@@ -36,6 +36,4 @@ function read($id)
 	return $contents;
 }
 
-
-
 ?>
