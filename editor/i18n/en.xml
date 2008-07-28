@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beacon-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="config.xsd">
+<beacon-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="config.xsd">
     
     <!-- No need to translate! -->           
     <version>0.3</version>
+    
+    <!-- Translate whole text -->
+    <welcome>Welcome to Beacon. A Collaborative WYSIWYG GuideXML Editor.</welcome>
 
     <!-- Translate only label, caption and fnote -->
-    <metadata cancelLabel="Cancel" cancelIcon="cancel.png" errorIcon="error.png">
+    <newform goLabel="Go!">
         <field label="Title" caption="The Title of the Document" guide="title" fnote="Enter a descriptive but short name for the document" icon="title.png"/>
-        <field label="Author" caption="Author(s) of the Document" guide="author" fnote="You may add additional authors and email information later" icon="authors.png"/>
+        <field label="Author" caption="Author of the Document" guide="author" fnote="You may add additional authors and email information later" icon="authors.png"/>
         <field label="Abstract" caption="A Short summary of the Document" guide="abstract" fnote="This text will appear in the top-right corner of the document" icon="abstract.png"/>
         <field label="Date" caption="Date of Creation" guide="date" fnote="Use the YYYY-MM-DD format!" icon="date.png"/>
-    </metadata>
+    </newform>
 
     <!-- Translate only label and caption -->
     <tools label="Toolbox" icon="tools.png">

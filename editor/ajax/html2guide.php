@@ -9,25 +9,19 @@ $id = urldecode($_POST['id']);
 $text = str_replace('<hr>', '<hr />', $text);
 $text = str_replace('<br>', '<br />', $text);
 
-$tidy = clean_html_code($text); //I want clean code!
+//$tidy = clean_html_code($text); //I want clean code!
 
-//echo $tidy;
-
-/*$html = fopen($id.".html", "w+");
-
-fwrite($html, $tidy);
-
-fclose($html);*/
-
-write($id.".html", $tidy);
+write($id.".html", $text);
 
 
 $template = loadDOM($id.".html");
 $theXSL = loadDOM('../xml/html2guide.xsl');
 $xslt = new XSLTProcessor();
-
 $xslt->importStylesheet($theXSL);    
 $output = $xslt->transformToXML($template);
+
+$output = str_replace('&#10;', '', $output);
+$output = str_replace("</author>", "</author>\n", $output);
 
 echo $output;
 
@@ -35,13 +29,9 @@ $text = '<?xml version="1.0" encoding="UTF-8"?><style type="text/css" media="all
         @import "../css/guide.css";
         </style>'.$text;
 
+//$tidy = clean_html_code($text); //I want clean code!
+
 write($id.".html", $text);
-   
-/*$html = fopen($id.".html", "w+");
-
-fwrite($html, $text);
-
-fclose($html);*/
 
 ?>
 

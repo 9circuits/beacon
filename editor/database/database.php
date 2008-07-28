@@ -2,7 +2,7 @@
 
 require_once '../conf';
 
-// set to the user defined error handler
+// set to the user defined error handler otherwise so many stupid warnings!
 $old_error_handler = set_error_handler("errorHandler");
 
 try {

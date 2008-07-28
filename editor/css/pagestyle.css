@@ -1,45 +1,7 @@
 * {
-
+    
 }
 
-body {
-    margin: 0;
-    background: #e0eff3 url(../images/page-bg.jpg) top left repeat;
-
-}
-
-#container {
-    margin: 0px auto 0px auto;
-    width: 950px;
-}
-
-#header {
-    width: 950px;
-    height: 225px;
-    background: url(../images/header.png) top left no-repeat;
-}
-
-#content {
-    width: 950px;
-    height: 450px;
-    background: url(../images/content-bg.png) top left no-repeat;
-}
-
-#left {
-    float: left;
-    width: 272px;
-    height: 400px;
-    margin: 25px 0px 0px 25px;
-    /*border: 1px solid #000;*/
-}
-
-#right {
-    float: right;
-    width: 620px;
-    height: 400px;
-    margin: 25px 25px 0px 0px;
-    /*border: 1px solid #000;*/
-}
 
 .breaker {
     display: block;
@@ -52,20 +14,7 @@ body {
     width: 270px;
     height: 125px;
     background: url(../images/new-button.png) top left no-repeat;
-}
-
-.editlink {
-    display: block;
-    width: 270px;
-    height: 125px;
-    background: url(../images/edit-button.png) top left no-repeat;
-}
-
-.recentlink {
-    display: block;
-    width: 270px;
-    height: 125px;
-    background: url(../images/recent-button.png) top left no-repeat;
+    cursor: pointer;
 }
 
 #initial{
@@ -75,11 +24,26 @@ body {
 
 #newform,#editform table{
     margin: 15px 0px 0px 25px;
+    font: 10pt normal "Helvetica";
 }
 
+.textbox {
+    font: 11pt normal "Helvetica";
+    margin: 5px 0px 5px 0px;
+    border: 1px solid #299a29;
+    padding: 3px;
+}
 
-#newform,#editform td{
-    padding: 0px 0px 5px 5px;
+.textfield {
+    font: 11pt normal "Helvetica";
+    margin: 5px 0px 5px 0px;
+    border: 1px solid #299a29;
+    padding: 3px;
+}
+
+.field {
+    margin: 5px 0px 5px 0px;
+    padding: 3px;
 }
 
 #upload_target {
@@ -91,8 +55,15 @@ body {
     margin: 10px;
 }
 
-
-.button
+.op {
+    display: block;
+    height: 20px;
+    cursor: pointer;
+    padding: 5px;
+    border: 1px solid #299a29;
+    margin-top: 10px;
+}
+.gbutton
 {
     width: 75px;
     height:35px;
@@ -108,12 +79,36 @@ body {
     font: 12pt bold "Trebuchet MS";
 }
 
-.button:active
+.gbutton:active
 {
     border: 3px double #CCCCCC;
     border-top-color: #999999;
     border-left-color: #999999;
 }
 
+.error {
+    color: #FF1A00;
+}
 
+#lpanel
+{
+    font: 9pt normal "Trebuchet MS";
+    border: 1px solid #299a29;
+    height: 97%;
+    background: #fff;
+    padding: 0px 10px 0px 10px;
+    margin-left: 3px;
+}
 
+#rpanel
+{
+    border: 1px solid #299a29;
+    height: 97%;
+    background: #fff;
+    margin-right: 3px;
+    overflow: scroll;
+}
+
+ul{
+    list-style:none;
+}

@@ -7,7 +7,7 @@ DB Wrapper Makers please parse the file name for a valid extension. */
 // Create a temporary storage
 function createStorage()
 {
-    return tempnam(null, null);
+    return tempnam('../database/tmp', null);
 }
 
 // Load a DOM document from a file (DB users will need a load-DOM-from-string function)

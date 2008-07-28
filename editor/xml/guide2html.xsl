@@ -1,13 +1,13 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"> 
 
-	<xsl:output method="xml" encoding="UTF-8" indent="no"/>
+	<xsl:output method="html" encoding="UTF-8" indent="yes"/>
 
 	<xsl:template match="/">
 		<xsl:apply-templates select="guide"/>
 	</xsl:template>
 
 	<xsl:template match="guide">
-			<style type="text/css" media="all">
+		<style type="text/css" media="all">
 			@import "../css/guide.css";
 		</style>
 		<body>
@@ -28,7 +28,6 @@
 				<xsl:apply-templates select="chapter" />
 			</div>
 		</div>
-		<xsl:apply-templates select="version" />
 	</body>
 	</xsl:template>
 	

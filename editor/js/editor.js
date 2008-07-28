@@ -13,6 +13,21 @@ function hello()
     alert('hello');
 }
 
+// Handles the exit event. I know I can't stop the browser from closing! :D
+function exit(e) 
+{
+    //TODO: Collaborative stuff, if client then inform server, if server then disconnect clients
+    
+   // if (window.confirm('Would you like to keep the current document?')) {
+        //Save the file
+        //alert("Saved!");
+    //}
+    //else {
+        //alert("Document Deleted") 
+    //}
+    
+}
+
 function initEditor() 
 {       
     //Get the iframe's content window
@@ -24,7 +39,7 @@ function initEditor()
     
     //Style the editable document
     iframe.document.getElementById("guide").style.margin = '5px';
-    
+        
     //Attach Event Listeners
     if (document.addEventListener) {
         iframe.document.addEventListener("keydown",keydown,false);
@@ -74,7 +89,6 @@ function autoSave()
             var exp = new Date();
             var time = exp.getHours()+":"+exp.getMinutes()+":"+exp.getSeconds();
             document.getElementById("savedStatus").innerHTML = "Draft Last Saved at - "+time;
-            document.getElementById("source").value = myAjax.transport.responseText;
         }
     }
     );
@@ -347,6 +361,7 @@ function keydown(e)
                 
                     if (spath!=null) // This solution ! working in Safari
                         if (start == 0) {
+                            //hello();
                             if (e.preventDefault) e.preventDefault();
                             if (e.stopPropagation) e.stopPropagation();
                         }
@@ -710,7 +725,7 @@ function deleteNode(node)
     var side = iframe.document.getElementById('sideContent');
     
     if(path!=null) {
-        path.style.background = '#D01F3C';
+        path.style.border = '3px solid #D01F3C';
         
         if (window.confirm('Are you sure you want to delete current node?')) {
             switch(path.title) {
@@ -754,7 +769,7 @@ function deleteNode(node)
             
         }
         else
-            path.style.background = '#FFF';
+            path.style.border = 'none';
     }
     else {
         alert('You cannot delete this node!');

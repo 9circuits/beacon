@@ -179,7 +179,6 @@ lightbox.prototype = {
 function checkSubmit()
 {
 	if (document.getElementById('update')) {
-	    
 	    var text = document.getElementById("source").value;
 	    
 	    var gid = getVar('id');
@@ -193,48 +192,43 @@ function checkSubmit()
             parameters: "id="+gid+"&text="+text, 
             onComplete: function() {
                 //alert(myAjax.transport.responseText);
-                iframe.document.body.innerHTML = myAjax.transport.responseText;
+                if (myAjax.transport.responseText == "ERROR")
+                    alert("Your XML was all screwed up! No changes were made! O_O");
+                else
+                    iframe.document.body.innerHTML = myAjax.transport.responseText;
+                
                 iframe.document.getElementById("guide").style.margin = '5px';
             }
         }
         );
-	}
-		
-	else if (document.getElementById("addAuthor"))
-	{
+	} else if (document.getElementById("addAuthor")) {
 		try {
 		    addAuthor(document.getElementById('authorName').value, 
 		                document.getElementById('authorTitle').value, 
 		                document.getElementById('authorMail').value);
 		}
-		catch(e){
+		catch(e) {
 			return;
 		}
-	}
-	else if (document.getElementById('addChapter'))
-	{
+	} else if (document.getElementById('addChapter')) {
 		try {
 		    addChapter(document.getElementById('chapterTitle').value, document.getElementById('sectionTitle').value);
 		}
-		catch(e){
+		catch(e) {
 			return;
 		}
-	}
-	else if (document.getElementById("addSection"))
-	{
+	} else if (document.getElementById("addSection")) {
 		try {
 		    addSection(document.getElementById('sectionTitle').value);
 		}
-		catch(e){
+		catch(e) {
 			return;
 		}
-	}
-	else if (document.getElementById("addLink"))
-	{
+	} else if (document.getElementById("addLink")) {
 		try {
 		    insertLink(document.getElementById('displayText').value, document.getElementById('link').value);
 		}
-		catch(e){
+		catch(e) {
 			return;
 		}
 	}

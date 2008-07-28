@@ -5,10 +5,38 @@ if ($_GET['id'] == '')
     //echo 'Boohoo! No File selected???';
     header('Location: index.php');
 }
-require_once 'conf';
-$theXML = DOMDocument::load('xml/default-config.xml');
+
+$beaconDoneLoad = false;
+
+$errors = "<p>Following Errors Occured:</p>";
+
+if (file_exists(dirname(__FILE__).'/conf')) {
+    require_once dirname(__FILE__).'/conf';
+    $beaconDoneLoad = true;
+}
+else {
+    $errors .= "<p>- <code>conf</code> file not found. Please create one.</p>";
+    $beaconDoneLoad = false;
+}
+
+if (file_exists(dirname(__FILE__).'/i18n/'.$conflang.'.xml')) {
+    $theXML = DOMDocument::load(dirname(__FILE__).'/i18n/'.$conflang.'.xml');
+    $beaconDoneLoad = true;
+}
+else {
+    $errors .= "<p>- <code>i18n/".$conflang.".xml</code> file not found. Please get your translated XML copy.</p>";
+    $beaconDoneLoad = false;
+}
+
+
+if (!$beaconDoneLoad) {
+    echo $errors;
+    return false;
+}
+
 $version = $theXML->getElementsByTagName('version');
 $version = $version->item(0)->nodeValue;
+
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
@@ -31,7 +59,7 @@ $version = $version->item(0)->nodeValue;
 
 </head>
 
-<body class="tundra" onload="initEditor();">
+<body class="tundra" onload="initEditor();" onbeforeunload="exit(event);">
 
     <div id="container">
 

@@ -1,7 +1,16 @@
 <?php
 
-//$confurl = 'http://guidexml.soc.gentoo.org/guidexml/editor/';
-$confurl = 'http://localhost/beacondist/';
+/*
+* URL of the Editor. Auto set.
+*/
+$confurl = $_SERVER['PHP_SELF'];
+
+
+/* 
+* Selects the language.
+* Available languages can be found in i18n 
+*/
+$conflang = 'en';
 
 
 /* 
@@ -10,8 +19,7 @@ $confurl = 'http://localhost/beacondist/';
 * remote - selects the AOL CDN network. No need of a local copy of Dojo Toolkit
 * local - selects a local copy of Dojo Toolkit. This copy should be put in editor/js/dojoroot
 */
-
-$confdojo = 'remote';
+$confdojo = 'local';
 
 
 /*
@@ -25,7 +33,8 @@ $confdojo = 'remote';
 *    named php file and put it in /editor/database/
 * 3. Be sure to implement all required functions!
 */
-
 $confdb = 'flatfile';
+
+
 
 ?>

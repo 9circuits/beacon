@@ -18,7 +18,7 @@ var myAjax = new Ajax.Request(
     onComplete: function() {
         document.getElementById("confirm").style.display = 'block';
         document.getElementById("loadingGif").style.display = 'none';
-        document.getElementById("source").value = myAjax.transport.responseText;
+        //document.getElementById("source").value = myAjax.transport.responseText;
     }
 }
 );
