@@ -18,6 +18,7 @@ write($id.".xml", $text);
 $template = loadDOM($id.".xml");
 
 $theXSL = loadDOM('../xml/guide2html-lite.xsl');
+$tinyXSL = loadDOM('../xml/guide2html.xsl');
 
 if($template == false) {
     echo $emsg;
@@ -30,7 +31,14 @@ $output = $xslt->transformToXML($template);
 
 //$output = clean_html_code($output); //I want clean code!
 
+
 echo $output;
+
+$xslt = new XSLTProcessor();
+$xslt->importStylesheet($tinyXSL);    
+$output = $xslt->transformToXML($template);
+
+write($id.".html", $output);
 
 ?>
 

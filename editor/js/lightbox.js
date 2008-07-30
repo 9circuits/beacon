@@ -194,8 +194,11 @@ function checkSubmit()
                 //alert(myAjax.transport.responseText);
                 if (myAjax.transport.responseText == "ERROR")
                     alert("Your XML was all screwed up! No changes were made! O_O");
-                else
+                else {
                     iframe.document.body.innerHTML = myAjax.transport.responseText;
+                    //Create the Document Tree
+                    createTree();
+                }
                 
                 iframe.document.getElementById("guide").style.margin = '5px';
             }

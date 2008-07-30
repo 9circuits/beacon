@@ -368,6 +368,7 @@ function keydown(e)
                         
                         
                     if (start == 0) {
+                        //hello();
                         switch (text.parentNode.nodeName.toLowerCase()) {
                             case 'span':
                                 break;
