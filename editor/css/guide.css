@@ -509,3 +509,45 @@ td.leftmenu p.altmenu a.altlink:before {content:"\2023\20"; color:#301060;}
 Any UTF-8 encoded character does not work with konqueror
 td.leftmenu p.altmenu a.altlink:before {content:"‣ "; color:#301060;}
 */
+
+
+
+/* Editor Stuff */
+.toolbar {
+    background: #F0F0EE;
+    height: 25px;
+}
+
+.toolholder {
+    margin: 1px 3px 1px 3px;
+    height: 25px;
+    background: #F0F0EE;
+}
+
+.button,.lbOn
+{
+    float: left;
+    display: block;
+    height: 23px;
+    border: 1px solid #F0F0EE;
+    color: #333333;
+    text-align: left;
+    font: 9pt normal "Trebuchet MS";
+    outline: none;
+    text-decoration: none;
+}
+
+.separator {
+    float: left;
+    display: block;
+    margin: 3px 5px 0px 5px;
+    width: 3px;
+    height: 18px;
+    border-left: 1px solid #AAA;
+}
+.button:hover,.lbOn:hover {
+    background: #c4c9d9;
+	border: 1px solid #17357b;
+    cursor: pointer;
+    outline: none;
+}

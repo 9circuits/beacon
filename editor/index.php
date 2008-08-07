@@ -81,6 +81,7 @@ $welcome = $theXML->getElementsByTagName('welcome')->item(0)->nodeValue;
                       <ul>
                         <li><a class="op" onclick="dijit.byId('form').setHref('new-form.php')"><span>&gt; New Document</span></a></li>
                         <li><a class="op" onclick="dijit.byId('form').setHref('edit-form.php')"><span>&gt; Edit a Document</span></a></li>
+                        <li><a class="op" onclick="dijit.byId('form').setHref('collab-form.php')"><span>&gt; Collaborate!</span></a></li>
                       </ul> 
                   </div>
             </div>

@@ -42,7 +42,7 @@
         <img src="images/epi.png" border="none" />
     </a>
     <div class="separator"></div>
-    <a class="lbOn" href="dialogs/addauthor.php" title="Delete Current Node">
+    <a class="lbOn" href="dialogs/addauthor.php" title="Add An Author">
         <img src="images/authors.png" border="none" />
     </a>
     <div class="separator"></div>

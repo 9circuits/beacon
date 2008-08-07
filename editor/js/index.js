@@ -5,8 +5,11 @@ dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit.form.Textarea");
 
-function stopUpload(val) 
+function stopUpload(val, username) 
 {
+    //if (username)
+        //document.getElementById('username').value = username;
+        
     document.getElementById('var').value = val;
     document.getElementById('cool').style.visibility = 'visible';
     return true;   

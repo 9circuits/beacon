@@ -23,6 +23,24 @@ $output = $xslt->transformToXML($template);
 $output = str_replace('&#10;', '', $output);
 $output = str_replace("</author>", "</author>\n", $output);
 
+$doc = new DOMDocument();
+$doc->preserveWhiteSpace = false;
+$doc->formatOutput   = false;
+$doc->loadXML($output);
+
+$output = $doc->saveXML();
+
+$output = str_replace("<title>", "\n<title>", $output);
+$output = str_replace("</title>", "</title>\n", $output);
+$output = str_replace("<author", "\n<author", $output);
+$output = str_replace("</author>", "\n</author>\n", $output);
+$output = str_replace("<mail", "\n  <mail", $output);
+$output = str_replace("<abstract>", "\n<abstract>", $output);
+$output = str_replace("</abstract>", "</abstract>\n", $output);
+
+$output = str_replace("<p>", "\n<p>", $output);
+$output = str_replace("</p>", "</p>\n", $output);
+
 echo $output;
 
 $text = '<?xml version="1.0" encoding="UTF-8"?><style type="text/css" media="all">
