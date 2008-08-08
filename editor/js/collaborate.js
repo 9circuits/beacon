@@ -6,6 +6,8 @@
 // Initialise Beacon
 window.onload = loadEditor;
 
+var lastLogId;
+
 function loadEditor() 
 {
     // Check for cookie
@@ -62,6 +64,8 @@ function loadEditor()
             createCookie('beacon_user', BeaconEditor.username , 1);
             createCookie('beacon_session', BeaconEditor.getVar('id'), 1);
             
+            document.getElementById('logDisplay').value = '';
+            
             postChat("connected", true);
             
             //BeaconEditor.addEventSimple(document.getElementById('chatSubmit'), "click", submitChat);
@@ -97,6 +101,10 @@ function getUsers()
 function submitChat(e)
 {
     var text = e.chattext.value;
+    
+    if (text == '')
+        return;
+        
     document.getElementById('chattext').value = '';
     postChat(text);
 }
@@ -118,13 +126,30 @@ function postChat(msg, flag)
             // If the response has failed then return
             if (myAjax.responseIsFailure()) return;
         
-            var responseText = myAjax.transport.responseText;
-            chatDisplay.value = responseText;
-            chatDisplay.value = trim11(chatDisplay.value);            
-            chatDisplay.scrollTop = chatDisplay.scrollHeight; 
+            var responseText = '\n';
+            var responseXML = myAjax.transport.responseXML;
+            var chats = responseXML.getElementsByTagName('chats')[0];
             
-            if (flag)
+            var messages = responseXML.getElementsByTagName('message');
+            var lastnode = messages[messages.length - 1];
+            
+            for (var i = 0; i < messages.length; i++) {
+                var node = messages[i];
+                responseText += "["+node.getAttribute('time')+"] - <"+node.getAttribute('user')+"> "+node.firstChild.nodeValue+"\n";
+            }
+            
+            lastLogId = lastnode.getAttribute('xml:id');
+            
+            chatDisplay.value += responseText;
+            
+            chatDisplay.value = trim11(chatDisplay.value);
+            
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+            
+            if (flag) {
+                //lastLogId = chats.getAttribute('last_id');
                 window.setInterval(getChat, 3000);
+            }
         }
     });
     
@@ -132,6 +157,7 @@ function postChat(msg, flag)
 
 function getChat()
 {
+    //alert('hello');
     var chatDisplay = document.getElementById('logDisplay');
     
     var request = 'GET_CHAT';
@@ -140,18 +166,34 @@ function getChat()
     "ajax/collab.php", 
     {
         method: 'post', 
-        parameters: "request="+request+"&id="+BeaconEditor.getVar('id')+"&username="+readCookie('beacon_user'), 
+        parameters: "request="+request+"&id="+BeaconEditor.getVar('id')+"&username="+readCookie('beacon_user')+"&last_id="+lastLogId, 
         onComplete: function() {
             // If the response has failed then return
             if (myAjax.responseIsFailure()) return;
                 
-            var responseText = myAjax.transport.responseText;
+            var responseText = '\n';
+            var responseXML = myAjax.transport.responseXML;
+            var chats = responseXML.getElementsByTagName('chats')[0];
             
-            // Update only if chat is different
-            if (trim11(chatDisplay.value) == trim11(responseText))
+            //chatDisplay.value += chats.nodeValue;
+            
+            // Update only if chat received
+            if (responseXML.getElementsByTagName('message')[1] == null)
                 return;
+                
+            //chatDisplay.value += "am here!!!!";
             
-            chatDisplay.value = responseText;
+            var messages = responseXML.getElementsByTagName('message');
+            var lastnode = messages[messages.length - 1];
+            
+            for (var i = 1; i < messages.length; i++) {
+                var node = messages[i];
+                responseText += "["+node.getAttribute('time')+"] - <"+node.getAttribute('user')+"> "+node.firstChild.nodeValue+"\n";
+            }
+            
+            lastLogId = lastnode.getAttribute('xml:id');
+            
+            chatDisplay.value += responseText;
             
             chatDisplay.value = trim11(chatDisplay.value);
             
@@ -233,10 +275,7 @@ var BeaconEditor = {
     
     // Save time out function ID
     savetout: 0,
-    
-    // Type of listeners
-    lockListener: {type: "lockListener", period: 60000, ID: null}, 
-                        
+                            
     // Let's initialize out funky editor!
     init: function() {
                 
@@ -256,7 +295,6 @@ var BeaconEditor = {
         this.addEventSimple(this.f.d, "click", this.frameClick);
         
         //this.w.setInterval(this.append, 1000);
-        
         
     },
     
@@ -731,11 +769,3 @@ function readCookie(name) {
 function eraseCookie(name) {
 	createCookie(name,"",-1);
 }
-
-
-/*var responseText = myAjax.transport.responseText;
-// NOT WORKING: Wonder why... So using a hack below...
-//var txt = response.getElementsByTagName('type')[0].nextSibling.firstChild;
-var lts = responseText.indexOf('<text>');
-var lte = responseText.indexOf('</text>');
-var txt = responseText.substring(lts+6, lte);*/

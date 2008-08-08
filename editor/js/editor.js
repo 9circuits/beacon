@@ -28,7 +28,7 @@ function exit(e)
     
 }
 
-function initEditor() 
+function initEditor(flag) 
 {       
     //Get the iframe's content window
     iframe = document.getElementById("design").contentWindow;
@@ -60,7 +60,8 @@ function initEditor()
     createTree();
     
     //Save the contents every one minute
-    window.setInterval(autoSave, 60000);
+    if (flag)
+        window.setInterval(autoSave, 60000);
 
     //setFocus(iframe.document.getElementById('mainContent'), false, 0);
     //document.body.style.overflow = 'hidden';

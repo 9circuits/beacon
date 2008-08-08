@@ -59,7 +59,7 @@ $version = $version->item(0)->nodeValue;
 
 </head>
 
-<body class="tundra" onload="initEditor();" onbeforeunload="exit(event);">
+<body class="tundra" onload="initEditor(true);" onbeforeunload="exit(event);">
 
     <div id="container">
 

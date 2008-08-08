@@ -208,16 +208,21 @@ if ($request == 'SAVE_TEMP') {
 
 if ($request == 'POST_CHAT') {
     
+    header('Content-Type: text/xml');
+    header("Cache-Control: no-cache, must-revalidate");
+    
     $id = urldecode($_POST['id']);
     $username = $_POST['username'];
     $chat = urldecode($_POST['msg']);
     
     if (!userExists($id, $username))
         return;
-        
-    postChat($id, $username, $chat);
     
-    $chatString = getChat($id);
+    $time = date('H:i:s');
+    
+    postChat($id, $username, $chat, $time);
+    
+    $chatString = getChat($id, md5($time.$username));
     
     echo $chatString;
 }
@@ -228,13 +233,18 @@ if ($request == 'POST_CHAT') {
 *   2. Delete old chats to keep the file size down
 */
 if ($request == 'GET_CHAT') {
+    
+    header('Content-Type: text/xml');
+    header("Cache-Control: no-cache, must-revalidate");
+    
     $id = urldecode($_POST['id']);
     $username = $_POST['username'];
+    $last_id = $_POST['last_id'];
     
     if (!userExists($id, $username))
         return;
         
-    $chatString = getChat($id);
+    $chatString = stripslashes(getChat($id, $last_id));
     
     echo $chatString;
 
@@ -242,22 +252,67 @@ if ($request == 'GET_CHAT') {
 
 
 
-function postChat($id, $username, $chat)
+function postChat($id, $username, $msg, $time)
 {
-    $text = "[".date('H:i:s')."] - ".$username.": ".$chat."\n";
+    $msg = stripslashes(urldecode($msg));
+    //$text = "[".$time."] - ".$username.": ".$msg;
     
-    $chatFile = '\n';
+    $chat = new DOMDocument();
+    $chat->preserveWhiteSpace = false;
+    $chat->formatOutput   = true;
     
-    if (file_exists($id."_CHAT"))
+    $chatFile = "";
+    
+    if (file_exists($id."_CHAT")) {
         $chatFile = read($id."_CHAT");
+        $chat->loadXML($chatFile);
+    } else {
+        $container = $chat->createElement("chats");
+        $container = $chat->appendChild($container);
+        write($id."_CHAT", $chat->saveXML());
+    }
     
-    $chatFile .= $text;
+    $container = $chat->getElementsByTagName('chats')->item(0);
+
+    $message = $chat->createElement('message');
+    $message->setAttribute('xml:id', md5($time.$username));
+    $message->setAttribute('time', $time);
+    $message->setAttribute('user', $username);
+    $message->nodeValue = $msg;
     
-    write($id."_CHAT", $chatFile);
+    $container->appendChild($message);
+        
+    write($id."_CHAT", $chat->saveXML());
 }
 
-function getChat($id) {
-    return read($id."_CHAT");
+function getChat($id, $last_id) {
+    
+    //if ($last_id)
+        //return;
+        
+    $chatFile = read($id."_CHAT");
+    
+    $chat = new DOMDocument();
+    $chat->preserveWhiteSpace = false;
+    $chat->formatOutput   = true;
+    
+    $chat->loadXML($chatFile);
+    
+    $node = $chat->getElementById($last_id);
+    $node = $node->previousSibling;
+    
+    $pnode = $node->parentNode;
+    
+    while($node)
+    {
+        $lastnode = $node->previousSibling;
+        $pnode->removeChild($node);
+        $node = $lastnode;
+    }    
+    
+    $pnode->setAttribute('last_id', $last_id);
+    
+    return $chat->saveXML();
 }
 
 function userExists($id, $username)

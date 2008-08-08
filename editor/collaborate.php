@@ -55,10 +55,8 @@ $version = $version->item(0)->nodeValue;
     <script language="JavaScript" src="js/lightbox.js" type="text/javascript"></script>-->
 
     <script language="JavaScript" type="text/JavaScript" src="js/collaborate.js"></script>
-    <script language="JavaScript" src="js/prototype.js" type="text/javascript"></script>
+    <script language="JavaScript" src="js/prototype.js" type="text/javascript"></script>    
     
-
-
 </head>
 
 <body class="tundra">
