@@ -10,21 +10,7 @@ var lastLogId;
 
 function loadEditor() 
 {
-    // Check for cookie
-    var username = readCookie('beacon_user');
-    var id = readCookie('beacon_session');
-   
-    if ((username != "") && (BeaconEditor.getVar('id') == id)) {
-        if (confirm("A session with username '"+username+"' already exists. Would you like to continue with this?")) {
-            BeaconEditor.username = username;
-        }
-        else {
-            BeaconEditor.username = window.prompt("Please enter a username:", "");
-        }
-    }
-    else {
-        BeaconEditor.username = window.prompt("Please enter a username:", "");
-    }
+    BeaconEditor.username = window.prompt("Please enter a username:", "");
     
     if (!BeaconEditor.username)
         BeaconEditor.username = "Guest_"+Math.floor(Math.random()*101);
@@ -50,8 +36,6 @@ function loadEditor()
             // TODO: Handle the server error here
             if (type == 'ERROR') {
                 alert('The username you had selected has already been taken!');
-                eraseCookie('beacon_user');
-                eraseCookie('beacon_session');
                 loadEditor();
                 return; 
             }
@@ -60,9 +44,6 @@ function loadEditor()
             userDisplay.innerHTML = "<div id=\"userlist\"><ol><li class=\"username\">"+BeaconEditor.username+"</li><ol></div>";
             
             // If everything is fine then continue.
-            //window.clearInterval(userTout);
-            createCookie('beacon_user', BeaconEditor.username , 1);
-            createCookie('beacon_session', BeaconEditor.getVar('id'), 1);
             
             document.getElementById('logDisplay').value = '';
             
@@ -86,7 +67,7 @@ function getUsers()
     "ajax/collab.php", 
     {
         method: 'post', 
-        parameters: "request="+request+"&id="+BeaconEditor.getVar('id')+"&username="+readCookie('beacon_user'), 
+        parameters: "request="+request+"&id="+BeaconEditor.getVar('id')+"&username="+BeaconEditor.username, 
         onComplete: function() {
             // If the response has failed then return
             if (myAjax.responseIsFailure()) return;
@@ -110,9 +91,7 @@ function submitChat(e)
 }
 
 function postChat(msg, flag) 
-{
-    var chatDisplay = document.getElementById('logDisplay');
-    
+{    
     var request = 'POST_CHAT';
     
     msg = encodeURIComponent(msg);
@@ -121,89 +100,78 @@ function postChat(msg, flag)
     "ajax/collab.php", 
     {
         method: 'post', 
-        parameters: "request="+request+"&id="+BeaconEditor.getVar('id')+"&username="+readCookie('beacon_user')+"&msg="+msg, 
+        parameters: "request="+request+"&id="+BeaconEditor.getVar('id')+"&username="+BeaconEditor.username+"&msg="+msg, 
         onComplete: function() {
             // If the response has failed then return
             if (myAjax.responseIsFailure()) return;
         
-            var responseText = '\n';
             var responseXML = myAjax.transport.responseXML;
-            var chats = responseXML.getElementsByTagName('chats')[0];
-            
-            var messages = responseXML.getElementsByTagName('message');
-            var lastnode = messages[messages.length - 1];
-            
-            for (var i = 0; i < messages.length; i++) {
-                var node = messages[i];
-                responseText += "["+node.getAttribute('time')+"] - <"+node.getAttribute('user')+"> "+node.firstChild.nodeValue+"\n";
-            }
-            
-            lastLogId = lastnode.getAttribute('xml:id');
-            
-            chatDisplay.value += responseText;
-            
-            chatDisplay.value = trim11(chatDisplay.value);
-            
-            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        
+            updateChatBox(responseXML, 0);
             
             if (flag) {
-                //lastLogId = chats.getAttribute('last_id');
                 window.setInterval(getChat, 3000);
             }
         }
     });
     
+    
 }
 
 function getChat()
 {
-    //alert('hello');
-    var chatDisplay = document.getElementById('logDisplay');
-    
+    //alert('hello');    
     var request = 'GET_CHAT';
         
     var myAjax = new Ajax.Request(
     "ajax/collab.php", 
     {
         method: 'post', 
-        parameters: "request="+request+"&id="+BeaconEditor.getVar('id')+"&username="+readCookie('beacon_user')+"&last_id="+lastLogId, 
+        parameters: "request="+request+"&id="+BeaconEditor.getVar('id')+"&username="+BeaconEditor.username+"&last_id="+lastLogId, 
         onComplete: function() {
             // If the response has failed then return
             if (myAjax.responseIsFailure()) return;
-                
-            var responseText = '\n';
+            
             var responseXML = myAjax.transport.responseXML;
-            var chats = responseXML.getElementsByTagName('chats')[0];
             
-            //chatDisplay.value += chats.nodeValue;
-            
-            // Update only if chat received
-            if (responseXML.getElementsByTagName('message')[1] == null)
-                return;
-                
-            //chatDisplay.value += "am here!!!!";
-            
-            var messages = responseXML.getElementsByTagName('message');
-            var lastnode = messages[messages.length - 1];
-            
-            for (var i = 1; i < messages.length; i++) {
-                var node = messages[i];
-                responseText += "["+node.getAttribute('time')+"] - <"+node.getAttribute('user')+"> "+node.firstChild.nodeValue+"\n";
-            }
-            
-            lastLogId = lastnode.getAttribute('xml:id');
-            
-            chatDisplay.value += responseText;
-            
-            chatDisplay.value = trim11(chatDisplay.value);
-            
-            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+            updateChatBox(responseXML, 1);
         }
     });
 }
 
+function updateChatBox(responseXML, index)
+{
+    var chatDisplay = document.getElementById('logDisplay');
+    
+    var responseText = '\n';
+    var chats = responseXML.getElementsByTagName('chats')[0];
+        
+    // Update only if chat received
+    if (index)
+        if (responseXML.getElementsByTagName('message')[1] == null)
+            return;
+            
+    var messages = responseXML.getElementsByTagName('message');
+    var lastnode = messages[messages.length - 1];
+    
+    for (var i = index; i < messages.length; i++) {
+        var node = messages[i];
+        responseText += "["+node.getAttribute('time')+"] - <"+node.getAttribute('user')+"> "+node.firstChild.nodeValue+"\n";
+    }
+    
+    
+    lastLogId = lastnode.getAttribute('xml:id');
+    
+    chatDisplay.value += responseText;
+    
+    chatDisplay.value = trim11(chatDisplay.value);
+    
+    chatDisplay.scrollTop = chatDisplay.scrollHeight;
+}
+
 // Fastest Trim Function I could find for large strings
-function trim11 (str) {
+function trim11 (str) 
+{
 	str = str.replace(/^\s+/, '');
 	for (var i = str.length - 1; i >= 0; i--) {
 		if (/\S/.test(str.charAt(i))) {
@@ -224,12 +192,6 @@ function unloadEditor()
     
     postChat("disconnected", true);
     
-    if (confirm('Do you want to keep the session alive for later use?')) ;
-    else {
-        eraseCookie('beacon_user');
-        eraseCookie('beacon_session');
-    }
-    
     var request = 'REMOVE_USER';
     var myAjax = new Ajax.Request(
     "ajax/collab.php", 
@@ -244,6 +206,7 @@ function unloadEditor()
     
     BeaconEditor.exit();
 }
+
 
 // One Singleton to handle the editor 
 var BeaconEditor = {
@@ -732,6 +695,86 @@ var BeaconEditor = {
         return(returnValue);  
     },
     
+    // Add a a little color to dull text :P
+    addSpan: function(spanTitle, spanClass, spanDir) {
+        
+        var t = BeaconEditor;
+        
+        var allowed = new Array("guideParagraph", 
+                                "guideList",
+                                "guideNoteValue",
+                                "guideWarnValue",
+                                "guideImpoValue",
+                                "guideCodeBox");
+
+        var theSelection = t.f.cw.getSelection();
+        var theRange = theSelection.getRangeAt(0);
+
+        var text = theRange.commonAncestorContainer;  
+
+        var path = t.checkNodePath(text, allowed);       
+
+        if (path == null)
+            return;
+
+        var span;
+
+        span = '<span';
+        if (spanTitle)
+            span += ' title="'+spanTitle+'"';
+        if (spanClass)
+            span += ' class="'+spanClass+'"';
+        if (spanDir)
+            span += ' dir="'+spanDir+'"';
+        span += '>';
+        span += theSelection;
+        span += '</span>';
+
+
+        var start = theRange.startOffset;
+        var end = theRange.endOffset;
+
+        if (start == end)
+            return;
+
+        t.f.d.execCommand('inserthtml', false, span);
+        //alert(span);
+    },
+
+
+
+    // Removes all styling from a text selection. Note: I need to find a better way to do this. Currently just a hack.
+    clearFormat: function() {
+        
+        var t = BeaconEditor;
+        
+        var allowed = new Array("guideParagraph", 
+                                "guideList",
+                                "guideNoteValue",
+                                "guideWarnValue",
+                                "guideImpoValue",
+                                "guideCodeBox");
+
+        var theSelection = t.f.cw.getSelection();
+        var theRange = theSelection.getRangeAt(0);
+
+        var text = theRange.commonAncestorContainer;  
+
+        var path = t.checkNodePath(text, allowed);       
+
+        if (path == null)
+            return;
+
+        var start = theRange.startOffset;
+        var end = theRange.endOffset;
+
+        if (start == end)
+            return;
+
+        t.f.d.execCommand('inserthtml', false, "</span>"+theSelection+"<span>");
+    },
+    
+    
     
     
     // Say hello to folks! 
@@ -742,30 +785,4 @@ var BeaconEditor = {
             alert("Hello");
     }
     
-}
-
-// Cookie functions: Thanks to quirksmode.org!
-function createCookie(name,value,days) {
-	if (days) {
-		var date = new Date();
-		date.setTime(date.getTime()+(days*24*60*60*1000));
-		var expires = "; expires="+date.toGMTString();
-	}
-	else var expires = "";
-	document.cookie = name+"="+value+expires+"; path=/";
-}
-
-function readCookie(name) {
-	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
-	for(var i=0;i < ca.length;i++) {
-		var c = ca[i];
-		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-	}
-	return null;
-}
-
-function eraseCookie(name) {
-	createCookie(name,"",-1);
 }

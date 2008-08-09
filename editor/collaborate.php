@@ -49,13 +49,13 @@ $version = $version->item(0)->nodeValue;
 
     <link rel="stylesheet" href="css/editor.css" type="text/css" media="screen" />
 
-    <!--<script language="Javascript" type="text/javascript" src="js/edit_area/edit_area_full.js"></script>
     <link rel="stylesheet" href="css/lightbox.css" type="text/css" />
-    <script language="JavaScript" src="js/prototype.js" type="text/javascript"></script>
-    <script language="JavaScript" src="js/lightbox.js" type="text/javascript"></script>-->
+
+    <script language="JavaScript" src="js/prototype.js" type="text/javascript"></script>    
+    
+    <script language="JavaScript" src="js/lightbox.js" type="text/javascript"></script>
 
     <script language="JavaScript" type="text/JavaScript" src="js/collaborate.js"></script>
-    <script language="JavaScript" src="js/prototype.js" type="text/javascript"></script>    
     
 </head>
 
@@ -99,7 +99,7 @@ $version = $version->item(0)->nodeValue;
                 	
                 <div id="designview" >
                     <div class="toolbar">
-                        <?php require_once 'toolbar.php'; ?>
+                        <?php require_once 'collab_toolbar.php'; ?>
                     </div>
 
                     <iframe onclick="klick(event);" class="iframe" src="ajax/gethtml.php?id=<?php echo $_REQUEST['id']; ?>" id="design">
