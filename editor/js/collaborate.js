@@ -6,7 +6,7 @@
 // Initialise Beacon
 window.onload = loadEditor;
 
-var lastLogId;
+var lastLogId = "NULL";
 
 function loadEditor() 
 {
@@ -100,18 +100,21 @@ function postChat(msg, flag)
     "ajax/collab.php", 
     {
         method: 'post', 
-        parameters: "request="+request+"&id="+BeaconEditor.getVar('id')+"&username="+BeaconEditor.username+"&msg="+msg, 
+        parameters: 
+            "request="+request+"&id="+BeaconEditor.getVar('id')+"&username="+BeaconEditor.username+"&msg="+msg+"&last_id="+lastLogId, 
         onComplete: function() {
             // If the response has failed then return
             if (myAjax.responseIsFailure()) return;
         
             var responseXML = myAjax.transport.responseXML;
         
-            updateChatBox(responseXML, 0);
-            
             if (flag) {
+                updateChatBox(responseXML, 0);
                 window.setInterval(getChat, 3000);
+            } else {
+                updateChatBox(responseXML, 1);
             }
+
         }
     });
     
@@ -257,6 +260,12 @@ var BeaconEditor = {
         
         this.addEventSimple(this.f.d, "click", this.frameClick);
         
+        iframe = this.f.cw;
+        
+        iframe.document.addEventListener("keydown",keydown,false);
+        iframe.document.addEventListener("keypress",keydown,false);
+        iframe.document.addEventListener("keyup",keydown,false);
+        
         //this.w.setInterval(this.append, 1000);
         
     },
@@ -350,7 +359,7 @@ var BeaconEditor = {
         // Make the area editable
         t.editbox = t.createForm(editarea);
         
-        
+        t.byID('getSource').style.visibility = 'hidden';
         
         
     },
@@ -444,9 +453,7 @@ var BeaconEditor = {
         return editDiv;
         
     },
- 
- 
-    
+     
     editCommit: function(e) {
         var t = BeaconEditor;
         //t.hello();
@@ -467,7 +474,11 @@ var BeaconEditor = {
         t.savetout = t.w.setInterval(t.saveTimeout, 60000);
         
         
-        
+        if (t.edited.title == 'guideChapterTitle') {            
+            t.edited.innerHTML = t.editedActive.value;
+        }
+        else if (t.edited.title == 'guideSection')
+            t.edited.innerHTML = t.editedActive.innerHTML;
         
         // Remove the editable window
         var editParent;
@@ -487,6 +498,9 @@ var BeaconEditor = {
         t.editedActive = null;
         t.editing = false;
         t.saving = false;
+        
+        t.byID('getSource').style.visibility = 'visible';
+        
     },
    
    
@@ -595,6 +609,9 @@ var BeaconEditor = {
         t.editedActive = null;
         t.editing = false;
         t.saving = false;
+        
+        t.byID('getSource').style.visibility = 'visible';
+        
     },
    
    
@@ -695,86 +712,60 @@ var BeaconEditor = {
         return(returnValue);  
     },
     
-    // Add a a little color to dull text :P
-    addSpan: function(spanTitle, spanClass, spanDir) {
-        
+    deleteNode: function(node)
+    {
         var t = BeaconEditor;
         
-        var allowed = new Array("guideParagraph", 
-                                "guideList",
-                                "guideNoteValue",
-                                "guideWarnValue",
-                                "guideImpoValue",
-                                "guideCodeBox");
+        if (node!=null)
+            var text = node;
+        else  {
+            var theSelection = t.f.cw.getSelection();
+            var theRange = theSelection.getRangeAt(0);
+            var text = theRange.commonAncestorContainer;
+        }
 
-        var theSelection = t.f.cw.getSelection();
-        var theRange = theSelection.getRangeAt(0);
-
-        var text = theRange.commonAncestorContainer;  
-
-        var path = t.checkNodePath(text, allowed);       
-
-        if (path == null)
-            return;
-
-        var span;
-
-        span = '<span';
-        if (spanTitle)
-            span += ' title="'+spanTitle+'"';
-        if (spanClass)
-            span += ' class="'+spanClass+'"';
-        if (spanDir)
-            span += ' dir="'+spanDir+'"';
-        span += '>';
-        span += theSelection;
-        span += '</span>';
+        var allowed = new Array("guideBlock",
+                                "guideParagraph");
 
 
-        var start = theRange.startOffset;
-        var end = theRange.endOffset;
+        var path = t.checkNodePath(text, allowed);    
 
-        if (start == end)
-            return;
+        var content = t.f.d.getElementById('mainContent');
+        var side = t.f.d.getElementById('sideContent');
 
-        t.f.d.execCommand('inserthtml', false, span);
-        //alert(span);
+        if(path!=null) {
+            path.style.border = '3px solid #D01F3C';
+
+            if (window.confirm('Are you sure you want to delete current node?')) {
+                switch(path.title) {
+                    case 'guideBlock':
+                        allowed = new Array("guideBody");
+                        var body = t.checkNodePath(path, allowed);
+                        //alert(body.childNodes[1].innerHTML);
+                        if (body!=null) {
+                            body.removeChild(path);
+                        }
+                        break;
+
+                    case 'guideParagraph':
+                        allowed = new Array("guideBlock");
+                        var body = t.checkNodePath(path, allowed);
+                        //alert(body.childNodes[1].innerHTML);
+                        if (body!=null) {
+                            body.removeChild(path);
+                        }
+                        break;
+                }
+
+            }
+            else
+                path.style.border = 'none';
+        }
+        else {
+            alert('You cannot delete this node!');
+        }
+
     },
-
-
-
-    // Removes all styling from a text selection. Note: I need to find a better way to do this. Currently just a hack.
-    clearFormat: function() {
-        
-        var t = BeaconEditor;
-        
-        var allowed = new Array("guideParagraph", 
-                                "guideList",
-                                "guideNoteValue",
-                                "guideWarnValue",
-                                "guideImpoValue",
-                                "guideCodeBox");
-
-        var theSelection = t.f.cw.getSelection();
-        var theRange = theSelection.getRangeAt(0);
-
-        var text = theRange.commonAncestorContainer;  
-
-        var path = t.checkNodePath(text, allowed);       
-
-        if (path == null)
-            return;
-
-        var start = theRange.startOffset;
-        var end = theRange.endOffset;
-
-        if (start == end)
-            return;
-
-        t.f.d.execCommand('inserthtml', false, "</span>"+theSelection+"<span>");
-    },
-    
-    
     
     
     // Say hello to folks! 

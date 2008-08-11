@@ -1,5 +1,12 @@
 <script type="text/javascript">
-    var theSelection = iframe.getSelection();
+    
+    //var theSelection;
+    
+    if (BeaconEditor)
+        theSelection = BeaconEditor.f.cw.getSelection();
+    else 
+        theSelection = iframe.getSelection();
+        
     var theRange = theSelection.getRangeAt(0);
     var text = theRange.commonAncestorContainer;
     
@@ -8,8 +15,13 @@
                             "guideNoteValue",
                             "guideWarnValue",
                             "guideImpoValue");
-                            
-    var path = checkNodePath(text, allowed);
+              
+    //var path;
+    
+    if (BeaconEditor)
+        path = BeaconEditor.checkNodePath(text, allowed);
+    else
+        path = checkNodePath(text, allowed);
     
     if (path!=null)
     {

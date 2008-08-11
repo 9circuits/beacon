@@ -1,15 +1,52 @@
 <div class="toolholder">
-    <a class="button" id="bold" onClick="BeaconEditor.addSpan('guideBold', 'boldtext');" title="Bold">
+    <a class="button" id="ol" onClick="execute(this, 'ol');" title="Ordered List">
+        <img src="images/ol.png" border="none" />
+    </a>
+    <a class="button" id="ul" onClick="execute(this, 'ul');" title="Unordered List">
+        <img src="images/ul.png" border="none" />
+    </a>
+     <div class="separator"></div>
+    <a class="button" id="code" onClick="execute(this, 'code');" title="Code Listing">
+        <img src="images/code.png" border="none" />
+    </a>
+    <div class="separator"></div>
+    <a class="button" name="guideNoteValue" title="Note" id="note" onClick="execute(this, 'note');">
+        <img src="images/note.png" border="none" />
+    </a>
+    <a class="button" name="guideImpoValue" title="Important" id="impo" onClick="execute(this, 'impo');">
+        <img src="images/impo.png" border="none" />
+    </a>
+    <a class="button" name="guideWarnValue" title="Warning" id="warn" onClick="execute(this, 'warn');">
+        <img src="images/warn.png" border="none" />
+    </a>
+    <div class="separator"></div>
+    <a class="button" id="paragraph" onClick="execute(this, 'paragraph');" title="Paragraph">
+        <img src="images/paragraph.png" border="none" />
+    </a>
+    <a class="button" id="paragraph" onClick="execute(this, 'epigraph');" title="Paragraph">
+        <img src="images/epi.png" border="none" />
+    </a>
+    <div class="separator"></div>
+    <a class="button" id="delete" onClick="BeaconEditor.deleteNode();" title="Delete Current Node">
+        <img src="images/cancel.png" border="none" />
+    </a>
+    <div class="separator"></div>
+    <a id="getSource" class="lbOn" href="dialogs/xmlview.php?id=<?php echo $_GET['id']; ?>">
+            <img src="images/sourceview.png" border="none" />
+    </a>
+</div>
+<div class="toolholder">
+    <a class="button" id="bold" onClick="addSpan('guideBold', 'boldtext');" title="Bold">
         <img src="images/bold.png" border="none" />
     </a>
-    <a class="button" id="italic" onClick="BeaconEditor.addSpan('guideEm', 'emphasis');" title="Italic">
+    <a class="button" id="italic" onClick="addSpan('guideEm', 'emphasis');" title="Italic">
         <img src="images/italic.png" border="none" />
     </a>
     <div class="separator"></div>
-    <a class="button" id="subscript" onClick="BeaconEditor.addSpan('guideSub', 'subspan');" title="Subscript">
+    <a class="button" id="subscript" onClick="addSpan('guideSub', 'subspan');" title="Subscript">
         <img src="images/sub.png" border="none" />
     </a>    
-    <a class="button" id="superscript" onClick="BeaconEditor.addSpan('guideSup', 'supspan');" title="Superscript">
+    <a class="button" id="superscript" onClick="addSpan('guideSup', 'supspan');" title="Superscript">
         <img src="images/sup.png" border="none" />
     </a>
     <div class="separator"></div>
@@ -20,35 +57,35 @@
         <img src="images/unlink.png" border="none" />
     </a>
     <div class="separator"></div>
-    <a class="button" onClick="BeaconEditor.addSpan('guideCodePath', 'path', 'ltr');" title="Add &lt;path&gt;">
+    <a class="button" onClick="addSpan('guideCodePath', 'path', 'ltr');" title="Add &lt;path&gt;">
         <img src="images/path.png" border="none" />
     </a>
-    <a class="button" onClick="BeaconEditor.addSpan('guideCode', 'code', 'ltr');" title="Highlight as Code">
+    <a class="button" onClick="addSpan('guideCode', 'code', 'ltr');" title="Highlight as Code">
         <img src="images/code-highlight.png" border="none" />
     </a>
-    <a class="button" onClick="BeaconEditor.addSpan('guideCodeInput', 'code-input');" title="Highlight as Input">
+    <a class="button" onClick="addSpan('guideCodeInput', 'code-input');" title="Highlight as Input">
         <img src="images/input.png" border="none" />
     </a>
-    <a class="button" onClick="BeaconEditor.addSpan('guideComment', 'code-comment');" title="Highlight as Comment">
+    <a class="button" onClick="addSpan('guideComment', 'code-comment');" title="Highlight as Comment">
         <img src="images/comment.png" border="none" />
     </a>
-    <a class="button" onClick="BeaconEditor.addSpan('guideIdentifier','code-identifier');" title="Highlight as Identifier">
+    <a class="button" onClick="addSpan('guideIdentifier','code-identifier');" title="Highlight as Identifier">
         <img src="images/ident.png" border="none" />
     </a>
-    <a class="button" onClick="BeaconEditor.addSpan('guideKeyword', 'code-keyword');" title="Highlight as Keyword">
+    <a class="button" onClick="addSpan('guideKeyword', 'code-keyword');" title="Highlight as Keyword">
          <img src="images/keyword.png" border="none" />
     </a>
-    <a class="button" onClick="BeaconEditor.addSpan('guideConstant', 'code-constant');" title="Highlight as Constant">
+    <a class="button" onClick="addSpan('guideConstant', 'code-constant');" title="Highlight as Constant">
          <img src="images/const.png" border="none" />
     </a>
-    <a class="button" onClick="BeaconEditor.addSpan('guideStatement', 'code-statement');" title="Highlight as Statement">
+    <a class="button" onClick="addSpan('guideStatement', 'code-statement');" title="Highlight as Statement">
          <img src="images/stmt.png" border="none" />
     </a>
-    <a class="button" onClick="BeaconEditor.addSpan('guideVariable', 'code-variable');" title="Highlight as Variable">
+    <a class="button" onClick="addSpan('guideVariable', 'code-variable');" title="Highlight as Variable">
          <img src="images/variable.png" border="none" />
     </a>
     <div class="separator"></div>
-    <a class="button" onClick="BeaconEditor.clearFormat();" title="Remove All Formatting">
+    <a class="button" onClick="clearFormat();" title="Remove All Formatting">
          <img src="images/clear.png" border="none" />
     </a>
 </div>

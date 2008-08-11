@@ -53,6 +53,7 @@ if ($flag == 1)
     
 	/* Store equivalent HTML */
 	$theXSL = loadDOM('../xml/guide2html.xsl');
+    $theXSL->preserveWhiteSpace = false;
 	$xslt = new XSLTProcessor();
 	$xslt->importStylesheet($theXSL);    
 	$output = $xslt->transformToXML($template);
@@ -61,7 +62,10 @@ if ($flag == 1)
 		exit;
 	}
 	
-	$output = clean_html_code($output); //I want clean code!
+	//$output = str_replace("> ", ">", $output);
+    $output = str_replace("<p title=\"guideParagraph\">\n", "<p title=\"guideParagraph\">", $output);
+    
+	//$output = clean_html_code($output); //I want clean code!
 
 	write($tmpName.".html", $output);
 	

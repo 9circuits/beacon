@@ -43,6 +43,19 @@ if ($request == 'CREATE_EDIT' || $request == 'CREATE_NEW') {
     createNew();
 }
 
+if ($request == 'GET_XML'){
+    $text = urldecode($_POST['text']);
+    $text = stripslashes($text);
+    $id = urldecode($_POST['id']);
+
+    $text = str_replace('<hr>', '<hr />', $text);
+    $text = str_replace('<br>', '<br />', $text);
+    
+    $output = getXML($text);
+
+    echo $output;
+}
+
 
 if ($request == 'GET_USER_LIST') {
     
@@ -130,7 +143,9 @@ if ($request == 'POST_CHAT') {
     $id = urldecode($_POST['id']);
     $username = $_POST['username'];
     $chat = urldecode($_POST['msg']);
+    $lastId = urldecode($_POST['last_id']);
     
+    $chat = str_replace("&", "&amp;", $chat);
     // Return if the user does not exist
     if (!userExists($id, $username))
         return;
@@ -142,8 +157,11 @@ if ($request == 'POST_CHAT') {
     postChat($id, $username, $chat, $time);
     
     // Get chat. (using md5 for unique message id)
-    $chatString = stripslashes(getChat($id, md5($time.$username)));
-    
+    if ($lastId == 'NULL')
+        $chatString = stripslashes(getChat($id, md5($time.$username)));
+    else
+        $chatString = stripslashes(getChat($id, $lastId));
+        
     // Send it to user
     echo $chatString;
 }

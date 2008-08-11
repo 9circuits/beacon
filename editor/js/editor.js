@@ -55,7 +55,7 @@ function initEditor(flag)
         iframe.document.onkeypress = keydown;
         iframe.document.onkeyup = keydown;
     }
-
+    
     //Create the Document Tree
     createTree();
     
@@ -121,6 +121,11 @@ function checkNodePath(node, allowed)
 /* Working hard every keystroke! To make your RTE idiot-proof! Brought to you by the Blah Blah Blah productions! XD */
 function keydown(e)
 {
+    if (BeaconEditor)
+        if (BeaconEditor.edited)
+            if (BeaconEditor.edited.title == 'guideChapterTitle')
+                return;
+        
     //alert(e.keyCode);
     if (!e) e = event;
 
@@ -359,6 +364,8 @@ function keydown(e)
                                          "guidePreTitle");
                                      
                     var spath = checkNodePath(text, sallowed);
+                    
+                    // /alert(text.parentNode.childNodes.length);
                 
                     if (spath!=null) // This solution ! working in Safari
                         if (start == 0) {

@@ -67,6 +67,7 @@ function createNew()
     	}
 
     	//$output = clean_html_code($output); //I want clean code!
+        $output = str_replace("<p title=\"guideParagraph\">\n", "<p title=\"guideParagraph\">", $output);
 
     	write($tmpName.".html", $output);
     
