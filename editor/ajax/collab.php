@@ -83,7 +83,7 @@ if ($request == 'GET_USER_LIST') {
 
 if ($request == 'NEW_USER') {
     
-    setHeader('xml');
+    setHeader('text/xml');
     
     $id = urldecode($_POST['id']);
     $username = $_POST['username'];
@@ -110,7 +110,7 @@ if ($request == 'REMOVE_USER') {
 if ($request == 'SAVE_TEMP') {
     
     // Set Header
-    setHeader('xml');
+    setHeader('text/xml');
     
     $text = '';
     $xml = '';

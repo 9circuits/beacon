@@ -18,7 +18,9 @@ function loadEditor()
     var request = 'NEW_USER';
     var text = BeaconEditor.username;
     
-    //userTout = window.setInterval(getUserTimeOut, 9000);
+    //userTout = window.setInterval(getUserTimeOut, 9000);alert('k');
+    
+    //alert("request="+request+"&username="+text+"&id="+BeaconEditor.getVar('id'));
     
     var myAjax = new Ajax.Request(
     "ajax/collab.php", 
@@ -28,6 +30,7 @@ function loadEditor()
         onComplete: function() {
             // If the response has failed then return
             if (myAjax.responseIsFailure()) alert("Something went bad! Try again...");
+            //alert('k');
             
             // Store the response XML and parse it
             var responseXML = myAjax.transport.responseXML;
@@ -39,7 +42,6 @@ function loadEditor()
                 loadEditor();
                 return; 
             }
-
             var userDisplay = document.getElementById('userDisplay');
             userDisplay.innerHTML = "<div id=\"userlist\"><ol><li class=\"username\">"+BeaconEditor.username+"</li><ol></div>";
             
@@ -56,13 +58,16 @@ function loadEditor()
             BeaconEditor.init();
         }
     });
+    
+    //postChat("connected", true);
+    
 }
 
 // Doubles as a user update function
 function getUsers()
 {
     var request = 'GET_USER_LIST';
-        
+            
     var myAjax = new Ajax.Request(
     "ajax/collab.php", 
     {
@@ -73,6 +78,7 @@ function getUsers()
             if (myAjax.responseIsFailure()) return;
                         
             var responseText = myAjax.transport.responseText;
+            
             var userDisplay = document.getElementById('userDisplay');
             userDisplay.innerHTML = responseText;
         }

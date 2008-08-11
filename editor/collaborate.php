@@ -55,8 +55,6 @@ $version = $version->item(0)->nodeValue;
     
     <script language="JavaScript" src="js/lightbox.js" type="text/javascript"></script>
     
-    <script language="Javascript" type="text/javascript" src="js/edit_area/edit_area_full.js"></script>
-
     <script language="JavaScript" type="text/JavaScript" src="js/collaborate.js"></script>
     
     <script language="JavaScript" type="text/JavaScript" src="js/editor.js"></script>

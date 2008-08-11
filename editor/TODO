@@ -1,5 +1,6 @@
-Last updated on 11 July, 2008, Beacon Version 0.3
+Last updated on 27 June, 2008, Beacon Version 0.3
 
-- Complete the standalone editor [Missing elements]
-- Complete the collaorative editor [Client-Server Comms]
-- Prettify the ugly XML
+- Complete the Rich Text Editor
+- Enable more actions via the DOM tree
+- Cleanup editor.js
+- Complete HTML to GuideXML XSLT
