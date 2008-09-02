@@ -8,7 +8,7 @@ Changelog:
 box with a standard Server and PHP with XSL support. 
 - Other minor changes.
 - Rudimentary i18n support.
-
+- Tagged and new branch for django based backend created
 
 
 Beacon v0.3
