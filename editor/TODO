@@ -1,6 +1,1 @@
-Last updated on 27 June, 2008, Beacon Version 0.3
-
-- Complete the Rich Text Editor
-- Enable more actions via the DOM tree
-- Cleanup editor.js
-- Complete HTML to GuideXML XSLT
+- Switch to Django!
