@@ -1,0 +1,50 @@
+Document:
+	id
+	title = text field (no max length, but enforce only one line.)
+	abstract = text field (no max length.)
+	date = date field
+	version = character field (max length = 25)
+		Char field because it's easier to work with than floats.
+		Don't want any documents with version = 1.00000000000000000000000003...
+	last_action = timestamp (to determine whether this document has been abandoned and can be safely deleted.  Maybe give a grace period of about a day or two?)
+	key = char field (hex digits maybe?  Or base 36 (0-9 and a-z)?  max length = 16?  Unique.)
+
+
+User:
+	id
+	document = foreign key to document currently being edited
+	username = char field (max length = 50)
+	last_user_update = timestamp of the last time user polled the server for chat messages.
+
+
+Author:
+	id
+	document = foreign key to document authored by this author
+	title = character field (max length = 100)
+	first_name = character field (max length = 100)
+	last_name = character field (max length = 100)
+	middle_name = character field (max length = 100) (can be null for those with no middle name)
+	email = email addr field
+
+
+Chapter:
+	id
+	document = foreign key to document
+	title = character field (max length = 500)
+	order = integer field
+
+
+Section:
+	id
+	chapter = foreign key to chapter
+	title = character field (max length = 500)
+	body = text field (no max length.  Holds xml code of that section.)
+	order = integer field (will start with 0 at the beginning of each chapter.)
+
+
+ChatEntry:
+	id
+	timestamp = timestamp field
+	user = foreign key to a user
+	message = text field (no max length.)
+
