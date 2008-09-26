@@ -9,9 +9,10 @@ MANAGERS = ADMINS
 DATABASE_ENGINE = 'mysql'
 DATABASE_NAME = 'beacon'
 DATABASE_USER = 'beacon'
-DATABASE_PASSWORD = 'password'
+DATABASE_PASSWORD = 'beacon'
 DATABASE_HOST = ''
 DATABASE_PORT = ''
+
 DATABASE_OPTIONS = {
 	"init_command": "SET storage_engine=INNODB",
 }
@@ -68,6 +69,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	#"django.core.context_processors.debug",
 	"django.core.context_processors.i18n",
 	"django.core.context_processors.media",
+
 	"beacon.context_processors.dojo_cp",
 	"beacon.context_processors.beacon_cp",
 )
