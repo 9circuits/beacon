@@ -140,6 +140,11 @@ class DocumentManager(models.Manager):
 			(first_name, middle_name, last_name) = split
 		elif len(split) > 3:
 			middle_name = " ".join(split[1:-1])
+			first_name = split[0]
+			last_name = split[-1]
+		else:
+			first_name = author
+			last_name = ""
 
 		auth = doc.author_set.create(first_name=first_name, middle_name=middle_name, last_name=last_name)
 
@@ -161,9 +166,9 @@ class DocumentManager(models.Manager):
 class DocumentUser(models.Model):
 	documents = models.ManyToManyField('Document')
 	username = models.CharField(max_length=50, null=True, blank=True)
-	last_user_update = models.DateTimeField()
+	last_user_update = models.DateTimeField(auto_now=True)
 	logged_in = models.BooleanField()
-	user = models.ForeignKey('auth.User')
+	user = models.ForeignKey('auth.User', null=True, blank=True)
 
 	def __unicode__(self):
 		return self.username
@@ -197,7 +202,7 @@ class Document(models.Model):
 
 
 class Author(models.Model):
-	document = models.ForeignKey(Document)
+	document = models.ForeignKey('Document')
 	title = models.CharField(max_length=100, null=True, blank=True)
 	first_name = models.CharField(max_length=100)
 	last_name = models.CharField(max_length=100)
@@ -226,7 +231,7 @@ class Author(models.Model):
 
 
 class Chapter(models.Model):
-	document = models.ForeignKey(Document)
+	document = models.ForeignKey('Document')
 	title = models.CharField(max_length=500)
 	order = models.PositiveIntegerField()
 	
@@ -249,7 +254,7 @@ class Chapter(models.Model):
 
 
 class Section(models.Model):
-	chapter = models.ForeignKey(Chapter)
+	chapter = models.ForeignKey('Chapter')
 	title = models.CharField(max_length=500)
 	body = models.XMLField()
 	order = models.PositiveIntegerField()
@@ -274,8 +279,8 @@ class Section(models.Model):
 
 class ChatEntry(models.Model):
 	timestamp = models.DateTimeField()
-	document = models.ForeignKey(Document)
-	user = models.ForeignKey(DocumentUser)
+	document = models.ForeignKey('Document')
+	user = models.ForeignKey('DocumentUser')
 	message = models.TextField()
 
 	class Meta:

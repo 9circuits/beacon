@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response
+from beacon.editor.models import Document
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError
 from django.conf import settings
 
@@ -11,10 +12,15 @@ def ajax_new(request):
 	else:
 		user = None
 
-	if request.method == "POST":
-		doc = Document.objects.create_new_document(logged_in=logged_in, user=user, **request.POST)
+	title = request.POST['title']
+	abstract = request.POST['abstract']
+	author = request.POST['author']
+	date = request.POST['date']
 
-		return render_to_response()
+	if request.method == "POST":
+		doc = Document.objects.create_new_document(logged_in=logged_in, user=user, title=title, abstract=abstract, author=author, date=date)
+
+		return render_to_response("editor/editor.html", {})
 
 	else:
 		return HttpResponseServerError("<h1>Incorrect Method</h1><br /><p>This view can only be used with the POST method.</p>")
