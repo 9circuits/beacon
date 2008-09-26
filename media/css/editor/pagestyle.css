@@ -7,13 +7,13 @@
     display: block;
     width: 272px;
     height: 5px;
-    background: url(../images/breaker.jpg) top left no-repeat;
+    background: url(/img/breaker.jpg) top left no-repeat;
 }
 .newlink {
     display: block;
     width: 270px;
     height: 125px;
-    background: url(../images/new-button.png) top left no-repeat;
+    background: url(/img/new-button.png) top left no-repeat;
     cursor: pointer;
 }
 
@@ -72,7 +72,7 @@
     border-left-color: #CCCCCC;
     padding: 0.25em;
     background-color: #FFFFFF;
-    background: #fff url(../images/go.png) right;
+    background: #fff url(/img/go.png) right;
     background-repeat: no-repeat;
     color: #333333;
     text-align: left;

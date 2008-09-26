@@ -1,7 +1,7 @@
 var openImg = new Image();
-openImg.src = "images/open.gif";
+openImg.src = "media_files/img/open.gif";
 var closedImg = new Image();
-closedImg.src = "images/closed.gif";
+closedImg.src = "media_files/img/closed.gif";
 
 var src;
 
@@ -1235,7 +1235,7 @@ function createTree()
                         var idc = "'"+mainContent.childNodes[i].id+"'";
                         var id = mainContent.childNodes[i].id;
                         tree += '<div class="trigger" id="t_'+id+'" onclick="showBranch('+idc+', true, this);">';
-                        tree += '<img src="images/closed.gif" id="I'+id+'" name="I'+id+'"> ';
+                        tree += '<img src="media_files/img/closed.gif" id="I'+id+'" name="I'+id+'"> ';
                         tree += '<span id="C_'+id+'">'+mainContent.childNodes[i].childNodes[z].innerHTML+'</span><br /></div>';
                         tree += '<div class="branch" id="'+id+'">';
                     }
@@ -1246,7 +1246,7 @@ function createTree()
                             k++;
                         }
                         var qid = "'"+section.id+"'";
-                        tree += '<p class="leaf"><img src="images/doc.gif">';
+                        tree += '<p class="leaf"><img src="media_files/img/doc.gif">';
                         tree += '<a id="S_'+section.id+'" onclick="showBranch('+qid+');">'+section.childNodes[k].innerHTML+'</a><br /></p>';
                     }
                 } 
@@ -1397,14 +1397,14 @@ function tabs(view,hide) {
     if (view.style.visibility == "hidden") {
 
         if (view == document.getElementById("sourceview")) {
-            document.getElementById("designTab").style.background = "url(images/editor-tab-design.png) top left no-repeat";
-            document.getElementById("sourceTab").style.background = "url(images/editor-tab-source-select.png) top left no-repeat";
+            document.getElementById("designTab").style.background = "url(media_files/img/editor-tab-design.png) top left no-repeat";
+            document.getElementById("sourceTab").style.background = "url(media_files/img/editor-tab-source-select.png) top left no-repeat";
             view.style.width = "100px";
 
         }
         else if (view == document.getElementById("designview")) {
-            document.getElementById("designTab").style.background = "url(images/editor-tab-design-select.png) top left no-repeat";
-            document.getElementById("sourceTab").style.background = "url(images/editor-tab-source.png) top left no-repeat";
+            document.getElementById("designTab").style.background = "url(media_files/img/editor-tab-design-select.png) top left no-repeat";
+            document.getElementById("sourceTab").style.background = "url(media_files/img/editor-tab-source.png) top left no-repeat";
         }
 
         view.style.visibility = "visible";

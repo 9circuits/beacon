@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.db import models
 from django.contrib import admin
+from django.template import Context, loader
 from random import choice
 from xml.dom.ext.reader import Sax2
 from xml import xpath
@@ -109,6 +111,30 @@ class DocumentManager(models.Manager):
 		return doc
 
 
+	def create_new_document(self, title, author, abstract, date, logged_in, user=None):
+		doc = self.create(title=title, abstract=abstract, date=date)
+
+		middle_name = None
+		split = author.split(" ")
+		if len(split) == 2:
+			(first_name, last_name) = split
+		elif len(split) == 3:
+			(first_name, middle_name, last_name) = split
+		elif len(split) > 3:
+			middle_name = " ".join(split[1:-1])
+
+		auth = doc.author_set.create(first_name=first_name, middle_name=middle_name, last_name=last_name)
+
+		if user is not None:
+			username = user.username
+		else:
+			username = "guest"
+
+		docuser = doc.documentuser_set.create(username=username, logged_in=logged_in, user=user)
+
+		return doc
+
+
 	def make_random_key(self):
 		chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
 		return ''.join([choice(chars) for i in range(16)])
@@ -126,42 +152,27 @@ class Document(models.Model):
 
 	objects = DocumentManager()
 
+	def render(self, template):
+		t = loader.get_template(template)
+		c = Context({'document': self})
+		return t.render(c)
+
 	def to_xml(self):
-		out = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-		out += "<!DOCTYPE guide SYSTEM \"/dtd/guide.dtd\">\n"
-		out += "<!-- $Header$ -->\n\n"
-		out += "<guide"
-		if self.link is not None:
-			out += " link=\"" + self.link + "\""
-		if self.language is not None:
-			out += " lang=\"" + self.language + "\""
+		return self.render("docoutput/doc_xml.xml")
 
-		out += "<title>" + self.title + "</title>\n\n"
-		for a in self.author_set.all():
-			out += a.to_xml()
-
-		out += "\n<abstract>\n" + self.abstract + "\n</abstract>\n\n"
-
-		out += "<license />\n\n"
-
-		out += "<version>" + self.version + "</version>\n"
-		out += "<date>" + self.date.strftime("%Y-%m-%d") + "</date>\n\n"
-
-		for c in self.chapter_set.all():
-			out += c.to_xml()
-
-		out += "</guide>\n"
-
-		return out
+	def to_html(self):
+		return self.render("docoutput/doc_html.html")
 
 	def __unicode__(self):
 		return self.title
 
 
 class DocumentUser(models.Model):
-	document = models.ForeignKey('Document')
+	documents = models.ManyToManyField('Document')
 	username = models.CharField(max_length=50)
-	last_user_update = models.DateTimeField()
+	last_user_update = models.DateTimeField(auto_now=True)
+	logged_in = models.BooleanField(default=False)
+	user = models.ForeignKey('auth.User', null=True, blank=True)
 
 	def __unicode__(self):
 		return self.username
@@ -173,21 +184,18 @@ class Author(models.Model):
 	first_name = models.CharField(max_length=100)
 	last_name = models.CharField(max_length=100)
 	middle_name = models.CharField(max_length=100, null=True, blank=True)
-	email = models.EmailField()
+	email = models.EmailField(null=True, blank=True)
+
+	def render(self, template):
+		t = loader.get_template(template)
+		c = Context({'author': self})
+		return t.render(c)
 
 	def to_xml(self):
-		out = "<author"
-		if self.title is not None:
-			out += " title=\"" + self.title + "\""
-		out += ">\n"
-		out += "	"
-		if self.email is not None:
-			out += "<mail link=\"" + self.email + "\">" + self.name() + "</mail>\n"
-		else:
-			out += self.name() + "\n"
-		out += "</author>\n"
-		
-		return out
+		return self.render("docoutput/author_xml.xml")
+	
+	def to_html(self):
+		return self.render("docoutput/author_html.html")
 	
 	def name(self):
 		if self.middle_name is not None:
@@ -203,15 +211,17 @@ class Chapter(models.Model):
 	document = models.ForeignKey('Document')
 	title = models.CharField(max_length=500)
 	order = models.PositiveIntegerField()
+	
+	def render(self, template):
+		t = loader.get_template(template)
+		c = Context({'chapter': self})
+		return t.render(c)
 
 	def to_xml(self):
-		out = "<chapter>\n"
-		out += "<title>" + self.title + "</title>\n"
-		for s in self.section_set.all():
-			out += s.to_xml()
-		out += "</chapters>\n"
-
-		return out
+		return self.render("docoutput/chapter_xml.xml")
+	
+	def to_html(self):
+		return self.render("docoutput/chapter_html.html")
 
 	def __unicode__(self):
 		return self.title
@@ -225,14 +235,17 @@ class Section(models.Model):
 	title = models.CharField(max_length=500)
 	body = models.XMLField()
 	order = models.PositiveIntegerField()
+	
+	def render(self, template):
+		t = loader.get_template(template)
+		c = Context({'section': self})
+		return t.render(c)
 
 	def to_xml(self):
-		out = "<section>\n"
-		out += "<title>" + self.title + "</title>\n"
-		out += self.body
-		out += "\n</section>\n"
+		return self.render("docoutput/section_xml.xml")
 
-		return out
+	def to_html(self):
+		return self.render("docoutput/section_html.html")
 
 	def __unicode__(self):
 		return self.title
@@ -250,11 +263,3 @@ class ChatEntry(models.Model):
 		verbose_name_plural = "menu entries"
 
 
-"""
-admin.site.register(Document, admin.ModelAdmin)
-admin.site.register(DocumentUser, admin.ModelAdmin)
-admin.site.register(Author, admin.ModelAdmin)
-admin.site.register(Chapter, admin.ModelAdmin)
-admin.site.register(Section, admin.ModelAdmin)
-admin.site.register(ChatEntry, admin.ModelAdmin)
-"""

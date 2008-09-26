@@ -1,0 +1,124 @@
+{% load i18n %}
+
+{% comment %}
+<?php
+
+$beaconDoneLoad = false;
+
+$errors = "<p>Following Errors Occured:</p>";
+
+if (file_exists(dirname(__FILE__).'/conf')) {
+    require_once dirname(__FILE__).'/conf';
+    $beaconDoneLoad = true;
+}
+else {
+    $errors .= "<p>- <code>conf</code> file not found. Please create one.</p>";
+    $beaconDoneLoad = false;
+}
+
+if (file_exists(dirname(__FILE__).'/i18n/'.$conflang.'.xml')) {
+    $theXML = DOMDocument::load(dirname(__FILE__).'/i18n/'.$conflang.'.xml');
+    $beaconDoneLoad = true;
+}
+else {
+    $errors .= "<p>- <code>i18n/".$conflang.".xml</code> file not found. Please get your translated XML copy.</p>";
+    $beaconDoneLoad = false;
+}
+
+if (!$beaconDoneLoad) {
+    echo $errors;
+    return false;
+}
+
+$metadata = $theXML->getElementsByTagName('newform');
+$metadata = $metadata->item(0);
+$goLabel = $metadata->getAttribute('goLabel');
+$fields = $metadata->getElementsByTagName('field');
+
+?>
+{% endcomment %}
+
+<div id="newform">
+	<form enctype="multipart/form-data" name="editform" action="{% url ajax-new %}" method="POST" onsubmit="return checkNewForm(this);">
+		{# <input type="hidden" name="isnew" value="1"/> #}
+		
+        <table>
+            <tr>
+							<td id="message" colspan="2"><p>{% trans "Please fill in the following details:" %}</p></td>
+						</tr>
+
+						<tr>
+							<td colspan="2"><span class="field">1. {% trans "The Title of the Document" %}. {% trans "Enter a descriptive but short name for the document" %}.</span></td>
+						</tr>
+						<tr>
+							<td><img src="{{ MEDIA_URL }}img/title.png" /></td>
+							<td><input class="textbox" type="text" name="{% trans "title" %}" value="{% trans "Title" %}" /></td>
+						</tr>
+						
+						<tr>
+							<td colspan="2"><span class="field">2. {% trans "Author of the Document" %}. {% trans "You may add additional authors and email information later" %}.</span></td>
+						</tr>
+						<tr>
+							<td><img src="{{ MEDIA_URL }}img/author.png" /></td>
+							<td><input class="textbox" type="text" name="{% trans "author" %}" value="{% trans "Author" %}" /></td>
+						</tr>
+
+						<tr>
+							<td colspan="2"><span class="field">3. {% trans "A short summary of the Document" %}. {% trans "This text will appear in the top-right corner of the document" %}.</span></td>
+						</tr>
+						<tr>
+							<td><img src="{{ MEDIA_URL }}img/abstract.png" /></td>
+							<td><textarea class="textfield" name="abstract" style="width: 400px; height: 150px;">{% trans "Abstract" %}</textarea></td>
+						</tr>
+						
+						<tr>
+							<td colspan="2"><span class="field">4. {% trans "Date of Creation" %}. {% trans "Use the YYYY-MM-DD format!" %}.</span></td>
+						</tr>
+						<tr>
+							<td><img src="{{ MEDIA_URL }}img/date.png" /></td>
+							<td><input class="textbox" type="text" name="{% trans "date" %}" value="2008-12-12" /></td>
+						</tr>
+
+				{% comment %}
+        <?php
+            for ($i = 0; $i < $fields->length; $i++) {
+                $field = $fields->item($i);
+                $icon = $field->getAttribute('icon');
+                $guide = $field->getAttribute('guide');
+                $label = $field->getAttribute('label');
+                $fnote = $field->getAttribute('fnote');
+                $caption = $field->getAttribute('caption');
+                
+				echo '<tr>';
+				echo '<td  colspan="2"><span class="field">'.($i+1).'. '.$caption.'. '.$fnote.'</td></tr>';
+                echo "\n<tr>";
+                echo "\n\t<td>".'<img src="images/'.$icon.'"/></td>';
+                
+                switch ($guide) {
+                case 'abstract' : echo '<td><textarea class="textfield" name="'.$guide.'" style="width:400px; height:150px;">'.$label.'</textarea></td>'; 
+                                  break;
+				case 'date'		: echo '<td><input class="textbox" type="text" name="'.$guide.'" value="2008-12-12" /></td>';
+								  break;
+				case 'author'	: echo '<td><input class="textbox" type="text" name="'.$guide.'" value="'.$label.'" /></td>';
+								  break;
+				case 'title'	: echo '<td><input class="textbox" type="text" name="'.$guide.'" value="'.$label.'" /></td>';
+								  break;
+                }
+                
+                
+                echo "\n</tr>";
+
+				echo '<tr><td colspan="2"><hr /></td</tr>';
+				
+            }
+        ?>
+				{% endcomment %}
+		<tr><td colspan="2"><hr /></td></tr>
+		<tr><td align="center" colspan ="2"><input class="gbutton" type="submit" value="{% trans "Go!" %}"></td></tr>
+
+        </table>
+
+    </form>
+
+</div>
+

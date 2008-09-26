@@ -528,7 +528,7 @@ var BeaconEditor = {
         
         // Display a message to the user
         try {
-            t.f.byID("saveStatus").innerHTML = '<img src="../images/loading.gif" width="16px" height="16px" border="none" /> Saving... Please Wait!';
+            t.f.byID("saveStatus").innerHTML = '<img src="/media_files/img/loading.gif" width="16px" height="16px" border="none" /> Saving... Please Wait!';
         } catch (err) {
             return;
         }
