@@ -6,15 +6,15 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'mysql'
-DATABASE_NAME = 'beacon'
+DATABASE_ENGINE = 'sqlite3'
+DATABASE_NAME = 'beacon.db'
 DATABASE_USER = 'beacon'
 DATABASE_PASSWORD = 'password'
 DATABASE_HOST = ''
 DATABASE_PORT = ''
-DATABASE_OPTIONS = {
-   "init_command": "SET storage_engine=INNODB",
-}
+#DATABASE_OPTIONS = {
+#   "init_command": "SET storage_engine=INNODB",
+#}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -73,9 +73,8 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-		'django.contrib.admin',
-
-		'editor',
+    'django.contrib.admin',
+    'editor',
 )
 
 import sys, os

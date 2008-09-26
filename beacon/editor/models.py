@@ -5,11 +5,27 @@ from xml.dom.ext.reader import Sax2
 from xml import xpath
 from xml.dom.ext import Print
 import StringIO
+import urllib2
+
+
+class ParseException(Exception):
+	pass
+
+
 
 
 class DocumentManager(models.Manager):
+	def parse_url(self, xml_url):
+		try:
+			urlfd = urllib2.urlopen(xml_url)
+			content = ''.join(urlfd.readlines())
+		except  Exception, e:
+			raise ParseException(e)
+		return self.parse_document(content)
+
 	def parse_document(self, xml_document):
 		reader = Sax2.Reader()
+		reader.parser.setFeature("http://xml.org/sax/features/external-general-entities",False)
 		doc = reader.fromString(xml_document)
 
 		doc_elem = doc.documentElement
@@ -114,6 +130,16 @@ class DocumentManager(models.Manager):
 		return ''.join([choice(chars) for i in range(16)])
 
 
+class DocumentUser(models.Model):
+	username = models.CharField(max_length=50)
+	last_user_update = models.DateTimeField()
+
+	def __unicode__(self):
+		return self.username
+
+
+
+
 class Document(models.Model):
 	title = models.TextField()
 	link = models.URLField(verify_exists=False, null=True, blank=True)
@@ -123,7 +149,7 @@ class Document(models.Model):
 	version = models.CharField(max_length=25)
 	last_action = models.DateTimeField(auto_now=True)
 	key = models.CharField(max_length=16, unique=True)
-
+	userlist = models.ManyToManyField(DocumentUser)
 	objects = DocumentManager()
 
 	def to_xml(self):
@@ -158,17 +184,10 @@ class Document(models.Model):
 		return self.title
 
 
-class DocumentUser(models.Model):
-	document = models.ForeignKey('Document')
-	username = models.CharField(max_length=50)
-	last_user_update = models.DateTimeField()
-
-	def __unicode__(self):
-		return self.username
 
 
 class Author(models.Model):
-	document = models.ForeignKey('Document')
+	document = models.ForeignKey(Document)
 	title = models.CharField(max_length=100, null=True, blank=True)
 	first_name = models.CharField(max_length=100)
 	last_name = models.CharField(max_length=100)
@@ -200,7 +219,7 @@ class Author(models.Model):
 
 
 class Chapter(models.Model):
-	document = models.ForeignKey('Document')
+	document = models.ForeignKey(Document)
 	title = models.CharField(max_length=500)
 	order = models.PositiveIntegerField()
 
@@ -221,7 +240,7 @@ class Chapter(models.Model):
 
 
 class Section(models.Model):
-	chapter = models.ForeignKey('Chapter')
+	chapter = models.ForeignKey(Chapter)
 	title = models.CharField(max_length=500)
 	body = models.XMLField()
 	order = models.PositiveIntegerField()
@@ -243,18 +262,18 @@ class Section(models.Model):
 
 class ChatEntry(models.Model):
 	timestamp = models.DateTimeField()
-	user = models.ForeignKey('DocumentUser')
+	document = models.ForeignKey(Document)
+	user = models.ForeignKey(DocumentUser)
 	message = models.TextField()
 
 	class Meta:
 		verbose_name_plural = "menu entries"
 
 
-"""
+
 admin.site.register(Document, admin.ModelAdmin)
 admin.site.register(DocumentUser, admin.ModelAdmin)
 admin.site.register(Author, admin.ModelAdmin)
 admin.site.register(Chapter, admin.ModelAdmin)
 admin.site.register(Section, admin.ModelAdmin)
 admin.site.register(ChatEntry, admin.ModelAdmin)
-"""
