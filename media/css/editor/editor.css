@@ -4,11 +4,11 @@
     margin: 0;
 }
 
-/* body, html {
+body, html {
     color: #000; 
     height: 100%;
     background: url(/img/left-bg.gif) repeat-y #fff;  /*** This is the left column background "faked" with an image. You can also position the image using left top repeat-y also. The background color #fff (white) will be the background color for our content ***/
-} */
+}
 
 body 
 {
