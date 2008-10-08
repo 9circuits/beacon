@@ -35,9 +35,9 @@ class DocumentManager(models.Manager):
 		htmlsource = InputSource.DefaultFactory.fromString(html_document)
 		xsltsource = InputSource.DefaultFactory.fromUri(settings.XSLT_DIR + "/html2guide.xsl")
 
-		f = open("/home/randerson/liquidus/beacon/test.txt", 'w')
-		f.write(htmlsource.read())
-		f.close()
+		#f = open("/home/randerson/liquidus/beacon/test.txt", 'w')
+		#f.write(htmlsource.read())
+		#f.close()
 		htmlsource.stream.reset()
 
 		processor = Processor.Processor()
