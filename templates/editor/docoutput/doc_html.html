@@ -1,48 +1,29 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-    "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-<title></title>
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}editor/css/guide.css">
-</head>
-<body>
-<div style="margin: 5px;" id="guide" link="{{ document.link }}">
+{% load i18n %}<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE body SYSTEM "http://example.com/dtd.dtd">
+<style type="text/css" media="all">@import "{{ MEDIA_URL }}css/editor/guide.css";</style>
+<body><div style="margin: 5px;" id="guide" link="">
 <div id="sideContent">
-<hr>
+<hr/>
 <div title="guideDate" class="alttext" align="center">{% trans "Updated" %} <div title="guideDateValue">{{ document.date }}</div>
 </div>
-<hr>
+<hr/>
 <div title="guideAbstract" class="alttext">
-<b>{% trans "Summary" %}: </b>
-<div title="guideAbstractValue">{{ document.abstract }}<br></div>
+<b>{% trans "Summary" %}: </b><div title="guideAbstractValue">
+{{ document.abstract }}
 </div>
-<hr>
-
+</div>
+<hr/>
 {% for author in document.author_set.all %}
-{% include "docoutput/author_html.html" %}
+{% include "editor/docoutput/author_html.html" %}
 {% endfor %}
-
-<span id="authorBreak">
-</span>
-<hr>
-
-********Done up to this point********
-<div title="guideVersion" class="version">1.0</div>
+<span id="authorBreak"></span><hr/>
+<div title="guideVersion" class="version">{{ document.version }}</div>
 </div>
 <div id="mainContent">
-<h1 title="guideTitle" id="doc_chap0">Title</h1>
-<div id="doc_chap1" title="guideChapter">
-<p title="guideChapterTitle" class="chaphead">Chapter 1</p>
-<div id="doc_chap1_sec1" title="guideSection">
-<p title="guideSectionTitle" class="secthead">Section 1</p>
-<div title="guideBody">
-<div title="guideBlock">
-<p title="guideParagraph">Test Paragraph!</p>
-</div>
-
-</div>
-</div>
-</div>
+<h1 title="guideTitle" id="doc_chap0">{{ document.title }}</h1>
+{% for chapter in document.chapter_set.all %}
+{% include "editor/docoutput/chapter_html.html" %}
+{% endfor %}
 </div>
 </div>
 </body>

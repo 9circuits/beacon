@@ -1,5 +1,5 @@
 <section>
 <title>{{ section.title }}</title>
-{{ self.body }}
+{{ self.get_body_xml|safe }}
 </section>
 

@@ -5,7 +5,7 @@
 
 <title>{{ document.title }}</title>
 {% for author in document.author_set.all %}
-{% include "documentoutput/author_xml.xml" %}
+{% include "editor/docoutput/author_xml.xml" %}
 {% endfor %}
 
 <abstract>{{ document.abstract }}</abstract>
@@ -16,7 +16,7 @@
 <date>{{ document.date|date:"%Y-%m-%d" }}</date>
 
 {% for chapter in document.chapter_set.all %}
-{% include "docoutput/chapter_xml.xml" %}
+{% include "editor/docoutput/chapter_xml.xml" %}
 {% endfor %}
 
 </guide>

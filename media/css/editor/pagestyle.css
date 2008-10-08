@@ -7,13 +7,13 @@
     display: block;
     width: 272px;
     height: 5px;
-    background: url(/img/breaker.jpg) top left no-repeat;
+    background: url(/media_files/img/breaker.jpg) top left no-repeat;
 }
 .newlink {
     display: block;
     width: 270px;
     height: 125px;
-    background: url(/img/new-button.png) top left no-repeat;
+    background: url(/media_files/img/new-button.png) top left no-repeat;
     cursor: pointer;
 }
 

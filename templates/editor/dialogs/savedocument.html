@@ -1,20 +1,22 @@
 <script type="text/javascript">
-var gid = getVar('id');
+var doc_key = "{{ doc_key }}";
 
 // Add the missing style from the 
-var style= '<<?php echo '\?'; ?>xml version="1.0" encoding="UTF-8"<?php echo '\?'; ?>><style type="text/css" media="all">';
-style += '@import "../css/guide.css";';
-style += '</style><body>';
+{# var style= '<<?php echo '\?'; ?>xml version="1.0" encoding="UTF-8"<?php echo '\?'; ?>><style type="text/css" media="all">'; #}
+var style= '<?xml version="1.0" encoding="UTF-8"?>' //<style type="text/css" media="all">';
+//style += '@import "../css/guide.css";';
+//style += '</style><body>';
+style += '<body>';
 var text = style+iframe.document.body.innerHTML+'</body>';
 
 text = encodeURIComponent(text);
 
 /* Thanks to the prototpye library AJAX is so much easier! XD */
 var myAjax = new Ajax.Request(
-"ajax/save.php", 
+"/ajax/save/", 
 {
     method: 'post', 
-    parameters: "id="+gid+"&text="+text, 
+   	parameters: "doc_key="+doc_key+"&text="+text,
     onComplete: function() {
         document.getElementById("confirm").style.display = 'block';
         document.getElementById("loadingGif").style.display = 'none';

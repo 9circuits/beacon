@@ -172,6 +172,20 @@ lightbox.prototype = {
 		}
 		
 		this.displayLightbox("none");
+	},
+	
+	// Example of creating your own functionality once lightbox is initiated
+	// I think we heard you the first time.
+	hide: function(){
+		Element.remove($('lbContent'));
+
+		/* if (browser == "Internet Explorer"){
+			this.setScroll(0,this.yPos);
+			this.prepareIE("auto", "auto");
+			this.hideSelects("visible");
+		} */
+		
+		this.displayLightbox("none");
 	}
 }
 
@@ -186,7 +200,7 @@ function checkSubmit()
         text = encodeURIComponent(text);
         
 	    var myAjax = new Ajax.Request(
-        "ajax/update.php", 
+        "/ajax/update/", 
         {
             method: 'post', 
             parameters: "id="+gid+"&text="+text, 

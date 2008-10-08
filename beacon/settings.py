@@ -89,9 +89,15 @@ INSTALLED_APPS = (
 	'beacon.editor',
 )
 
+XSLT_DIR = "/home/randerson/liquidus/beacon/beacon-django/xsl"
+
 DOJO_LOCAL = False
 
 BEACON_VERSION = "1.0"
+
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_URL = "/logout/"
 
 import sys, os
 try:

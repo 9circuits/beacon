@@ -1,5 +1,5 @@
 <script type="text/javascript">
-var gid = getVar('id');
+var doc_key = "{{ doc_key }}";
 
 var style= '<body>';
 var text = style+iframe.document.body.innerHTML+'</body>';
@@ -7,10 +7,9 @@ var text = style+iframe.document.body.innerHTML+'</body>';
 text = encodeURIComponent(text);
 
 var myAjax = new Ajax.Request(
-"ajax/html2guide.php", 
+"/ajax/xml/"+doc_key+"/", 
 {
-    method: 'post', 
-    parameters: "id="+gid+"&text="+text, 
+    method: 'get', 
     onComplete: function() {
         document.getElementById("confirm").style.display = 'block';
         document.getElementById("loadingGif").style.display = 'none';
@@ -44,7 +43,7 @@ var myAjax = new Ajax.Request(
             <textarea id="source" name="text" style="width: 760px; height: 450px;"></textarea>
         </td></tr>
 
-        <tr><td align="center"> <a href="#" id="update" class="lbAction" rel="deactivate">Update</a></td></tr>
+        <tr><td align="center"><a href="#" id="update" class="lbAction" rel="deactivate">Update</a>&nbsp;<a href="#" id="cancel" class="lbAction" rel="hide">Ok</a></td></tr>
     </table>
 </div>
 

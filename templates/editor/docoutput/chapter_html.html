@@ -1,0 +1,6 @@
+<div id="doc_chap{{ chapter.order }}" title="guideChapter">
+<p title="guideChapterTitle" class="chaphead">{{ chapter.title }}</p>
+{% for section in chapter.section_set.all %}
+{% include "editor/docoutput/section_html.html" %}
+{% endfor %}
+</div>

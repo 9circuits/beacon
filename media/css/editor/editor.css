@@ -7,12 +7,12 @@
 body, html {
     color: #000; 
     height: 100%;
-    background: url(/img/left-bg.gif) repeat-y #fff;  /*** This is the left column background "faked" with an image. You can also position the image using left top repeat-y also. The background color #fff (white) will be the background color for our content ***/
+    background: url(/media_files/img/left-bg.gif) repeat-y #fff;  /*** This is the left column background "faked" with an image. You can also position the image using left top repeat-y also. The background color #fff (white) will be the background color for our content ***/
 }
 
 body 
 {
-    background:#fff url(/img/body-bg.png) top left repeat;
+    background:#fff url(/media_files/img/body-bg.png) top left repeat;
     font-family:'Helvetica', sans-serif;
     font-size: 81%;
     /*border: 3px solid #000;*/
@@ -30,7 +30,7 @@ p {
 
 #header {
     height: 44px;
-    background: url(/img/editor-header-bg.png) top left repeat-x;
+    background: url(/media_files/img/editor-header-bg.png) top left repeat-x;
     margin-bottom: 5px;
 }
 
@@ -39,11 +39,11 @@ p {
 #nav li a {display: inline; float: left; height: 44px; margin-right: 30px; cursor: pointer;}
 #nav li span {display: none;}
 
-#nav01 a {background: url(/img/editor-new-link.png) top left no-repeat; width: 49px; height: 44px; outline: none;}
-#nav01 a:hover {background: url(/img/editor-new-link-hover.png) top left no-repeat; outline: none;}
+#nav01 a {background: url(/media_files/img/editor-new-link.png) top left no-repeat; width: 49px; height: 44px; outline: none;}
+#nav01 a:hover {background: url(/media_files/img/editor-new-link-hover.png) top left no-repeat; outline: none;}
 
-#nav02 a {background: url(/img/editor-edit-link.png) top left no-repeat; width: 90px; height: 33px; outline: none;}
-#nav02 a:hover {background: url(/img/editor-edit-link-hover.png) top left no-repeat; outline: none;}
+#nav02 a {background: url(/media_files/img/editor-edit-link.png) top left no-repeat; width: 90px; height: 33px; outline: none;}
+#nav02 a:hover {background: url(/media_files/img/editor-edit-link-hover.png) top left no-repeat; outline: none;}
 
 #content {
     width: auto;
@@ -150,7 +150,7 @@ p {
     border-left-color: #CCCCCC;
     padding: 0.25em;
     background-color: #FFFFFF;
-    /*background: #fff url(/img/go.png) right;*/
+    /*background: #fff url(/media_files/img/go.png) right;*/
     background-repeat: no-repeat;
     color: #333333;
     text-align: left;

@@ -23,7 +23,7 @@ function loadEditor()
     //alert("request="+request+"&username="+text+"&id="+BeaconEditor.getVar('id'));
     
     var myAjax = new Ajax.Request(
-    "ajax/collab.php", 
+    "/ajax/collab/", 
     {
         method: 'post', 
         parameters: "request="+request+"&username="+text+"&id="+BeaconEditor.getVar('id'), 
@@ -69,7 +69,7 @@ function getUsers()
     var request = 'GET_USER_LIST';
             
     var myAjax = new Ajax.Request(
-    "ajax/collab.php", 
+    "/ajax/collab/", 
     {
         method: 'post', 
         parameters: "request="+request+"&id="+BeaconEditor.getVar('id')+"&username="+BeaconEditor.username, 
@@ -103,7 +103,7 @@ function postChat(msg, flag)
     msg = encodeURIComponent(msg);
         
     var myAjax = new Ajax.Request(
-    "ajax/collab.php", 
+    "/ajax/collab/", 
     {
         method: 'post', 
         parameters: 
@@ -133,7 +133,7 @@ function getChat()
     var request = 'GET_CHAT';
         
     var myAjax = new Ajax.Request(
-    "ajax/collab.php", 
+    "/ajax/collab/", 
     {
         method: 'post', 
         parameters: "request="+request+"&id="+BeaconEditor.getVar('id')+"&username="+BeaconEditor.username+"&last_id="+lastLogId, 
@@ -203,7 +203,7 @@ function unloadEditor()
     
     var request = 'REMOVE_USER';
     var myAjax = new Ajax.Request(
-    "ajax/collab.php", 
+    "/ajax/collab/", 
     {
         method: 'post', 
         parameters: "request="+request+"&id="+BeaconEditor.getVar('id')+"&username="+username, 
@@ -548,7 +548,7 @@ var BeaconEditor = {
 
         /* Thanks to the prototpye library AJAX is so much easier! XD */
         var myAjax = new Ajax.Request(
-        "ajax/collab.php", 
+        "/ajax/collab/", 
         {
             method: 'post', 
             parameters: "request="+request+"&text="+text, 
