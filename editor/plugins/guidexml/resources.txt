@@ -1,0 +1,11 @@
+// GuideXML Config
+{
+    initFunction: guidexml,
+    
+    scripts: [],
+    
+    // All the URLs
+    urls: {
+        
+    }
+}

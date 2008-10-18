@@ -1,3 +1,18 @@
+Beacon v0.4.01
+~~~~~~~~~~~~~~
+
+View INSTALL for more instructions.
+
+Visit http://beacon.kix.in for more info.
+
+Changelog:
+
+- The new wave Beacon with jQuery.
+- A plugin framework in the making.
+
+Note: This version is not useable. Use 0.31 instead to *Actually* edit documents. 
+
+
 Beacon v0.31
 ~~~~~~~~~~~~~
 

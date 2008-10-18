@@ -1,102 +1,75 @@
-<?php
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Beacon</title>
 
-$beaconDoneLoad = true;
-
-$errors = "<p>Following Errors Occured:</p>";
-
-// Check for conf file
-if (file_exists(dirname(__FILE__).'/conf')) {
-    require_once dirname(__FILE__).'/conf';
-} else {
-    $errors .= "<p>- <code>conf</code> file not found. Please create one.</p>";
-    $beaconDoneLoad = false;
-}
-
-// Check for language file
-if (file_exists(dirname(__FILE__).'/i18n/'.$conflang.'.xml')) {
-    $theXML = DOMDocument::load(dirname(__FILE__).'/i18n/'.$conflang.'.xml');
-} else {
-    $errors .= "<p>- <code>i18n/".$conflang.".xml</code> file not found. Please get your translated XML copy.</p>";
-    $beaconDoneLoad = false;
-}
-
-// If some error occured then inform user and stop execution
-if (!$beaconDoneLoad) {
-    echo $errors;
-    return false;
-}
-
-// Start loading text
-$version = $theXML->getElementsByTagName('version')->item(0)->nodeValue;
-$welcome = $theXML->getElementsByTagName('welcome')->item(0)->nodeValue;
-
-?>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $conflang; ?>">
-<head>
-    <title>Beacon v<?php echo $version; ?></title>
-    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
-    <meta name="author" content="Anant Narayanan" />
-	<meta name="author" content="Nandeep Mali" />
-    <meta name="description" content="Beacon: The GuideXML Editor" />
-    <link rel="stylesheet" href="css/editor.css" type="text/css" media="screen" />    
-    <link rel="stylesheet" href="css/pagestyle.css" type="text/css" media="screen" />    
-    
-
-    <?php if ($confdojo == 'local') { ?>
-    	<style type="text/css">
-    	        @import "js/dojoroot/dijit/themes/tundra/tundra.css";
-    	        @import "js/dojoroot/dojo/resources/dojo.css";
-    	</style>
-        <script type="text/javascript" src="js/dojoroot/dojo/dojo.js"
-    		djConfig="isDebug: false, parseOnLoad: true"></script>
-	<?php } else if ($confdojo == 'remote') { ?>
-	    <style type="text/css">
-            @import "http://o.aolcdn.com/dojo/1.0.0/dijit/themes/tundra/tundra.css";
-            @import "http://o.aolcdn.com/dojo/1.0.0/dojo/resources/dojo.css";
-        </style>
-        <script type="text/javascript" src="http://o.aolcdn.com/dojo/1.0.0/dojo/dojo.xd.js" 
-            djConfig="parseOnLoad: true"></script>
-	<?php } ?>
-
-	<script language="JavaScript" type="text/JavaScript" src="js/index.js"></script>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+       	
+        <link rel="stylesheet" href="css/main.css" type="text/css" />
+        <link rel="stylesheet" href="css/ui.tabs.css" type="text/css" media="print, projection, screen" />
+        <link rel="stylesheet" href="css/jgrowl.css" type="text/css" />
+		<link rel="stylesheet" href="css/modal.css" type="text/css" />
+        
+        <script src="js/jquery-1.2.6.js" type="text/javascript"></script>        
+        <script src="js/Beacon.js" type="text/javascript"></script>
+        
+        <script type="text/javascript">
+            
+            $(document).ready(function() {  
+                // Holds basic Beacon Config.
+                // These options allow you to customize
+                // Beacon's rendering, plugins and other stuff.
+                // For all list of configs view the Documentation
+                var opts = {
+                    // Set the display container.
+                    // If setting this then make sure you set the 
+                    // isRoot option below
+                    container: "#container",
+                    
+                    // Is the above container the only container in the page.
+                    // If true then Beacon will grab the whole of the page.
+                    // If false then make sure the height and width are set
+                    // in absolute numbers instead of relative
+                    // i.e. in 'px' instead of '%' !Very Important
+                    isRoot: true,
+                    
+                    // Set the language.
+                    // Will load the text on initialization
+                    // Make sure the server side has the corresponding 
+                    // Language Pack.
+                    lang: "en_US",
+                    
+                    // Choose the plugins to be loaded.
+                    // These plugins should be present in the 
+                    // /beacon/plugin directory.
+                    plugins: ["guidexml", "po"],
+                    
+                    // The intro content to be displayed.
+                    // The default welcome will display the content
+                    // from this page.
+                    intro: "dialogs/intro.php",
+                    
+                };
+                
+                var beacon = new Beacon(opts);
+                // And we are done... ^_^
+                
+            });
+            
+        </script>
 
 </head>
 
-<body class="tundra">
+<body>
 
+    <!-- 
+    Leave the container Empty. 
+    This is a sample container. 
+    You can name your container anything.
+    But do set the required option. 
+    -->
     <div id="container">
-
-        <div id="header">
-            <img src="images/editor-title.png" alt="Beacon | The GuideXML Editor" border="none">
-        </div>
-
-        <div id="content">
-            <div id="left">
-                <div id="lpanel">
-                      <div style="text-align: center;">
-                         <img src="images/beacon-logo.jpg" alt="Beacon" />
-                      </div>
-                      <p><?php echo $welcome; ?></p>
-                      <ul>
-                        <li><a class="op" onclick="dijit.byId('form').setHref('new-form.php')"><span>&gt; New Document</span></a></li>
-                        <li><a class="op" onclick="dijit.byId('form').setHref('edit-form.php')"><span>&gt; Edit a Document</span></a></li>
-                        <li><a class="op" onclick="dijit.byId('form').setHref('collab-form.php')"><span>&gt; Collaborate!</span></a></li>
-                      </ul> 
-                  </div>
-            </div>
-            <div id="right">
-                <div id="rpanel">
-            	    <div preload="true" id="form" dojoType="dijit.layout.ContentPane">
-		                <div id="initial">Select a task.</div>
-		            </div>
-		        </div>
-		
-		    </div>
-        </div>
-
     </div>
-
-
+    
 </body>
 </html>

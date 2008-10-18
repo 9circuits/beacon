@@ -1,6 +1,9 @@
-Last updated on 27 June, 2008, Beacon Version 0.3
+TODO (As on 18th October, 2008)
 
-- Complete the Rich Text Editor
-- Enable more actions via the DOM tree
-- Cleanup editor.js
-- Complete HTML to GuideXML XSLT
+- See the code and inline comments on most of the TODOs
+
+A few are:
+
+1. Complete the GuideXML plugin
+2. Make an API for plugin development
+ - This API should handle tasks like creating UI elements and using the core Beacon functions through an abstraction. (Come to #beacon (freenode) for more discussions on this)

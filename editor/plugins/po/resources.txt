@@ -1,0 +1,11 @@
+// Po Config
+{
+    initFunction: po,
+    
+    scripts: [],
+    
+    // All the URLs
+    urls: {
+        
+    }
+}
