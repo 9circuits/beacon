@@ -7,5 +7,7 @@
     // All the URLs
     urls: {
         
-    }
+    },
+    
+    actions: ["new"]
 }

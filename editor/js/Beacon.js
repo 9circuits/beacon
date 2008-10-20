@@ -2,7 +2,7 @@
  * Beacon - Core and Utils
  * 
  * Copyright (c) Beacon Dev Team
- * Licensed under GPLv2
+ * Licensed under GPLv3
  * 
  * Plugins belong to their respective
  * authors as mentioned.
@@ -38,6 +38,11 @@ var Beacon = function(opts) {
 };
 
 
+// Helper to fetch the translated string
+Beacon.prototype.getMessage = function(str) {
+    return this.strings.messages[str];
+};
+
 /*
  * All the URLs beacon needs (to make it python friendly)
  * 
@@ -53,7 +58,8 @@ function BeaconURLSet(o) {
       beaconui: "dialogs/beaconui.html",
       i18n: "i18n/"+o.lang+".txt",
       intro: o.intro,
-      plugins: "plugins/"
+      plugins: "plugins/",
+      newform: "dialogs/newform.php"
     };
 };
 
@@ -251,32 +257,37 @@ Beacon.prototype.bindGlobals = function() {
 
 // Resize the main container
 Beacon.prototype.resizeBeaconContainer = function(){
-    var $ms = $(this.container);
-    var top = $ms.offset().top;
     
-    var wh = $(window).height();
+    var ms, top, wh, mrg, brd;
+    
+    ms = $(this.container);
+    top = ms.offset().top;
+    
+    wh = $(window).height();
   
     // Account for margin or border on the container
-    var mrg = parseInt($ms.css("marginBottom"), 10) || 0;
-    var brd = parseInt($ms.css("borderBottomWidth"), 10) || 0;
-    $ms.css("height", (wh - top - mrg - brd) + "px");
+    mrg = parseInt(ms.css("marginBottom"), 10) || 0;
+    brd = parseInt(ms.css("borderBottomWidth"), 10) || 0;
+    ms.css("height", (wh - top - mrg - brd) + "px");
 };
 
 
 
 // Draw the tab Container
 Beacon.prototype.drawTabContainer = function() {
-
+    
+    var ms, top, wh, mrg, brd;
+    
     // Set the tab container bottom align with window bottom
-    var $ms = $("#BeaconTabContainer");
-	var top = $ms.offset().top;		
+    ms = $("#BeaconTabContainer");
+	top = ms.offset().top;		
 	
-	var wh = $(this.container).height();
+    wh = $(this.container).height();
     
 	// Account for margin or border on the container
-	var mrg = parseInt($ms.css("marginBottom"), 10) || 0;
-	var brd = parseInt($ms.css("borderBottomWidth"), 10) || 0;
-	$ms.css("height", (wh - top - mrg - brd) + "px");
+	mrg = parseInt(ms.css("marginBottom"), 10) || 0;
+	brd = parseInt(ms.css("borderBottomWidth"), 10) || 0;
+	ms.css("height", (wh - top - mrg - brd) + "px");
     
     this.resizeDocuments();
 };
@@ -312,14 +323,10 @@ Beacon.prototype.newDoc = function() {
     
     $.ajax({
         //async: false,
-        url: "dialogs/newform.php",
+        url: this.urls.getURL("newform"),
         success: function(html) {
             $("#boo").empty();
             $("#boo").append(html);
-            
-            // Hide forms
-            $("#secondaryfields").hide().end();
-            $('form.cmxform').hide().end();
             
             $.each(this.plugins, function() {
                 $("<option value=\""+this+"\">"+this+"<\/option>").appendTo("#doctypeselect");
@@ -360,7 +367,7 @@ Beacon.prototype.newDoc = function() {
 
                 $.modal.close();
                 
-                this.pluginManager.initPlugin(filetype, container);
+                this.pluginManager.initPlugin(filetype, container, "new");
                 
             }.attach(this));
             
@@ -390,32 +397,72 @@ BeaconPluginManager.prototype.addPlugin = function(name, res) {
     this.plugins[name] = res;
     
     // Set a flag to enable lazy loading
-    this.plugins[name].hasLoaded = false;
+    this.plugins[name].hasLoaded = this.plugins[name].scripts.length !== 0 ? false : true;
+    
+    // Make a document list
+    this.plugins[name].documents = {};
     
 };
 
 // Start up the plugin in a given tab
-BeaconPluginManager.prototype.initPlugin = function(name, container) {
+BeaconPluginManager.prototype.initPlugin = function(name, container, action) {
+    var doc = {},
+        i = 0,
+        url = "",
+        scripts = [],
+        o = {},
+        el = $("#BeaconLoading").clone();
     
-    if (this.plugins[name].hasLoaded) {
-        // TODO: Load up the other scripts required by the plugin
+    // Check if the plugin's scripts have been loaded
+    if (!this.plugins[name].hasLoaded) {
         
-        // TODO: Load the first page of the new form
+        // If yes show a load
+        el.appendTo(container);
+        el.show().end();
+        $("<p align=\"center\">"+this.beacon.getMessage("loadingPluginScripts")+"<\/p>").appendTo(container);
         
+        scripts = this.plugins[name].scripts;
+
+        for (i = 0; i < scripts.length; i++) {
+            url = this.beacon.urls.getURL("plugins")+
+                  name+"/js/"+
+                  scripts[i];
+            
+            // TODO: Stop sending the whole object everytime     
+            o = {
+                status: scripts.length - i - 1,
+                manager: this,
+                name: name,
+                container: container,
+                action: action
+            };
+            
+            $.ajaxq(name, {
+                url: url,
+                dataType: "script",
+                success: function() {
+                    if (this.status === 0) {
+                        $(this.container).empty();
+                        this.manager.plugins[name].hasLoaded = true;
+                        this.manager.initPlugin(this.name, this.container, this.action);
+                    }
+                }.attach(o)
+            });
+        }
+    
         return; // Call the initFunction within the Ajax Request
     }
     
     // Call the init function of the plugin handing it the container
-    this.plugins[name].initFunction(container);
+    doc = this.plugins[name].initFunction(container, action);
+    
+    // Add it to the list
+    this.plugins[name].documents[container] = doc;
     
 };
 
-Beacon.prototype.getMessage = function(str) {
-    return this.strings.messages[str];
-};
 
-
-
+// Make an array out of a pseudo array
 function toArray(pseudoArray) {
     var result = [];
     for (var i = 0; i < pseudoArray.length; i++) {
@@ -424,6 +471,7 @@ function toArray(pseudoArray) {
     return result;
 };
 
+// Attach an object to a method to 'this'
 Function.prototype.attach = function (object) {
     var method = this;
     var oldArguments = toArray(arguments).slice(1);
@@ -433,6 +481,7 @@ Function.prototype.attach = function (object) {
     };
 };
 
+// Attach an event to a method along with an object
 Function.prototype.attachEvent = function (object) {
     var method = this;
     var oldArguments = toArray(arguments).slice(1);

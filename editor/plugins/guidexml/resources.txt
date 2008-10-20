@@ -2,10 +2,12 @@
 {
     initFunction: guidexml,
     
-    scripts: [],
+    scripts: ["sample.php"],
     
     // All the URLs
     urls: {
         
-    }
+    },
+    
+    actions: ["new", "edit"]
 }

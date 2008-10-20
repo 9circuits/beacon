@@ -7,3 +7,4 @@ A few are:
 1. Complete the GuideXML plugin
 2. Make an API for plugin development
  - This API should handle tasks like creating UI elements and using the core Beacon functions through an abstraction. (Come to #beacon (freenode) for more discussions on this)
+3. Avoid Javascript based page layout. Get a CSS solution working.
