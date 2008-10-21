@@ -16,6 +16,7 @@
         loading: "Loading...",
         noFileType: "Please enter a file type!",
         noFileName: "Please enter a file name!",
-        loadingPluginScripts: "Fetching the scripts required by the plugin. This is a one time task."
+        loadingPluginScripts: "Fetching the scripts required by the plugin. This is a one time task.",
+        liveHelp: "Live help! Just chat with the developers at #beacon on freenode!"
     }
 }

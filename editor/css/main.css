@@ -29,11 +29,8 @@ html, body {height: 100%; margin: 0; padding: 0; overflow: hidden; font-family: 
 #BeaconTabContainer .BeaconDocumentTab {border: 1px solid #97a5b0; overflow: auto;
 }
 
-#BeaconTabClose {font-size: 9pt; float: right; font-weight: normal; text-decoration: none; 
-margin: 6px 9px 0px 0px; color: #ffffff; cursor: pointer; padding: 0px 5px 2px 5px; background: #AA0000;
-border: 1px solid #fff; }
-
-#BeaconTabClose:hover {background: #FF0000;}
+#BeaconTabClose {float: right; text-decoration: none; 
+margin: 6px 9px 0px 0px; cursor: pointer;}
 
 .BeaconLoading { text-align: center; padding: 10px 50px 10px 50px;}        
 
