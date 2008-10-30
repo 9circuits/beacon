@@ -7,7 +7,7 @@
             <legend id="primaryfields">New Document</legend>
             <ol>
                 <li>
-                    <label for="docname">Filename: </label>
+                    <label for="docname">Tab Name: </label>
                     <input class="textbox" name="docname" id="docname" type="text" />
                 </li>
                 <li>

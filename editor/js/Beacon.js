@@ -58,6 +58,7 @@ function BeaconURLSet(o) {
       growljs: "js/jquery.jgrowl.js",
       modaljs: "js/jquery.simplemodal.js",
       beaconui: "dialogs/beaconui.html",
+      beaconapi: "js/BeaconAPI.js",
       i18n: "i18n/"+o.lang+".txt",
       intro: o.intro,
       plugins: "plugins/",
@@ -93,7 +94,8 @@ Beacon.prototype.init = function() {
     var scripts = ["coreuijs",
                    "tabjs",
                    "growljs",
-                   "modaljs"];
+                   "modaljs",
+                   "beaconapi"];
     
     // If Beacon is the only item on the page then fill up the page
     if (this.isRoot) {              
@@ -434,7 +436,7 @@ Beacon.prototype.newDoc = function() {
 
                 $.modal.close();
                 
-                this.pluginManager.initPlugin(filetype, container, "new");
+                this.pluginManager.initPlugin(filetype, container, "NEW");
                 
             }.attach(this));
             

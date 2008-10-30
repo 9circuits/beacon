@@ -40,6 +40,65 @@ margin: 6px 9px 0px 0px; cursor: pointer;}
 
 h4 {margin-bottom: 10px;}
 
+.BeaconIframe {
+    border: 1px inset #ccc;
+}
+
+.BeaconToolBar {
+    border: 1px solid #ccc;
+    margin: 0px;
+    padding: 0px;
+}
+
+.BeaconToolHolder {
+    height: 28px;
+    background: #F0F0EE;
+}
+
+.BeaconSideBar {
+    border: 1px solid #ccc;
+}
+
+.BeaconToolButton {
+    float: left;
+    display: block;
+    border: 1px solid #F0F0EE;
+    color: #333333;
+    text-align: left;
+    font: 9pt normal "Trebuchet MS";
+    outline: none;
+    text-decoration: none;
+}
+
+.BeaconToolButton img {
+    border: none;
+}
+
+.BeaconSeparator {
+    float: left;
+    display: block;
+    margin: 5px 5px 0px 5px;
+    width: 3px;
+    height: 18px;
+    border-left: 1px solid #AAA;
+}
+.BeaconToolButton:hover {
+    background: #c4c9d9;
+	border: 1px solid #17357b;
+    cursor: pointer;
+    outline: none;
+}
+
+.BeaconButton:active
+{
+    background: #9aa4c1;
+	border: 1px solid #17357b;
+    outline: none;
+}
+
+
+
+
 form.cmxform fieldset {
   margin-bottom: 10px;
   border: none;
