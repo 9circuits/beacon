@@ -154,10 +154,13 @@ BeaconToolBar.prototype.addButton = function(opts) {
         toolbar: this
     };
     
-    // If it's a type supported by the toolbar
     if (opts.hasOwnProperty('type')) {
+        // If it's a type supported by the toolbar
         // Attach the event
         $(button).bind("click", this[opts.type].attach(obj));
+    } else if (opts.hasOwnProperty('handler')) {
+        // The button knows what handler to call when it is clicked
+        $(button).bind("click", opts.handler.attach(obj));
     }
 };
 

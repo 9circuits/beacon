@@ -69,14 +69,28 @@ GuideXML.prototype.newDoc = function(src) {
             nodeName: "span",
             className: "boldtext",
             title: "guideBold",
-            
         }
     });
     
     // Add a separator
     editor.toolbar.addSeparator(0);
+    
+    editor.toolbar.addButton({
+        row: 0,
+        name: "XML",
+        tooltip: "Convert current document to XML",
+        handler: getSource,
+        icon: "plugins/guidexml/img/xml.png",
+        markup: {}
+    });
+    
+    editor.toolbar.addSeparator(0);
 };
 
+function getSource()
+{
+    alert(this);
+}
 
 // The Core Function for checking user cursor location
 function checkNodePath(node, allowed)
