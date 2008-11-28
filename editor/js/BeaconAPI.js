@@ -36,7 +36,6 @@ function BeaconEditor(opts) {
     // Create the toolbar. Hand the iframe.
     this.toolbar = new BeaconToolBar({
         container: this.container,
-        height: "12%",
         width: "75%",
         align: "right",
         iframe: this.iframe
@@ -94,12 +93,12 @@ function BeaconToolBar(opts) {
     // Generate a random id
     this.id = Math.floor(Math.random()*100001);
     
-    // Attach
+    // Attach the toolbar to the top of the container
     $(this.container).prepend("<div id=\""+this.id+"\" class=\"BeaconToolBar\"></div>");
     
     // Set up styles
     this.toolbar = $("#"+this.id);
-    this.toolbar.css("height", this.height || "50%");
+    //this.toolbar.css("height", this.height || "50%");
     this.toolbar.css("width", this.width || "50%");
     this.toolbar.css("float", this.align || "left");
     
@@ -227,11 +226,272 @@ function BeaconIframe(opts) {
     this.frame.css("width", this.width || "50%");
     this.frame.css("float", this.align || "left");
     
+    this.iframe = document.getElementById(this.id);
+    
+    
+
+        // To check if something's being edited
+        this.editing = false,
+
+        // Area being edited - Hidden
+        this.edited = null,
+
+        // Area being edited - Active
+        this.editedActive = null,
+
+        // EditBox
+        this.editbox = null,
+
+        // Wether saving in action
+        this.saving = false,
+
+        // Save time out function ID
+        this.savetout = 0,
+
+    
     // Attach the onload event to set the designMode
     this.frame.bind("load", function() {
-        this.contentWindow.document.designMode = "On";
-    });
+        
+        $(this.iframe.contentWindow.document).click(this.frameclick.attachEvent(this));
 
+    }.attach(this));
+
+};
+
+BeaconIframe.prototype.frameclick = function(e) {
+    var t = this;
+                   
+    // Get the node which was clicked
+    if (!e) var obj = window.event.srcElement;
+	else var obj = e.target;
+    
+    // Only Section and the Chapter Titles are editable (get it from the plugin please)
+    var allowed = new Array("guideSection", "guideChapterTitle");
+    
+    var editarea = checkNodePath(obj, allowed);
+    
+    // If no such node was found then exit
+    if (!editarea) return;
+    
+    // If a section is already being edited then just return
+    if (t.editing) return;
+    
+    t.editing = true;
+    
+    t.edited = editarea;
+    
+    var ID = editarea.id;
+    
+    // TODO: Check for lock on server
+    // if (!t.hasLock(ID)) return;
+    
+    // TODO: Get a lock from server
+    // if (!t.getLock(ID)) return;
+    
+    // TODO: Set a lock listener
+    // t.lockListener.ID = ID;
+    // t.setAJAXRequest(t.lockListener);
+    
+    // Make the area editable
+    t.editbox = t.createForm(editarea);
+};
+
+BeaconIframe.prototype.createForm = function(editarea) {
+    var t = this;
+    
+    var d = t.iframe.contentWindow.document;
+    var editParent = editarea.parentNode;
+    
+    var editDiv = d.createElement('div');
+    editDiv.id = "editBox";
+    editDiv.style.border = "2px solid #00FF00";
+    
+    var form = d.createElement('div');
+    form.style.display= "block";
+    
+    var saveCommit = d.createElement('a');
+    saveCommit.innerHTML = "Save And Commit Changes";
+    saveCommit.title = "Commit the changes to the master copy and close the editor box.";
+    
+    var saveContinue = d.createElement('a');
+    saveContinue.innerHTML = "Save And Continue Editing | <span id=\"saveStatus\">Last saved at: Never</span>";
+    saveContinue.title = "Save the changes to the temporary copy and continue editing.";
+    
+    var cancel = d.createElement('a');
+    cancel.innerHTML = "Cancel";
+    cancel.title = "Close the editor box and continue editing";
+    
+    var links = new Array(saveCommit, saveContinue, cancel);
+    
+    // Somehow the CSS styles were not being applied in FireFox, so doing it manually here
+    for (var i=0; i < links.length; i++) {
+        links[i].style.cursor = "pointer";
+        links[i].style.border = "1px solid #999";
+        links[i].style.margin = "3px";
+        links[i].style.padding = "3px";
+        links[i].style.display = "block";
+        links[i].style.background = "#C3D9FF";
+        links[i].className = "formButton";
+        form.appendChild(links[i]);
+    }
+    
+    // TODO: Add Click Handlers
+    $(saveCommit).click(t.editCommit.attach(this));
+    $(saveContinue).click(t.editSave.attach(this));
+    $(cancel).click(t.editCancel.attach(this));
+    
+    if (editarea.title == 'guideChapterTitle') {
+        var editTitle = d.createElement('input');
+        editTitle.type = "text";
+        editTitle.value = editarea.innerHTML;
+        editTitle.style.fontSize = "1.3em";
+        editTitle.style.fontWeight = "bold";
+        editDiv.appendChild(editTitle);
+        t.editedActive = editTitle;
+        //t.setFocus(editTitle, false, 0);
+    } else if (editarea.title == 'guideSection') {
+        var editText = editarea.cloneNode(true);
+        editText.contentEditable = true;
+        editText.style.border = "2px ridge #FFF";
+        editText.style.padding = "5px";
+        editText.style.outline = "none";
+        editDiv.appendChild(editText);
+        t.editedActive = editText;
+    }
+    
+    editDiv.appendChild(form);
+    
+    // Hide the node
+    editarea.style.display = 'none';
+    
+    editParent.insertBefore(editDiv, editarea);
+    
+    if (editarea.title == 'guideChapterTitle')
+        t.editedActive.focus();
+    else if (editarea.title == 'guideSection')        
+        t.setFocus(t.editedActive, false, 1);
+    
+    return editDiv;
+};
+
+BeaconIframe.prototype.editCommit = function() {
+    var t = this;
+    //t.hello();
+	
+    // TODO: Remove AJAX Request
+    // TODO: Release Lock
+    // TODO: Save the Document to the permanent file
+    
+    // If already saving then just return the function
+    if (t.saving) return;
+
+    // If no active edit area then just return
+    if (!t.editedActive) return;
+
+    // Set the saving flag to true
+    t.saving = true;
+
+    // Set a timeout function - Throw a panic after 1 minute
+    //t.savetout = t.w.setInterval(t.saveTimeout, 60000);
+    
+    
+    if (t.edited.title == 'guideChapterTitle') {            
+        t.edited.innerHTML = t.editedActive.value;
+    }
+    else if (t.edited.title == 'guideSection')
+        t.edited.innerHTML = t.editedActive.innerHTML;
+    
+    // Remove the editable window
+    var editParent;
+    try {
+        editParent = t.edited.parentNode;
+    } catch (err) {
+        return;
+    }
+    try {
+        editParent.removeChild(t.editbox);
+    } catch (err) {
+        return;
+    }
+    t.editbox = null;
+    t.edited.style.display = 'block';
+    t.edited = null;
+    t.editedActive = null;
+    t.editing = false;
+    t.saving = false;
+    
+};
+
+BeaconIframe.prototype.editSave = function() {
+    alert("am savin sam savin!");
+};
+
+BeaconIframe.prototype.editCancel = function () {
+    var t = this;
+    //t.hello();
+    
+    // TODO: Remove AJAX Request
+    // TODO: Release Lock
+    // TODO: Trash the temp file at server
+    
+    // If already saving then just return the function
+    if (t.saving) return;
+    
+    // Remove the editable window
+    var editParent;
+    try {
+        editParent = t.edited.parentNode;
+    } catch (err) {
+        return;
+    }
+    try {
+        editParent.removeChild(t.editbox);
+    } catch (err) {
+        return;
+    }
+    t.editbox = null;
+    t.edited.style.display = 'block';
+    t.edited = null;
+    t.editedActive = null;
+    t.editing = false;
+    t.saving = false;
+};
+
+
+BeaconIframe.prototype.setFocus = function(node, flag, index) {
+    var t = this;
+    
+    s = t.iframe.contentWindow.getSelection();
+    var r1 = t.iframe.contentWindow.document.createRange();
+    
+    try {
+        r1.setStart(node.childNodes[index], 0);
+    } catch (err) {
+        return;
+    }
+    
+    try {
+        r1.setEnd(node.childNodes[index], 0);
+    } catch (err) {
+        return;
+    }
+    
+    //r1.selectNode(node);
+    //r1.setStartBefore(node.childNodes[1]);
+
+    s.removeAllRanges(); 
+    //r1.startOffset = 0;
+    s.addRange(r1);
+
+    t.iframe.contentWindow.focus();
+
+    if (flag!=false) {
+        node.scrollIntoView();
+
+        t.iframe.scrollBy(0, -100);
+
+        //colorFade(node.id,'background','008C00','ffffff', 50,20);
+    }  
 };
 
 // Get the contents of the iframe
@@ -244,3 +504,25 @@ BeaconIframe.prototype.setContent = function(markup) {
     this.frame.contents().find("body").html(markup);
 };
 
+// The Core Function for checking user cursor location (only for guide)
+function checkNodePath(node, allowed)
+{
+    var check = node;
+    try {
+        while (check.title != 'guide')
+        {
+            for (var i=0; i < allowed.length; i++)
+            {
+                //alert(check.title);
+                if (check.title == allowed[i])
+                return check;
+            }
+            check = check.parentNode;
+        }
+    }
+    catch(err) {
+        return null;
+    }
+
+    return null;
+}

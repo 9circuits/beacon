@@ -22,7 +22,6 @@
  *
  */
 function guidexml(container, action) {
-    //$(container).append("I am the default guidexml plugin.")
     
     // THIS IS WAY INCOMPLETE!!!
     
@@ -39,9 +38,11 @@ function guidexml(container, action) {
  * 
  */
 function GuideXML(opts) {
+    
     $.extend(this, opts);
     if (this.action === "NEW") {
-        this.newDoc("plugins/guidexml/xml/template.html");
+        this.newDoc("plugins/guidexml/xml/template1.html");
+        //alert("hello")
     }
 };
 
@@ -65,10 +66,12 @@ GuideXML.prototype.newDoc = function(src) {
         tooltip: "Bold the Selected Text",
         type: "styler",
         icon: "plugins/guidexml/img/bold.png",
+        //onclick: nodecheck;
         markup: {
             nodeName: "span",
             className: "boldtext",
             title: "guideBold",
+            
         }
     });
     
@@ -87,32 +90,9 @@ GuideXML.prototype.newDoc = function(src) {
     editor.toolbar.addSeparator(0);
 };
 
-function getSource()
-{
-    alert(this);
-}
 
-// The Core Function for checking user cursor location
-function checkNodePath(node, allowed)
-{
-    var check = node;
-    try {
-        while (check.title != 'guide')
-        {
-            for (var i=0; i < allowed.length; i++)
-            {
-                //alert(check.title);
-                if (check.title == allowed[i])
-                return check;
-            }
-            check = check.parentNode;
-        }
-    }
-    catch(err) {
-        return null;
-    }
-
-    return null;
+function getSource() {
+    
 }
 
 // Check whether the nodes are allowed or not
