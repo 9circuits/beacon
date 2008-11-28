@@ -88,6 +88,23 @@ GuideXML.prototype.newDoc = function(src) {
     });
     
     editor.toolbar.addSeparator(0);
+    
+    // Send an array of nodes to check
+    editor.iframe.setInlineEditors([
+        "guideChapterTitle", 
+        "guideSection", 
+        "guideAbstractValue", 
+        "guideDateValue"
+    ]);
+    
+    // Send an object containing type of inline editor to be generated
+    editor.iframe.setInlineTypes({
+        guideChapterTitle: "textbox",
+        guideSection: "richtext",
+        guideAbstractValue: "textarea",
+        guideDateValue: "textbox"
+    });
+
 };
 
 

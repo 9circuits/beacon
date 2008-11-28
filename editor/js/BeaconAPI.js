@@ -228,34 +228,48 @@ function BeaconIframe(opts) {
     
     this.iframe = document.getElementById(this.id);
     
+    // To check if something's being edited
+    this.editing = false;
+
+    // Area being edited - Hidden
+    this.edited = null;
+
+    // Area being edited - Active
+    this.editedActive = null;
+    
+    // Type of edit area
+    this.editedActiveType = "";
+
+    // EditBox
+    this.editbox = null;
+
+    // Wether saving in action
+    this.saving = false;
+
+    // Save time out function ID
+    this.savetout = 0;
+    
+    this.rootNode = "";
+    
+    this.inlineEditorLocations = [];
+    
+    this.inlineTypes = {};
+    
     
 
-        // To check if something's being edited
-        this.editing = false,
-
-        // Area being edited - Hidden
-        this.edited = null,
-
-        // Area being edited - Active
-        this.editedActive = null,
-
-        // EditBox
-        this.editbox = null,
-
-        // Wether saving in action
-        this.saving = false,
-
-        // Save time out function ID
-        this.savetout = 0,
-
-    
     // Attach the onload event to set the designMode
-    this.frame.bind("load", function() {
-        
+    this.frame.bind("load", function() {       
         $(this.iframe.contentWindow.document).click(this.frameclick.attachEvent(this));
-
     }.attach(this));
 
+};
+
+BeaconIframe.prototype.setInlineEditors = function(array) {
+    this.inlineEditorLocations = array;
+};
+
+BeaconIframe.prototype.setInlineTypes = function(obj) {
+    this.inlineTypes = obj;
 };
 
 BeaconIframe.prototype.frameclick = function(e) {
@@ -265,10 +279,14 @@ BeaconIframe.prototype.frameclick = function(e) {
     if (!e) var obj = window.event.srcElement;
 	else var obj = e.target;
     
-    // Only Section and the Chapter Titles are editable (get it from the plugin please)
-    var allowed = new Array("guideSection", "guideChapterTitle");
+   var editarea = checkNodePath(obj, this.inlineEditorLocations);
     
-    var editarea = checkNodePath(obj, allowed);
+    if (!editarea)
+        return;
+        
+    //alert(editarea.innerHTML);
+    //alert(this.inlineTypes[editarea.title]);
+    //return;
     
     // If no such node was found then exit
     if (!editarea) return;
@@ -293,10 +311,10 @@ BeaconIframe.prototype.frameclick = function(e) {
     // t.setAJAXRequest(t.lockListener);
     
     // Make the area editable
-    t.editbox = t.createForm(editarea);
+    t.editbox = t.createForm(editarea, this.inlineTypes[editarea.title]);
 };
 
-BeaconIframe.prototype.createForm = function(editarea) {
+BeaconIframe.prototype.createForm = function(editarea, type) {
     var t = this;
     
     var d = t.iframe.contentWindow.document;
@@ -340,7 +358,7 @@ BeaconIframe.prototype.createForm = function(editarea) {
     $(saveContinue).click(t.editSave.attach(this));
     $(cancel).click(t.editCancel.attach(this));
     
-    if (editarea.title == 'guideChapterTitle') {
+    if (type === 'textbox') {
         var editTitle = d.createElement('input');
         editTitle.type = "text";
         editTitle.value = editarea.innerHTML;
@@ -349,7 +367,7 @@ BeaconIframe.prototype.createForm = function(editarea) {
         editDiv.appendChild(editTitle);
         t.editedActive = editTitle;
         //t.setFocus(editTitle, false, 0);
-    } else if (editarea.title == 'guideSection') {
+    } else if (type === 'richtext') {
         var editText = editarea.cloneNode(true);
         editText.contentEditable = true;
         editText.style.border = "2px ridge #FFF";
@@ -357,7 +375,14 @@ BeaconIframe.prototype.createForm = function(editarea) {
         editText.style.outline = "none";
         editDiv.appendChild(editText);
         t.editedActive = editText;
+    } else if (type === 'textarea') {
+        var editText = d.createElement('textarea');
+        editText.value = editarea.innerHTML;
+        editDiv.appendChild(editText);
+        t.editedActive = editText;
     }
+    
+    this.editedActiveType = type;
     
     editDiv.appendChild(form);
     
@@ -366,10 +391,10 @@ BeaconIframe.prototype.createForm = function(editarea) {
     
     editParent.insertBefore(editDiv, editarea);
     
-    if (editarea.title == 'guideChapterTitle')
+    /*if (editarea.title == 'guideChapterTitle')
         t.editedActive.focus();
     else if (editarea.title == 'guideSection')        
-        t.setFocus(t.editedActive, false, 1);
+        t.setFocus(t.editedActive, false, 1);*/
     
     return editDiv;
 };
@@ -395,11 +420,11 @@ BeaconIframe.prototype.editCommit = function() {
     //t.savetout = t.w.setInterval(t.saveTimeout, 60000);
     
     
-    if (t.edited.title == 'guideChapterTitle') {            
+    if (t.editedActiveType === "textbox" || t.editedActiveType === "textarea") {            
         t.edited.innerHTML = t.editedActive.value;
-    }
-    else if (t.edited.title == 'guideSection')
+    } else if (t.editedActiveType === "richtext") {
         t.edited.innerHTML = t.editedActive.innerHTML;
+    }
     
     // Remove the editable window
     var editParent;
