@@ -27,7 +27,7 @@ class BeaconFlatFile implements BeaconStorage
 	
 	public function fetchDocument($id)
 	{
-		return file_get_contents("tmp/$id");
+		return file_get_contents("storage/tmp/$id");
 	}
 }
 
