@@ -18,12 +18,15 @@ if (isset($_POST['action'])) {
 	case 'fetch':
 		if (isset($_POST['id'])) {
 			$raw = $storage->fetchDocument($_POST['id']);
+			// TODO: Fix HRBR hack!
+			$raw = str_replace('<br>', '<br/>', $raw);
+			$raw = str_replace('<hr>', '<hr/>', $raw);
 			
 			$tSrc = new DOMDocument();
 			$tSrc->loadXML($raw);
 			$tXSL = new XSLTProcessor();
 			$tXSL->importStyleSheet(DOMDocument::load('../plugins/guidexml/xml/src2dst.xsl'));
-			$ret = $tXSL->transformToXML($raw);
+			$ret = $tXSL->transformToXML(DOMDocument::loadXML($raw));
 		}
 		break;
 	default:
