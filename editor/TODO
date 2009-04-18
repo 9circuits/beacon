@@ -1,4 +1,4 @@
-TODO (As on 18th October, 2008)
+TODO (As on 19th April, 2009)
 
 - See the code and inline comments on most of the TODOs
 
@@ -8,3 +8,4 @@ A few are:
 2. Make an API for plugin development
  - This API should handle tasks like creating UI elements and using the core Beacon functions through an abstraction. (Come to #beacon (freenode) for more discussions on this)
 3. Avoid Javascript based page layout. Get a CSS solution working.
+4. Plug in the storage API in the new framework.

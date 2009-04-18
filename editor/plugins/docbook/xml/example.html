@@ -1,0 +1,141 @@
+<style type="text/css" media="all">
+	.boldtext {
+	    font-weight: bold;
+	}
+</style>
+<div class="article" lang="en" xml:lang="en">
+    <div class="section" lang="en" xml:lang="en">
+        <div class="titlepage">
+            <div>
+                <div>
+                    <h2 class="title" style="clear: both" title="docbookSectionTitle">
+                        A Small Section
+                    </h2>
+                </div>
+            </div>
+        </div><a id="id380233" class="indexterm" name="id380233"></a>
+        <p title="docbookParagraph">
+            This is an example section. You should not use <code class="sgmltag-element">sect1</code> , <code class="sgmltag-element">sect2</code> , and <code class="sgmltag-element">sect3</code> , since those tags will make sections less modular and harder to relocate without changing a lot of other markup.
+        </p>
+    </div>
+    <div class="section" lang="en" xml:lang="en">
+        <div class="titlepage">
+            <div>
+                <div>
+                    <h2 class="title" style="clear: both" title="docbookSectionTitle">
+                        About ShmooMaker
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <p title="docbookParagraph">
+            <span class="application">ShmooMaker</span> is a utility for making <em class="firstterm">shmoos</em>. A shmoo is a lovable, globular beastie with a penchant for turning himself into other objects. Everyone loves shmoos due to their warm and cuddly nature.
+        </p>
+        <div class="section" lang="en" xml:lang="en">
+            <div class="titlepage">
+                <div>
+                    <div>
+                        <h3 class="title" title="docbookSectionTitle">
+                            Installing ShmooMaker
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <p title="docbookParagraph">
+                To install <span class="application">ShmooMaker</span>, use <span class="command"><strong>yum</strong></span> to install the <span class="package">ShmooMaker</span> RPM package:
+            </p>
+            <pre class="screen" title="docbookCode">
+<span class="command"><strong>yum install ShmooMaker</strong></span>
+</pre>
+        </div>
+        <div class="section" lang="en" xml:lang="en">
+            <div class="titlepage">
+                <div>
+                    <div>
+                        <h3 class="title" title="docbookSectionTitle">
+                            Configuring ShmooMaker
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <p title="docbookParagraph">
+                <span class="application">ShmooMaker</span> creates a basic system configuration template for shmoos in the <code class="filename">/etc/</code> folder. The configuration file is called <code class="filename">/etc/shmoos</code>. You can add your own user-specific shmoo information by creating a file in your home directory called <code class="filename">~/.shmoos</code>. The <code class="filename">/etc/shmoos</code> file resembles the following:
+            </p>
+            <pre class="screen" title="docbookCode">
+<strong class="userinput"><code>cat /etc/shmoos</code></strong>
+        <code class="computeroutput">[shmoo]
+            size = medium
+            lovable = True
+
+            [add-ons]
+            intelligibility = 0</code>
+</pre>
+            <p title="docbookParagraph">
+                To edit the system configuration template, use the <code class="systemitem">root</code> account.
+            </p>
+        </div>
+        <div class="section" lang="en" xml:lang="en">
+            <div class="titlepage">
+                <div>
+                    <div>
+                        <h3 class="title" title="docbookSectionTitle">
+                            Using ShmooMaker
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <p title="docbookParagraph">
+                To run <span class="application">ShmooMaker</span>, select it from the GUI menu under <span class="guimenu">Applications</span> → <span class="guisubmenu">Entertainment</span> → <span class="guimenuitem">ShmooMaker</span>.
+            </p>
+            <p title="docbookParagraph">
+                If you want to run <span class="application">ShmooMaker</span> as a daemon process, use the command <span class="command"><strong>shmoo-maker <code class="option">-d</code></strong></span>.
+            </p>
+        </div>
+        <div class="section" lang="en" xml:lang="en">
+            <div class="titlepage">
+                <div>
+                    <div>
+                        <h3 class="title" title="docbookSectionTitle">
+                            Creating Shmoos
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <p title="docbookParagraph">
+                To create a shmoo, do the following:
+            </p>
+            <div class="procedure">
+                <ol type="1">
+                    <li title="docbookListItem">
+                        Click the <span class="guibutton">New</span> button.
+                    </li>
+                    <li title="docbookListItem">
+                        Select the desired shmoo from the list in the dialog.
+                    </li>
+                    <li title="docbookListItem">
+                        When the shmoo appears, feed it and give it a hug.
+                    </li>
+                </ol>
+            </div>
+            <p title="docbookParagraph">
+                To put away your shmoo for safe-keeping, hit <span class="keycap"><strong>Ctrl</strong></span>+<span class="keycap"><strong>Q</strong></span> .
+            </p>
+            <p title="docbookParagraph">
+                Shmoos love the following kinds of food:
+            </p><a id="id380491" class="indexterm" name="id380491"></a>
+            <div class="itemizedlist">
+                <ul type="disc">
+                    <li title="docbookListItem">
+                        Candied yams
+                    </li>
+                    <li title="docbookListItem">
+                        Marshmallows
+                    </li>
+                    <li title="docbookListItem">
+                        Gummi bears
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -350,6 +350,7 @@ BeaconIframe.prototype.createForm = function(editarea, type) {
         links[i].style.display = "block";
         links[i].style.background = "#C3D9FF";
         links[i].className = "formButton";
+        links[i].style.color = "#000000";
         form.appendChild(links[i]);
     }
     
@@ -358,13 +359,22 @@ BeaconIframe.prototype.createForm = function(editarea, type) {
     $(saveContinue).click(t.editSave.attach(this));
     $(cancel).click(t.editCancel.attach(this));
     
+    this.editedActiveType = type;
+    
+    editDiv.appendChild(form);
+    
+    // Hide the node
+    $(editarea).attr("displaytype", editarea.style.display);
+    editarea.style.display = 'none';
+    
+    editParent.insertBefore(editDiv, editarea.nextSibling);
+    
     if (type === 'textbox') {
         var editTitle = d.createElement('input');
         editTitle.type = "text";
-        editTitle.value = editarea.innerHTML;
-        editTitle.style.fontSize = "1.3em";
-        editTitle.style.fontWeight = "bold";
-        editDiv.appendChild(editTitle);
+        editTitle.value = $.trim(editarea.innerHTML);
+        $(editTitle).addClass($(editarea).attr('class'));
+        $(editDiv).prepend(editTitle);
         t.editedActive = editTitle;
         //t.setFocus(editTitle, false, 0);
     } else if (type === 'richtext') {
@@ -373,23 +383,19 @@ BeaconIframe.prototype.createForm = function(editarea, type) {
         editText.style.border = "2px ridge #FFF";
         editText.style.padding = "5px";
         editText.style.outline = "none";
-        editDiv.appendChild(editText);
+        editText.style.display = "block";
+        $(editDiv).prepend(editText);
         t.editedActive = editText;
     } else if (type === 'textarea') {
         var editText = d.createElement('textarea');
-        editText.value = editarea.innerHTML;
-        editDiv.appendChild(editText);
+        editText.value = $.trim(editarea.innerHTML);
+        editText.style.height = "100px";
+        editText.style.width = "100%";
+        $(editDiv).prepend(editText);
         t.editedActive = editText;
     }
     
-    this.editedActiveType = type;
     
-    editDiv.appendChild(form);
-    
-    // Hide the node
-    editarea.style.display = 'none';
-    
-    editParent.insertBefore(editDiv, editarea);
     
     /*if (editarea.title == 'guideChapterTitle')
         t.editedActive.focus();
@@ -421,9 +427,9 @@ BeaconIframe.prototype.editCommit = function() {
     
     
     if (t.editedActiveType === "textbox" || t.editedActiveType === "textarea") {            
-        t.edited.innerHTML = t.editedActive.value;
+        t.edited.innerHTML = $.trim(t.editedActive.value);
     } else if (t.editedActiveType === "richtext") {
-        t.edited.innerHTML = t.editedActive.innerHTML;
+        t.edited.innerHTML = $.trim(t.editedActive.innerHTML);
     }
     
     // Remove the editable window
@@ -439,7 +445,8 @@ BeaconIframe.prototype.editCommit = function() {
         return;
     }
     t.editbox = null;
-    t.edited.style.display = 'block';
+    t.edited.style.display = $(t.edited).attr("displaytype");
+    $(t.edited).removeAttr("displaytype");
     t.edited = null;
     t.editedActive = null;
     t.editing = false;
@@ -475,7 +482,8 @@ BeaconIframe.prototype.editCancel = function () {
         return;
     }
     t.editbox = null;
-    t.edited.style.display = 'block';
+    t.edited.style.display = $(t.edited).attr("displaytype");
+    $(t.edited).removeAttr("displaytype");
     t.edited = null;
     t.editedActive = null;
     t.editing = false;

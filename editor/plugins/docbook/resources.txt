@@ -1,0 +1,13 @@
+// DocBookXML Config
+{
+    initFunction: docbook,
+    
+    scripts: [],
+    
+    // All the URLs
+    urls: {
+        
+    },
+    
+    actions: ["new", "edit"]
+}

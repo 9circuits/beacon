@@ -1,5 +1,5 @@
 /*
- * GuideXML Plugin for Beacon
+ * DocBookXML Plugin for Beacon
  * 
  * Copyright Beacon Dev Team
  * Licensed under GPLv3
@@ -21,7 +21,7 @@
  * A new instance of the Document Object
  *
  */
-function guidexml(container, action) {
+function docbook(container, action) {
     
     // THIS IS WAY INCOMPLETE!!!
     
@@ -29,32 +29,61 @@ function guidexml(container, action) {
         container: container,
         action: action
     };
-    
-    return new GuideXML(opts);
+
+    return new DocBookXML(opts);
 };
 
 /*
  * This is the document object for the plugin.
  * 
  */
-function GuideXML(opts) {
+function DocBookXML(opts) {
     
     $.extend(this, opts);
     if (this.action === "NEW") {
-        this.newDoc("plugins/guidexml/xml/template1.html");
-        //alert("hello")
+        this.newDoc("plugins/docbook/xml/example.html");
     }
 };
 
-GuideXML.prototype.newDoc = function(src) {
+DocBookXML.prototype.newDoc = function(src) {
     // Create an editor
     var editor = new BeaconEditor({
         container: this.container,
         src: src,
     });
     
+    editor.iframe.setInlineEditors([
+        "docbookSectionTitle",
+        "docbookParagraph",
+        "docbookListItem",
+        "docbookCode"
+    ]);
+    
+    editor.iframe.setInlineTypes({
+        docbookSectionTitle: "textbox",
+        docbookParagraph: "richtext",
+        docbookListItem: "richtext",
+        docbookCode: "richtext"
+    });
+    
+    editor.toolbar.addRow();
+    
+    editor.toolbar.addButton({
+        row: 0,
+        name: "Bold",
+        tooltip: "Bold the Selected Text",
+        type: "styler",
+        icon: "plugins/docbook/img/bold.png",
+        //onclick: nodecheck;
+        markup: {
+            nodeName: "span",
+            className: "boldtext",
+            title: "docbookBold",
+        }
+    });
+    
     // Set the flagger for the styler tool
-    editor.toolbar.setFlagger("styler", nodecheck.attach(editor.iframe.id));
+    /*editor.toolbar.setFlagger("styler", nodecheck.attach(editor.iframe.id));
     
     // Add a row to the toolbar
     editor.toolbar.addRow();
@@ -106,45 +135,20 @@ GuideXML.prototype.newDoc = function(src) {
     editor.iframe.setInlineTypes({
         guideChapterTitle: "textbox",
         guideSectionTitle: "textbox",
-        guideParagraph: "richtext",
+        guideParagraph: "textarea",
         guideAbstractValue: "textarea",
         guideDateValue: "textbox",
         guideTitle: "textbox",
         guidePreTitle: "textbox",
         guideCodeBox: "richtext",
         guideWarnValue: "richtext"
-    });
+    });*/
 
 };
 
 
 function getSource() {
     
-}
-
-// Check whether the nodes are allowed or not
-function nodecheck() {
-
-    var allowed = new Array("guideParagraph", 
-                            "guideList",
-                            "guideNoteValue",
-                            "guideWarnValue",
-                            "guideImpoValue",
-                            "guideCodeBox");
-                            
-    var iframe = document.getElementById(this).contentWindow;
-    
-    var theSelection = iframe.getSelection();
-    var theRange = theSelection.getRangeAt(0);
-
-    var text = theRange.commonAncestorContainer;  
-                   
-    var path = checkNodePath(text, allowed);       
-    
-    if (path == null)
-        return false;
-    else
-        return true;
 }
 
 

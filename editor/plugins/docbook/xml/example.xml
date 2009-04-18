@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: -->
+
+<article id="example-tutorial">
+
+
+  <xi:include href="fdp-info.xml"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:fallback>CHECK "rpm-info.xml"!</xi:fallback>
+  </xi:include>
+
+  <section id="sn-small-section">
+
+    <title>A Small Section</title>
+
+    <indexterm>
+      <primary>sect1, sect2, and sect3</primary>
+    </indexterm>
+    <para>
+      This is an example section. You should not use
+      <sgmltag
+	class="element">sect1</sgmltag>
+      ,
+      <sgmltag
+	class="element">sect2</sgmltag>
+      , and
+      <sgmltag
+	class="element">sect3</sgmltag>
+      , since those tags will make sections less modular and harder to
+      relocate without changing a lot of other markup.
+    </para>
+  </section>
+
+
+  <section id="sn-about-ShmooMaker">
+
+    <title>About <application>ShmooMaker</application></title>
+
+    <para>
+      <application>ShmooMaker</application> is a utility for making
+      <firstterm>shmoos</firstterm>. A shmoo is a lovable, globular
+      beastie with a penchant for turning himself into other objects.
+      Everyone loves shmoos due to their warm and cuddly nature.
+    </para>
+
+    <section id="sn-installing-ShmooMaker">
+      <title>Installing <application>ShmooMaker</application></title>
+
+      <para>
+        To install <application>ShmooMaker</application>, use
+        <command>yum</command> to install the
+        <package>ShmooMaker</package>
+        RPM package:
+      </para>
+
+<screen><command>yum install ShmooMaker</command></screen>
+    </section>
+    <section id="sn-configuring-ShmooMaker">
+      <title>Configuring <application>ShmooMaker</application></title>
+      <para>
+        <application>ShmooMaker</application> creates a basic system
+        configuration template for shmoos in the
+        <filename
+	  class="directory">/etc/</filename> folder. The
+        configuration file is called <filename>/etc/shmoos</filename>.
+        You can add your own user-specific shmoo information by creating
+        a file in your home directory called
+        <filename>~/.shmoos</filename>. The
+        <filename>/etc/shmoos</filename> file resembles the following:
+      </para>
+
+<screen><userinput>cat /etc/shmoos</userinput>
+<computeroutput>[shmoo]
+size = medium
+lovable = True
+
+[add-ons]
+intelligibility = 0</computeroutput></screen>
+
+      <para>
+        To edit the system configuration template, use the
+        <systemitem class="username">root</systemitem> account.
+      </para>
+    </section>
+    <section id="sn-using-ShmooMaker">
+      <title>Using <application>ShmooMaker</application></title>
+
+
+      <para>
+        To run <application>ShmooMaker</application>, select it from the
+        GUI menu under <menuchoice> <guimenu>Applications</guimenu>
+        <guisubmenu>Entertainment</guisubmenu>
+        <guimenuitem>ShmooMaker</guimenuitem> </menuchoice>.
+      </para>
+
+      <para>
+        If you want to run <application>ShmooMaker</application> as a
+        daemon process, use the command <command>shmoo-maker
+        <option>-d</option></command>.
+      </para>
+    </section>
+
+    <section id="sn-creating-shmoos">
+      <title>Creating Shmoos</title>
+
+      <para>
+        To create a shmoo, do the following:
+      </para>
+
+      <procedure>
+        <step>
+          <para>
+            Click the <guibutton>New</guibutton> button.
+          </para>
+        </step>
+        <step>
+          <para>
+            Select the desired shmoo from the list in the dialog.
+          </para>
+        </step>
+        <step>
+          <para>
+            When the shmoo appears, feed it and give it a hug.
+          </para>
+        </step>
+      </procedure>
+
+      <para>
+        To put away your shmoo for safe-keeping, hit
+        <keycombo><keycap>Ctrl</keycap><keycap>Q</keycap>
+        </keycombo>
+        .
+      </para>
+
+      <para>
+        Shmoos love the following kinds of food:
+      </para>
+      <indexterm>
+        <primary>shmoo</primary>
+        <secondary>feeding</secondary>
+      </indexterm>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Candied yams
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Marshmallows
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Gummi bears
+          </para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+
+
+  <index />
+</article>
