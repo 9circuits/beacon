@@ -1,0 +1,159 @@
+ * {margin: 0; padding: 0; }
+
+html, body {
+    overflow: hidden;
+    font-family: "Trebuchet MS", "Arial";
+
+    font: 75% "Trebuchet MS", sans-serif;
+
+    margin:0;
+  padding:0;
+  height:100%; /* needed for container min-height */
+  background: gray;
+
+  color:#666;
+}
+
+div#BeaconContainer {
+  margin:0px; /* center, not in IE5 */
+  background:#fff;
+
+  height:auto !important; /* real browsers */
+  height:98%; /* IE6: treaded as min-height*/
+
+  min-height:98%; /* real browsers */
+
+  border: 4px solid #395B8E;
+}
+
+#BeaconTabList {
+    font-size: 12px;
+}
+
+.BeaconSideBar {
+    float: right;
+    width: 21%;
+    overflow: auto;
+}
+
+.BeaconSideBar p {
+    margin-bottom: 9px;
+}
+
+.BeaconAccordion {
+    height: 500px;
+}
+
+.BeaconContent {
+    font: 9pt "Trebuchet MS", sans-serif;
+    float: left;
+    width: 77%;
+    border: 1px solid #a6c9e2;
+    overflow: auto;
+}
+
+.BeaconToolBarRow {
+    height: 30px;
+}
+
+.BeaconContent p,ul {
+    margin-bottom: 9px;
+}
+
+.BeaconContent hr {
+    border: none;
+    border-bottom: 1px solid #a6c9e2;
+    margin: 10px 0px;
+}
+
+.BeaconTopBar {
+    display: block;
+    clear: both;
+    margin: 5px 0px 5px 0px;
+    height: 30px;
+}
+
+.BeaconIframe {
+    margin: 0px 7px;
+    width: 98%;
+    border: 1px solid #a6c9e2;
+}
+
+.BeaconSourceView {
+    margin: 0px 7px;
+    width: 98%;
+    border: 1px solid #a6c9e2;
+    display: none;
+}
+
+ul.BeaconRightToolBar {margin: 0; padding: 0;}
+ul.BeaconRightToolBar li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: right;  list-style: none;}
+ul.BeaconRightToolBar span.ui-icon {float: left; margin: 0 4px;}
+
+ul.BeaconRightToolBar li:hover { border: 1px solid #79b7e7; background: #d0e5f5 url(redmond/images/ui-bg_glass_75_d0e5f5_1x400.png) 50% 50% repeat-x; font-weight: bold; color: #1d5987; outline: none; }
+ul.BeaconRightToolBar span.ui-icon:hover {background-image: url(redmond/images/ui-icons_217bc0_256x240.png);  }
+
+
+a.BeaconButton {
+    cursor: pointer;
+    padding: 5px;
+    display: block;
+    margin: 5px 0px;
+    border: 1px solid #a6c9e2;
+}
+
+a.BeaconButton:hover {
+    background-color: #E1EFFB;
+}
+
+
+
+.BeaconToolBar {
+    overflow: none;
+    margin: 5px;
+    padding: 0px;
+}
+
+.BeaconToolHolder {
+    margin-bottom: 3px;
+    height: 28px;
+    background: #E1EFFB;
+}
+
+.BeaconToolButton {
+    float: left;
+    display: block;
+    border: 1px solid #E1EFFB;
+    color: #333333;
+    text-align: left;
+    font: 9pt normal "Trebuchet MS";
+    outline: none;
+    text-decoration: none;
+}
+
+.BeaconToolButton img {
+    border: none;
+}
+
+.BeaconSeparator {
+    float: left;
+    display: block;
+    margin: 5px 5px 0px 5px;
+    width: 3px;
+    height: 18px;
+    border-left: 1px solid #AAA;
+}
+.BeaconToolButton:hover {
+    background: #a6c9e2;
+    border: 1px solid #999;
+    cursor: pointer;
+    outline: none;
+}
+
+.BeaconButton:active
+{
+    background: #9aa4c1;
+    border: 1px solid #17357b;
+    outline: none;
+}
+

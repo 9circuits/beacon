@@ -1,0 +1,78 @@
+Beacon v0.5.01
+~~~~~~~~~~~~~~
+
+View INSTALL for more instructions.
+
+Visit http://beacon.kix.in for more info.
+
+
+
+Beacon v0.4.01
+~~~~~~~~~~~~~~
+
+Changelog:
+
+- The new wave Beacon with jQuery.
+- A plugin framework in the making.
+
+Note: This version is not useable. Use 0.31 instead to *Actually* edit documents.
+
+
+Beacon v0.31
+~~~~~~~~~~~~~
+
+Changelog:
+
+- RTE improved a lot
+- Added a conf val to choose the source of Dojo Toolkit. So should run out of the
+box with a standard Server and PHP with XSL support.
+- Other minor changes.
+- Rudimentary i18n support.
+- Tagged and new branch for django based backend created
+
+
+Beacon v0.3
+~~~~~~~~~~~~~
+
+Changelog:
+
+- Added a shiny new Rich Text Editor
+  - The Enter and Delete keys will not work eveywhere as their handling is not complete yet. So don't panic if your keys don't work!
+- Added a DOM tree which helps in jumping to parts of the documnent quickly
+- Changed the CSS layout to a very fluid one. Let's not have an annoying scrollbar!
+
+
+
+Beacon v0.2.1
+~~~~~~~~~~~~~
+
+index1.php and editor1.php are the new files here. new.php is being redirected to editor1.php now.
+
+More to be added later.
+
+
+
+Beacon v0.2
+~~~~~~~~~~~
+
+The AJAXian WYSIWYG Editor for GuideXML.
+
+Requirements:
+    - PHP 5.1+ (on any web server ;))
+    - Javascript enabled on: Firefox, Opera or Camino (No Mozilla, Konqueror or Safari yet, sorry! There are _NO_ plans to make this work on IE!)
+
+Check the INSTALL file for installation instructions.
+
+Once you are ready to go, usage is just too easy:
+
+    - Choose to either create a new document or edit an existing one.
+    - Toolbox contains GuideXML elements that you can add
+    - Click on an area to edit it, then click save when you are done.
+
+What CAN'T you do yet (but will be able to soon enough ;)):
+
+    - Edit <book> based GuideXML documents
+    - Delete or re-order GuideXML elements within the document.
+
+Feel free to contact me at: <anant@kix.in> if you have any suggestions,
+comments or would like to help with the project.

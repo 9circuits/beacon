@@ -3,37 +3,66 @@
  * Beacon Startup Script
  *
  * This is how to use the API.
+ * This page should serve everything
+ * required by Beacon.
  *
  */
 
 // Include the API
-include "php/beacon.php";
+require "php/beacon.php";
 
 // Set the conf file path here
 $confFile = "beacon.conf";
 
-$request = "";
+// Set the full path here
+$fullPath = "/Library/WebServer/Documents/beacon/beacondev/trunk/editor/";
 
 // Pick up any requests
+$request = "";
 $request = json_decode(file_get_contents("php://input"));
+
+// Create a new Beacon object
+$beacon = new Beacon($confFile, $request, $fullPath);
+
+
+sleep(1);
 
 // If none do the default that is load the page
 if ($request == '') {
-    
-    // Create a new Beacon object
-    $beacon = new Beacon($confFile, $request);
+
+    // Fetch the content to be displayed
     $content = $beacon->init();
-    
+
     // Echo the contents
     echo $content;
-    
+
 } else {
     // All beacon requests if made to this file should be handled.
     // You can do your own stuff when actions are called.
     switch($request->action) {
+        case "beaconui":
+             $ui = $beacon->fetchui();
+             echo $ui;
+             break;
+
         case "newdoc":
+            $newdoc = $beacon->newdoc();
+            echo $newdoc;
             break;
-        case "editdoc":
+
+        case "deletedoc":
+            $deletedoc = $beacon->deletedoc();
+            echo $deletedoc;
+            break;
+
+        case "getsrc":
+            $src = $beacon->getsrc();
+            echo $src;
+            break;
+
+        case "gethtml":
+            $html = $beacon->gethtml();
+            echo $html;
             break;
     }
 }

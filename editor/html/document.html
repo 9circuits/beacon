@@ -1,0 +1,49 @@
+<div  id="{id}Document">
+
+    <div id="{id}Sidebar" class="BeaconSideBar ui-corner-all">
+         <div class="BeaconTopBar">
+             <ul id="{id}RightToolBar" class="BeaconRightToolBar">
+                 <li class="ui-state-default ui-corner-all">
+                     <a  id="{id}CloseButton" href="#" title="Close This Tab">
+                         <span class="ui-icon ui-icon-circle-close"></span>
+                     </a>
+                 </li>
+             </ul>
+         </div>
+
+         <div id="{id}Accordion" class="BeaconAccordion">
+             <h4><a href="#">Common Tasks</a></h4>
+             <div class="BeaconAccordionItem">
+                <p><a id="{id}SaveButton" class="BeaconButton ui-corner-all">{Save}</a></p>
+                <p><a id="{id}ViewSourceButton" class="BeaconButton ui-corner-all">{View Source}</a></p>
+                <p><a id="{id}DownloadButton" class="BeaconButton ui-corner-all">{Download}</a></p>
+                <p>Last saved: <abbr id="{id}TimeStamp"></abbr></p>
+             </div>
+             <h4><a href="#">Document Tree</a></h4>
+             <div class="BeaconAccordionItem">
+             </div>
+         </div>
+
+     </div>
+
+     <div id="{id}Content" class="BeaconContent ui-corner-all">
+          <div class="BeaconToolBar">
+              <div id="{id}ToolHolder" class="BeaconToolHolder">
+              </div>
+          </div>
+
+          <iframe id="{id}Iframe" src="{src}" class="BeaconIframe ui-corner-all">
+          </iframe>
+
+          <textarea id="{id}SourceView" class="BeaconSourceView ui-corner-all"></textarea>
+
+          <div id="{id}Loading" style="display:none; text-align:center; margin-top: 30px">
+              <p class="BeaconLoading">
+                  <span>Please wait. Loading...</span>
+                  <br />
+                  <img src="img/loading.gif" />
+              </p>
+          </div>
+     </div>
+
+</div>

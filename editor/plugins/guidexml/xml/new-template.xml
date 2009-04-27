@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE guide SYSTEM "/dtd/guide.dtd">
+<!-- $Header$ -->
+
+<guide link="newfile.xml" lang="en">
+
+    <title>New Template</title>
+
+    <author title="Author">Template Author</author>
+
+    <abstract>
+        Template Abstract
+    </abstract>
+
+    <!-- The content of this document is licensed under the CC-BY-SA license -->
+    <!-- See http://creativecommons.org/licenses/by-sa/2.5 -->
+    <license/>
+
+    <version>1.0</version>
+    <date>2006-07-21</date>
+
+    <chapter>
+        <title>Chapter 1</title>
+
+        <section>
+            <title>Section 1</title>
+            <body>
+                <p>Sample Paragraph!</p>
+            </body>
+        </section>
+    </chapter>
+
+</guide>
