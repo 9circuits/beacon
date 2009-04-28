@@ -22,6 +22,10 @@ var Beacon = function(container, conf) {
 
     this.tabs = [{name:"Welcome", plugin: "Beacon"}];
 
+    this.uploading = false;
+    this.uploadingFileName = "";
+    this.uploadingID = "";
+
     // Boot up
     this.bootstrap();
 };
@@ -114,7 +118,7 @@ Beacon.prototype.init = function() {
             url: this.getURL("script", scripts[i]),
             dataType: "script",
             success: function(data, textStatus) {
-                $(this.container).append("<p>" + this.beacon.tr("hasLoaded", {name: scripts[i]}) + "</p>");
+                $(this.container).append("<p>" + this.beacon.tr("hasLoaded", {name: this.script}) + "</p>");
             }.attach(obj)
         });
     }
@@ -192,11 +196,20 @@ Beacon.prototype.init = function() {
 
             resizeDocuments();
 
+            $("#BeaconEditUploadFormContainer").hide();
+            $("#BeaconEditFetchFormContainer").hide();
+
             // Attach all events
             $(window).bind("resize", resizeDocuments);
 
             $("#BeaconCreateNewButton").bind("click", this.newDoc.attach(this));
-            $("#BeaconEditButton").bind("click", this.editDoc.attach(this));
+
+            $("#BeaconUploadButton").bind("click", this.editDoc.attach(this));
+            $("#BeaconFetchButton").bind("click", this.editDoc.attach(this));
+
+            $("#BeaconEditFetchType").bind("change", this.toggleEditForm.attach(this));
+
+            //$("#BeaconEditButton").bind("click", this.editDoc.attach(this));
         }.attach(this)
     });
 };
@@ -262,6 +275,144 @@ Beacon.prototype.newDoc = function() {
     // To add some randomness to the tab id
     id = Math.floor(Math.random()*10001);
 
+    this.initDoc(filename, id, "newdoc", this.settings.plugins[filetype]);
+};
+
+
+Beacon.prototype.editDoc = function() {
+    if (this.uploading) {
+        $.jGrowl("Please wait. The system is busy...");
+        return;
+    }
+
+    var fetchtype = parseInt($.trim($("#BeaconEditFetchType").val()));
+
+    if (fetchtype === -1) {
+        $.jGrowl("Please select a method to fetch the document!");
+        return;
+    }
+
+    var filename = $.trim($("#BeaconEditFileName").val()),
+        filetype = $.trim($("#BeaconEditDocType").val()),
+        flag = true,
+        id = 0,
+        container = "";
+
+    if (filetype === "-1") {
+        $.jGrowl(this.strings.messages["noFileType"]);
+        flag = false;
+    }
+    if (filename.length === 0) {
+        $.jGrowl(this.strings.messages["noFileName"]);
+        flag = false;
+    }
+
+    if (!flag) {
+        return;
+    }
+
+    // To add some randomness to the tab id
+    id = Math.floor(Math.random()*10001);
+
+    if (fetchtype === 0) {
+
+        this.fetchDoc(filename, id, this.settings.plugins[filetype], $("#BeaconURLField").val());
+
+    } else if (fetchtype === 1) {
+        this.uploading = true;
+        this.uploadingFileName = filename;
+        this.uploadingID = id;
+
+        $("#BeaconEditUploadFormFileID").val(filename + id);
+        $("#BeaconEditUploadFormPluginName").val(this.settings.plugins[filetype]);
+
+        $("#BeaconEditUploadForm").submit();
+    }
+
+    $("#BeaconLoading").show();
+    $("#BeaconEditUploadFormContainer").hide("medium");
+    $("#BeaconEditFetchFormContainer").hide("medium");
+
+    $("#BeaconEditFileName").val("");
+    $("#BeaconEditDocType").val(-1);
+    $("#BeaconEditFetchType").val(-1);
+    $("#BeaconEditUploadFormFile").val("");
+    $("#BeaconURLField").val("");
+};
+
+Beacon.prototype.uploadFail = function() {
+    $.jGrowl("The Upload Failed! Possibly the XML ws not valid!");
+
+    $("#BeaconLoading").hide();
+    this.uploading = false;
+    this.uploadingFileName = "";
+    this.uploadingID = "";
+};
+
+Beacon.prototype.uploadDone = function(id, plugin) {
+    $.jGrowl("ID = " + id + " Plugin = " + plugin);
+
+    if (id === (this.uploadingFileName + this.uploadingID)) {
+        $.jGrowl("Upload successfull! Creating Document...");
+        this.initDoc(this.uploadingFileName, this.uploadingID, "documentui", plugin);
+    } else {
+        $.jGrowl("Server error. Please try again or contact your system admin if the problem persists.");
+    }
+
+    $("#BeaconLoading").hide();
+    this.uploading = false;
+    this.uploadingFileName = "";
+    this.uploadingID = "";
+};
+
+Beacon.prototype.fetchDoc = function(filename, id, plugin, url) {
+    var o = {
+        id: filename+id,
+        filename: filename,
+        plugin: plugin,
+        url: url
+    };
+
+    var data = {
+        action: "fetchdoc",
+        payload: o
+    };
+
+    var attached = {
+        beacon: this,
+        payload: o
+    }
+
+    $.ajax({
+        url: this.getURL("handler"),
+        data: JSON.stringify(data),
+        type: "POST",
+        success: function(html) {
+            if ($.trim(html) === "FAIL") {
+                $.jGrowl("The parsing of document failed. Are you sure the link contains valid XML?");
+                $("#BeaconLoading").hide();
+                return;
+            }
+
+            $(this.beacon.container).tabs("add", "#"+this.payload.id, this.payload.filename);
+            $("#"+this.payload.id).addClass('BeaconDocumentTab');
+            $(this.beacon.container).tabs('select', "#"+this.payload.id);
+
+            $("#"+this.payload.id).html(html);
+
+            resizeDocuments();
+
+            $("#"+this.payload.id+"CloseButton").bind("click", this.beacon.closeDoc.attach(this.beacon));
+
+            this.beacon.tabs[$(this.beacon.container).tabs('option', 'selected')] = this.payload;
+            this.beacon.pluginManager.initDocument(this.payload);
+
+            $("#BeaconLoading").hide();
+        }.attach(attached)
+    });
+};
+
+Beacon.prototype.initDoc = function(filename, id, action, plugin) {
     container = '#' + filename + id;
 
     $(this.container).tabs("add", container, filename);
@@ -272,11 +423,11 @@ Beacon.prototype.newDoc = function() {
 
     var o = {
         id: filename+id,
-        plugin: this.settings.plugins[filetype]
+        plugin: plugin
     };
 
     var data = {
-        action: "newdoc",
+        action: action,
         payload: o
     };
 
@@ -303,8 +454,24 @@ Beacon.prototype.newDoc = function() {
     });
 };
 
-Beacon.prototype.editDoc = function() {
+Beacon.prototype.toggleEditForm = function() {
+    if (this.uploading) {
+        $.jGrowl("Please wait. The system is busy...");
+        return;
+    }
 
+    var fetchtype = parseInt($.trim($("#BeaconEditFetchType").val()));
+
+    if (fetchtype === -1) {
+        $("#BeaconEditUploadFormContainer").hide("medium");
+        $("#BeaconEditFetchFormContainer").hide("medium");
+    } else if (fetchtype === 0) {
+        $("#BeaconEditUploadFormContainer").hide("medium");
+        $("#BeaconEditFetchFormContainer").show("medium");
+    } else if (fetchtype === 1) {
+        $("#BeaconEditUploadFormContainer").show("medium");
+        $("#BeaconEditFetchFormContainer").hide("medium");
+    }
 };
 
 Beacon.prototype.closeDoc = function() {

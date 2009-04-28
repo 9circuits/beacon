@@ -20,6 +20,7 @@ function getsrc($beacon) {
 function gethtml($beacon) {
     $output = $beacon->parser->xslParse($beacon->src, $beacon->path . "xml/guide2html.xsl", true);
     $output = str_replace('&#10;', '', $output);
+    $output = str_replace("{css}", $beacon->url . "css/guide.css", $output);
     return $output;
 }
 

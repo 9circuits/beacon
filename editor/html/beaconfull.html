@@ -27,10 +27,12 @@
     <script src="js/Beacon.js" type="text/javascript"></script>
 
     <script type="text/javascript">
+        // This is important to make the fileupload work!
+        window.beacon = {};
 
         $(document).ready(function() {
             // Start up Beacon by showing the Container
-            var beacon = new Beacon("#BeaconContainer", "{pathtoconf}");
+            beacon = new Beacon("#BeaconContainer", "{pathtoconf}");
         });
 
     </script>

@@ -13,37 +13,63 @@
                 </ul>
             </div>
             <div id="BeaconMenu" class="BeaconAccordion">
-              <h4><a href="#">{Create a New Document}</a></h4>
-              <div class="BeaconAccordionItem">
-                  <p>{File Name:}</p>
-                  <p><input id="BeaconNewFileName" type="text" /></p>
-                  <p>{Choose Document Type:}</p>
-                  <p>
-                      <select id="BeaconNewDocType">
-                          <option value="-1">{Select one}</option>
-                      </select>
-                  </p>
-                  <p><a id="BeaconCreateNewButton" class="BeaconButton ui-corner-all">{Create New!}</a></p>
-              </div>
-              <h4><a href="#">{Edit a Document}</a></h4>
-              <div class="BeaconAccordionItem">
-                  <p>{File Name:}</p>
-                  <p><input id="BeaconEditFileName" type="text" /></p>
-                  <p>{Choose Document Type:}</p>
-                  <p>
-                      <select id="BeaconEditDocType">
-                          <option value="-1">{Select one}</option>
-                      </select>
-                  </p>
-                  <p>{Choose where to fetch the document from:}</p>
-                  <p>
-                      <select id="BeaconEditFetchType">
-                          <option value="0">{Upload a file}</option>
-                          <option value="1">{From URL}</option>
-                      </select>
-                  </p>
-                  <p><a id="BeaconEditButton" class="BeaconButton ui-corner-all">{Go Edit!}</a></p>
-              </div>
+                <h4><a href="#">{Create a New Document}</a></h4>
+                <div class="BeaconAccordionItem">
+                    <p>{File Name:}</p>
+                    <p><input id="BeaconNewFileName" type="text" /></p>
+                    <p>{Choose Document Type:}</p>
+                    <p>
+                        <select id="BeaconNewDocType">
+                            <option value="-1">{Select one}</option>
+                        </select>
+                    </p>
+                    <p><a id="BeaconCreateNewButton" class="BeaconButton ui-corner-all">{Create New!}</a></p>
+                </div>
+                <h4><a href="#">{Edit a Document}</a></h4>
+                <div class="BeaconAccordionItem">
+                    <p>{File Name:}</p>
+                    <p><input id="BeaconEditFileName" type="text" /></p>
+                    <p>{Choose Document Type:}</p>
+                    <p>
+                        <select id="BeaconEditDocType">
+                            <option value="-1">{Select one}</option>
+                        </select>
+                    </p>
+                    <p>{Choose where to fetch the document from:}</p>
+                    <p>
+                        <select id="BeaconEditFetchType">
+                            <option value="-1">{Select one}</option>
+                            <option value="0">{From URL}</option>
+                            <option value="1">{Upload a file}</option>
+                        </select>
+                    </p>
+                    <div id="BeaconEditUploadFormContainer">
+                        <form id="BeaconEditUploadForm" enctype="multipart/form-data" target="upload_target" action="{handler}" method="POST">
+                            <input type="hidden" name="UPLOAD" value="yes" />
+                            <input type="hidden" id="BeaconEditUploadFormFileID" name="ID" value="" />
+                            <input type="hidden" id="BeaconEditUploadFormPluginName" name="PLUGIN" value="" />
+                            <input type="hidden" name="MAX_FILE_SIZE" value="102400"/>
+                            <p>{Select a file:}</p>
+                            <p><input class="textbox" name="xmlf" type="file" id="BeaconEditUploadFormFile" /></p>
+                            <p><a id="BeaconUploadButton" class="BeaconButton ui-corner-all">{Upload}</a></p>
+                            <iframe id="upload_target" name="upload_target" style="display: none">
+                            </iframe>
+                        </form>
+                    </div>
+                    <div id="BeaconEditFetchFormContainer">
+                        <p>{Enter a URL to fetch from:}</p>
+                        <p><input id="BeaconURLField" type="text" /></p>
+                        <p><a id="BeaconFetchButton" class="BeaconButton ui-corner-all">{Fetch}</a></p>
+                    </div>
+
+                    <div id="BeaconLoading" style="display:none;">
+                        <p class="BeaconLoading">
+                            <span>{Loading...}</span>
+                            <br />
+                            <img src="img/loading.gif" />
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -80,11 +106,5 @@
     </div>
 
     <!-- All HTML resources that need to be shown again and again -->
-    <div id="BeaconLoading" style="display:none;">
-        <p id="loadingFields" class="BeaconLoading">
-            <span id="loadingMessage"></span>
-            <br />
-            <img src="img/loading.gif" />
-        </p>
-    </div>
+
 

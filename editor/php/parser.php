@@ -2,8 +2,8 @@
 
 class BeaconParser
 {
-    function BeaconParser() {
-
+    function BeaconParser($js=false) {
+        $this->js = $js;
     }
 
     function xslParse($text, $xsl, $html_output=false) {
@@ -17,8 +17,12 @@ class BeaconParser
 
         // Critical. Must not output bad code.
         if (! @$tSrc->loadXML($raw)) {
-            echo "FAIL";
-            exit;
+            if ($this->js) {
+                echo '<script language="javascript" type="text/javascript">window.top.window.beacon.uploadFail()</script>';
+            } else {
+                echo "FAIL";
+                exit;
+            }
         }
 
         $tXSL = new XSLTProcessor();

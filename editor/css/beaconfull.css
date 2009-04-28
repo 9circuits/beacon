@@ -44,6 +44,12 @@ div#BeaconContainer {
     height: 500px;
 }
 
+.BeaconFieldSet {
+    border: 1px solid #a6c9e2;
+    padding: 5px;
+    margin-top: 5px;
+}
+
 .BeaconContent {
     font: 9pt "Trebuchet MS", sans-serif;
     float: left;

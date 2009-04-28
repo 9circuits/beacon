@@ -43,6 +43,8 @@ class Beacon
         // Get the localized UI
         $html = $this->localizeHTML("beaconui.html");
 
+        $html = str_replace("{handler}", $this->settings->url . $this->settings->php->handler, $html);
+
         // Return
         return $html;
     }
@@ -73,7 +75,79 @@ class Beacon
     }
 
     function editdoc() {
+        $html = $this->localizeHTML("document.html");
+        $html = str_replace("{id}", $id, $html);
+        $html = str_replace("{src}",
+            $this->settings->url . $this->settings->php->path . "storage/tmp/" . $id . ".html", $html);
 
+    }
+
+    function fetchdoc() {
+        $id = $this->request->payload->id;
+        $plugin = $this->request->payload->plugin;
+        $url = $this->request->payload->url;
+
+        // create curl resource
+        $ch = curl_init();
+        // set url
+        curl_setopt($ch, CURLOPT_URL, $url);
+        //return the transfer as a string
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // $output contains the output string
+        $src = curl_exec($ch);
+        // close curl resource to free up system resources
+        curl_close($ch);
+
+        include $this->pluginpath . $plugin . "/php/" . $plugin . ".php";
+
+        $beacon->path = $this->pluginpath . $plugin . "/";
+        $beacon->url = $this->settings->url . $this->settings->php->pluginpath . $plugin . "/";
+        $beacon->src = urldecode($src);
+        $beacon->parser = new BeaconParser();
+
+        $text = gethtml($beacon);
+
+        if ($this->settings->storage === "flatfile") {
+            $storage = new BeaconFlatFile($this->phppath . "storage/tmp/");
+            $storage->createDocument($id, $text);
+        }
+
+        $html = $this->localizeHTML("document.html");
+        $html = str_replace("{id}", $id, $html);
+        $html = str_replace("{src}",
+            $this->settings->url . $this->settings->php->path . "storage/tmp/" . $id . ".html", $html);
+
+        return $html;
+    }
+
+    function upload($id, $plugin, $src) {
+        include $this->pluginpath . $plugin . "/php/" . $plugin . ".php";
+
+        $beacon->path = $this->pluginpath . $plugin . "/";
+        $beacon->url = $this->settings->url . $this->settings->php->pluginpath . $plugin . "/";
+        $beacon->src = urldecode($src);
+        $beacon->parser = new BeaconParser(true);
+
+        $text = gethtml($beacon);
+
+        if ($this->settings->storage === "flatfile") {
+            $storage = new BeaconFlatFile($this->phppath . "storage/tmp/");
+            $storage->createDocument($id, $text);
+        }
+
+        return '<script language="javascript" type="text/javascript">
+            window.top.window.beacon.uploadDone("'.$id.'", "'.$plugin.'");</script>';
+    }
+
+    function documentui() {
+        $id = $this->request->payload->id;
+
+        $html = $this->localizeHTML("document.html");
+        $html = str_replace("{id}", $id, $html);
+        $html = str_replace("{src}",
+            $this->settings->url . $this->settings->php->path . "storage/tmp/" . $id . ".html", $html);
+
+        return $html;
     }
 
     function savedoc() {
@@ -163,6 +237,21 @@ class Beacon
         $this->phppath = $this->fullPath . $this->settings->php->path;
         $this->i18npath = $this->fullPath . $this->settings->php->i18npath;
         $this->pluginpath = $this->fullPath . $this->settings->php->pluginpath;
+    }
+
+    function randomstr($length){
+        $randstr = "";
+        for($i=0; $i<$length; $i++) {
+            $randnum = mt_rand(0,61);
+            if($randnum < 10) {
+                $randstr .= chr($randnum+48);
+            } else if($randnum < 36) {
+                $randstr .= chr($randnum+55);
+            } else {
+                $randstr .= chr($randnum+61);
+            }
+        }
+        return $randstr;
     }
 
 

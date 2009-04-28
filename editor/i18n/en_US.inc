@@ -45,8 +45,17 @@ $pages = array(
         "From URL" =>
             "From URL",
 
-        "Go Edit!" =>
-            "Go Edit!",
+        "Select a file:" =>
+            "Select a file:",
+
+        "Upload" =>
+            "Upload",
+
+        "Enter a URL to fetch from:" =>
+            "Enter a URL to fetch from:",
+
+        "Fetch" =>
+            "Fetch",
 
         "Welcome to Beacon. A WYSIWYG (and much more!) Editor." =>
             "Welcome to Beacon. A WYSIWYG (and much more!) Editor.",
@@ -88,7 +97,10 @@ $pages = array(
             "Language:",
 
         "Theme:" =>
-            "Theme:"
+            "Theme:",
+
+        "Loading..." =>
+            "Loading..."
     ),
 
     "document.html" => array(
