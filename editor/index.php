@@ -15,7 +15,7 @@ require "php/beacon.php";
 $confFile = "beacon.conf";
 
 // Set the full path here
-$fullPath = "/Library/WebServer/Documents/beacon/beacondev/trunk/editor/";
+$fullPath = getcwd() . "/";
 
 // Pick up any requests
 $request = "";
@@ -25,7 +25,7 @@ $request = json_decode(file_get_contents("php://input"));
 $beacon = new Beacon($confFile, $request, $fullPath);
 
 // Simulate Network Lag for local development
-sleep(1);
+//sleep(1);
 
 // If none check if its a request to upload. If not load up Beacon.
 if ($request == '') {

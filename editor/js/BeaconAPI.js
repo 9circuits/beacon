@@ -156,7 +156,6 @@ BeaconAPI.prototype.getSource = function(displayFlag) {
                 $(this.ui["SourceView"].id).val($.trim(src));
                 $(this.ui["Loading"].id).hide();
                 $(this.ui["SourceView"].id).show();
-
             } else {
                 this.getSource(false);
             }

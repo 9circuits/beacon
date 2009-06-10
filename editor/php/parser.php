@@ -16,7 +16,7 @@ class BeaconParser
         $tSrc = new DOMDocument();
 
         // Critical. Must not output bad code.
-        if (! @$tSrc->loadXML($raw)) {
+        if (! $tSrc->loadXML($raw)) {
             if ($this->js) {
                 echo '<script language="javascript" type="text/javascript">window.top.window.beacon.uploadFail()</script>';
             } else {

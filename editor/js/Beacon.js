@@ -53,7 +53,6 @@ Beacon.prototype.bootstrap = function() {
 
         }.attach(this)
     });
-
 };
 
 Beacon.prototype.getURL = function(type, str) {
@@ -67,6 +66,8 @@ Beacon.prototype.getURL = function(type, str) {
         return (this.settings.url + this.settings[this.settings.backend].htmlpath + str);
     } else if (type === "handler") {
         return (this.settings.url + this.settings[this.settings.backend].handler);
+    } else if (type === "css") {
+        return (this.settings.url + this.settings[this.settings.backend].csspath + str);
     }
     return "";
 };
@@ -74,7 +75,7 @@ Beacon.prototype.getURL = function(type, str) {
 Beacon.prototype.tr = function(name, replace) {
     var str = this.strings.messages[name] || "";
 
-    for (r in replace){
+    for (var r in replace){
         str = str.replace("{"+r+"}", replace[r]);
     }
 

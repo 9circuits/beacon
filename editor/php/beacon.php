@@ -253,8 +253,6 @@ class Beacon
         }
         return $randstr;
     }
-
-
 };
 
 ?>
