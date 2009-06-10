@@ -1,0 +1,199 @@
+/*
+
+CSS for Red Hat Linux Project docs from the Documentation Project
+
+Written by Tammy Fox and Garrett LeSage
+
+Copyright 2003 Tammy Fox, Garrett LeSage, and Red Hat, Inc.
+Copywight 2005 Tommy Reynolds <Tommy.Reynolds@MegaCoder.com>
+
+License: GPL
+
+*/
+
+body  {
+  background-attachment  scroll;
+  background-color:  #FEFEFF;
+  background-image:  url('watermark.png');
+  background-position:  top center;
+  background-repeat:  repeat;
+  margin-left:    1.5em;
+  margin-right:    1.5em;
+}
+
+p {
+  line-height:    140%;
+}
+
+li p {
+  # display: inline;
+}
+
+li p.title {
+        display: inline;
+}
+
+div.table table {
+  width: 95%;
+  background-color: #DCDCDC;
+  color: #000000;
+  border-spacing: 0;
+}
+
+div.table table th {
+  border: 1px solid #A9A9A9;
+  background-color: #A9A9A9;
+  color: #000000;
+}
+
+div.table table td {
+  border: 1px solid #A9A9A9;
+  background-color: #DCDCDC;
+  color: #000000;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  margin-top: 2px;
+
+}
+
+div.note table, div.tip table, div.important table, div.caution table, div.warning table {
+  width: 95%;
+  border: 2px solid #D0D0B0;
+  background-color: #FAF9E0;
+  color: #000000;
+  /* padding inside table area */
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+.qandaset table {
+  border-collapse: collapse;
+}
+.qandaset {
+}
+.qandaset tr.question {
+}
+.qandaset tr.question td {
+  font-weight: bold;
+  padding: 1em 1em 0;
+}
+.qandaset tr.answer td {
+  padding: 0.25em 1em 1.5em;
+}
+.qandaset tr.question td, .qandaset tr.answer td {
+}
+
+.segmentedlist {
+}
+.segmentedlist .title {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  margin-top: 1.5em;
+}
+.segmentedlist table {
+  border-collapse: collapse;
+  margin-bottom: 2em;
+}
+.segmentedlist tr {
+  border: 1px solid #22437f;
+}
+.segmentedlist tr.segtitle {
+        background: #33649f;
+  color: #fefefe;
+  font-weight: bold;
+}
+.segmentedlist th {
+  text-align: left;
+  padding: 0.5em 5em 0.5em 0.5em;
+}
+.segmentedlist td {
+  padding: 0.5em 5em 0.5em 0.5em;
+}
+
+hr {
+  border: 0;
+  border-bottom: 1px solid #ccc;
+}
+
+h1, h2, h3, h4 {
+  font-family: luxi sans,sans-serif;
+  color: #22437f;
+  font-weight: bold;
+}
+h1 {
+  font-size: 1.75em;
+}
+
+h2 {
+  font-size: 1.25em;
+}
+
+h3 {
+  font-size: 1.1em;
+}
+
+a:link {
+  color: #900;
+}
+a:visited {
+  color: #48468f;
+}
+a:hover {
+  color: #f20;
+}
+
+code.screen, pre.screen {
+  font-family: monospace;
+  font-size: 1em;
+  display: block;
+  padding: 10px;
+  border: 1px solid #bbb;
+  background-color: #eee;
+  color: #000;
+  overflow: auto;
+  border-radius: 2.5px;
+  -moz-border-radius: 2.5px;
+  margin: 0.5em 2em;
+}
+
+div.example {
+  padding: 10px;
+  border: 1px solid #bbb;
+  margin: 0.5em 2em;
+}
+
+.procedure ol li {
+  margin-bottom: 0.5em;
+}
+.procedure ol li li {
+  /* prevent inheritance */
+  margin-bottom: 0em;
+}
+.procedure ol li pre {
+  margin-bottom: 1em;
+}
+
+.itemizedlist ul li {
+  margin-bottom: 0.5em;
+}
+.itemizedlist ul li li {
+  /* prevent inheritance */
+  margin-bottom: 0em;
+}
+
+p.title  {
+  text-align: center;
+}
+
+.package {
+    font-style: italic;
+}
+
+.userinput {
+    font-weight: bold;
+}
+
+.command {
+    font-weight: bold;
+}
