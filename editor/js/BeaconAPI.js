@@ -127,7 +127,7 @@ BeaconAPI.prototype.getSource = function(displayFlag) {
         }
     }
 
-    var html = '<body>' + $(this.ui["Iframe"].id).contents().find("body").html() + "</body>";
+    var html = $(this.ui["Iframe"].id).contents().find("body").html();
 
     html = encodeURIComponent(html);
 

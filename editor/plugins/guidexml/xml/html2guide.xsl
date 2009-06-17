@@ -2,16 +2,15 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-<xsl:output method="xml" encoding="UTF-8" indent="no" />
+<xsl:output method="xml" encoding="UTF-8" indent="yes" />
+
+<xsl:strip-space elements="*"/>
+<xsl:preserve-space elements="pre"/>
 
 <xsl:template match="/">
   <guide>
     <xsl:apply-templates />
   </guide>
-</xsl:template>
-
-<xsl:template match="body">
-    <xsl:apply-templates select="div[@id='guide']"/>
 </xsl:template>
 
 <xsl:template match="div[@id='guide']">

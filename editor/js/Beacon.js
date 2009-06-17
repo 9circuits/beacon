@@ -351,8 +351,6 @@ Beacon.prototype.uploadFail = function() {
 };
 
 Beacon.prototype.uploadDone = function(id, plugin) {
-    $.jGrowl("ID = " + id + " Plugin = " + plugin);
-
     if (id === (this.uploadingFileName + this.uploadingID)) {
         $.jGrowl("Upload successfull! Creating Document...");
         this.initDoc(this.uploadingFileName, this.uploadingID, "documentui", plugin);

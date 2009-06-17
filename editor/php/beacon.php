@@ -104,6 +104,7 @@ class Beacon
         $beacon->url = $this->settings->url . $this->settings->php->pluginpath . $plugin . "/";
         $beacon->src = urldecode($src);
         $beacon->parser = new BeaconParser();
+        $beacon->wrap = true;
 
         $text = gethtml($beacon);
 
@@ -127,6 +128,7 @@ class Beacon
         $beacon->url = $this->settings->url . $this->settings->php->pluginpath . $plugin . "/";
         $beacon->src = urldecode($src);
         $beacon->parser = new BeaconParser(true);
+        $beacon->wrap = true;
 
         $text = gethtml($beacon);
 
@@ -165,6 +167,7 @@ class Beacon
         $beacon->url = $this->settings->url . $this->settings->php->pluginpath . $plugin . "/";
         $beacon->html = urldecode($html);
         $beacon->parser = new BeaconParser();
+        $beacon->wrap = false;
 
         $text = getsrc($beacon);
 
@@ -182,6 +185,7 @@ class Beacon
         $beacon->url = $this->settings->url . $this->settings->php->pluginpath . $plugin . "/";
         $beacon->src = urldecode($src);
         $beacon->parser = new BeaconParser();
+        $beacon->wrap = false;
 
         $text = gethtml($beacon);
 

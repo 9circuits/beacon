@@ -6,7 +6,7 @@ class BeaconParser
         $this->js = $js;
     }
 
-    function xslParse($text, $xsl, $html_output=false) {
+    function xslParse($text, $xsl, $html_output=false, $cssPath=false) {
         $raw = $text;
 
         // TODO: Fix HRBR hack!
@@ -29,11 +29,13 @@ class BeaconParser
         $tXSL->importStyleSheet(DOMDocument::load($xsl));
         $ret = $tXSL->transformToXML(DOMDocument::loadXML($raw));
 
-        if ($html_output) {
-            return $ret;
-        } else {
-            return $this->xmlpp($ret);
+        if ($cssPath) {
+            $ret = '<style type="text/css">@import "{css}";</style><body>' . $ret;
+            $ret = str_replace('{css}', $cssPath, $ret);
+            $ret = $ret . "</body>";
         }
+
+        return $ret;
     }
 
     function xmlpp($xml, $html_output=false) {
