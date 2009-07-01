@@ -104,14 +104,59 @@ $pages = array(
     ),
 
     "document.html" => array(
-        "Save" =>
-            "Save",
+        "Save the document" =>
+            "Save the document",
 
-        "View Source" =>
-            "View Source",
+        "Show/Hide Source View" =>
+            "Show/Hide Source View",
 
-        "Download" =>
-            "Download"
+        "Delete the node" =>
+            "Delete the node",
+
+        "Insert Block Element" =>
+            "Insert Block Element",
+
+        "Insert around a Node:" =>
+            "Insert around a Node:",
+
+        "Before" =>
+            "Before",
+
+        "After" =>
+            "After",
+
+        "Select Any One" =>
+            "Select Any One",
+
+        "Insert Block Element" =>
+            "Insert Block Element",
+
+        "Insert around a Node:" =>
+            "Insert around a Node:",
+
+        "Insert Inline Element" =>
+            "Insert Inline Element",
+
+        "Document Tree" =>
+            "Document Tree",
+
+        "Last saved:" =>
+            "Last saved:",
+
+        "Please wait. Loading..." =>
+            "Please wait. Loading...",
+
+        "Select type:" =>
+            "Select type:",
+
+        "Highlight some text while editing rich text type nodes," =>
+            "Highlight some text while editing rich text type nodes,",
+
+        "and then choose a type of inline element and click" =>
+            "and then choose a type of inline element and click",
+
+        "This will highlight the selected text as that inline element style." =>
+            "This will highlight the selected text as that inline element style.",
     )
 );
 

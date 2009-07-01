@@ -144,28 +144,7 @@ Beacon.prototype.init = function() {
            dataType: "script",
            success: function() {
                $(this.container).append("<p>"+this.beacon.tr("hasLoaded", {name: this.plugin})+"</p>");
-           }.attach(obj)
-        });
-
-        /*
-         * Load the plugin specific resources
-         * Loads a JSON file which
-         * informs Beacon of which functions/scripts
-         * etc are required to communicate with it
-         */
-        url = this.getURL("plugin", this.settings.plugins[i]) + "resources.txt";
-
-        // To pass to the success event
-        obj = {
-            pluginManager: this.pluginManager,
-            pluginName: this.settings.plugins[i]
-        };
-
-        $.ajaxq("init", {
-           url: url,
-           dataType: "json",
-           success: function(json) {
-               this.pluginManager.addPlugin(this.pluginName, json);
+               this.beacon.pluginManager.addPlugin(this.plugin);
            }.attach(obj)
         });
     }
@@ -510,12 +489,12 @@ function BeaconPluginManager(o) {
 };
 
 // Add it to the plugin list
-BeaconPluginManager.prototype.addPlugin = function(name, res) {
+BeaconPluginManager.prototype.addPlugin = function(name) {
     // Attach the recieved JSON object
-    this.plugins[name] = res;
+    this.plugins[name] = {};
 
     // Set a flag to enable lazy loading
-    this.plugins[name].hasLoaded = this.plugins[name].scripts.length !== 0 ? false : true;
+    //this.plugins[name].hasLoaded = this.plugins[name].scripts.length !== 0 ? false : true;
 
     // Make a document list
     this.plugins[name].documents = {};
@@ -525,7 +504,6 @@ BeaconPluginManager.prototype.addPlugin = function(name, res) {
 BeaconPluginManager.prototype.initDocument = function(o) {
     var doc = {};
 
-    // Call the init function of the plugin handing it the container
     doc = new BeaconAPI(o, this.beacon);
 
     // Add it to the list
@@ -537,9 +515,6 @@ BeaconPluginManager.prototype.destroyDocument = function(o) {
 
     delete this.plugins[o.plugin].documents[o.id];
 };
-
-
-
 
 // Make an array out of a pseudo array
 function toArray(pseudoArray) {
@@ -634,147 +609,6 @@ jQuery.ajaxq = function (queue, options)
     document.ajaxq.q[queue] = [];
   }
 }
-
-/*
- * Dimensions
- * @author Dave Methvin (dave.methvin@gmail.com)
-*/
-
-// Override jQuery height function
-jQuery.fn.height = function() {
-  if ( this.get(0) == window )
-    return self.innerHeight ||
-      jQuery.boxModel && document.documentElement.clientHeight ||
-      document.body.clientHeight;
-  if ( this.get(0) == document )
-    return Math.max( document.body.scrollHeight, document.body.offsetHeight );
-
-  return parseInt(this.css("height", arguments[0]), 10);
-};
-
-// Override jQuery width function
-jQuery.fn.width = function() {
-  if ( this.get(0) == window )
-    return self.innerWidth ||
-      jQuery.boxModel && document.documentElement.clientWidth ||
-      document.body.clientWidth;
-
-  if ( this.get(0) == document )
-    return Math.max( document.body.scrollWidth, document.body.offsetWidth );
-
-  return this.css("width", arguments[0]);
-};
-
-jQuery.fn.innerHeight = function() {
-  return this.get(0) == window || this.get(0) == document ?
-    this.height() :
-    this.get(0).offsetHeight - parseInt(this.css("borderTop") || 0, 10) - parseInt(this.css("borderBottom") || 0, 10);
-};
-
-jQuery.fn.innerWidth = function() {
-  return this.get(0) == window || this.get(0) == document ?
-    this.width() :
-    this.get(0).offsetWidth - parseInt(this.css("borderLeft") || 0, 10) - parseInt(this.css("borderRight") || 0, 10);
-};
-
-jQuery.fn.outerHeight = function() {
-  return this.get(0) == window || this.get(0) == document ?
-    this.height() :
-    this.get(0).offsetHeight;
-};
-
-jQuery.fn.outerWidth = function() {
-  return this.get(0) == window || this.get(0) == document ?
-    this.width() :
-    this.get(0).offsetWidth;
-};
-
-jQuery.fn.scrollLeft = function() {
-  if ( this.get(0) == window || this.get(0) == document )
-    return self.pageXOffset ||
-      jQuery.boxModel && document.documentElement.scrollLeft ||
-      document.body.scrollLeft;
-
-  return this.get(0).scrollLeft;
-};
-
-jQuery.fn.scrollTop = function() {
-  if ( this.get(0) == window || this.get(0) == document )
-    return self.pageYOffset ||
-      jQuery.boxModel && document.documentElement.scrollTop ||
-      document.body.scrollTop;
-
-  return this.get(0).scrollTop;
-};
-
-jQuery.fn.offset = function(refElem) {
-  if (!this[0]) throw 'jQuery.fn.offset requires an element.';
-
-  refElem = (refElem) ? jQuery(refElem)[0] : null;
-  var x = 0, y = 0, elem = this[0], parent = this[0], sl = 0, st = 0;
-  do {
-    if (parent.tagName == 'BODY' || parent.tagName == 'HTML') {
-      // Safari and IE don't add margin for static and relative
-      if ((jQuery.browser.safari || jQuery.browser.msie) && jQuery.css(parent, 'position') != 'absolute') {
-        x += parseInt(jQuery.css(parent, 'marginLeft'), 10) || 0;
-        y += parseInt(jQuery.css(parent, 'marginTop'), 10)  || 0;
-      }
-      break;
-    }
-
-    x += parent.offsetLeft || 0;
-    y += parent.offsetTop  || 0;
-
-    // Mozilla and IE do not add the border
-    if (jQuery.browser.mozilla || jQuery.browser.msie) {
-      x += parseInt(jQuery.css(parent, 'borderLeftWidth'), 10) || 0;
-      y += parseInt(jQuery.css(parent, 'borderTopWidth'), 10)  || 0;
-    }
-
-    // Mozilla removes the border if the parent has overflow hidden
-    if (jQuery.browser.mozilla && jQuery.css(parent, 'overflow') == 'hidden') {
-      x += parseInt(jQuery.css(parent, 'borderLeftWidth'), 10) || 0;
-      y += parseInt(jQuery.css(parent, 'borderTopWidth'), 10)  || 0;
-    }
-
-    // Need to get scroll offsets in-between offsetParents
-    var op = parent.offsetParent;
-    do {
-      sl += parent.scrollLeft || 0;
-      st += parent.scrollTop  || 0;
-      parent = parent.parentNode;
-    } while (parent != op);
-  } while (parent);
-
-  if (refElem) { // Get the relative offset
-    var offset = jQuery(refElem).offset();
-    x  = x  - offset.left;
-    y  = y  - offset.top;
-    sl = sl - offset.scrollLeft;
-    st = st - offset.scrollTop;
-  }
-
-  // Safari and Opera do not add the border for the element
-  if (jQuery.browser.safari || jQuery.browser.opera) {
-    x += parseInt(jQuery.css(elem, 'borderLeftWidth'), 10) || 0;
-    y += parseInt(jQuery.css(elem, 'borderTopWidth'), 10)  || 0;
-  }
-
-  return {
-    top:  y - st,
-    left: x - sl,
-    width:  elem.offsetWidth,
-    height: elem.offsetHeight,
-    borderTop:  parseInt(jQuery.css(elem, 'borderTopWidth'), 10)  || 0,
-    borderLeft: parseInt(jQuery.css(elem, 'borderLeftWidth'), 10) || 0,
-    marginTop:  parseInt(jQuery.css(elem, 'marginTopWidth'), 10)  || 0,
-    marginLeft: parseInt(jQuery.css(elem, 'marginLeftWidth'), 10) || 0,
-    scrollTop:  st,
-    scrollLeft: sl,
-    pageYOffset: window.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop  || 0,
-    pageXOffset: window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0
-  };
-};
 
 /*$.fn.image = function(src, f){
    return this.each(function(){

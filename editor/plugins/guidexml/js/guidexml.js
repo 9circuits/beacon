@@ -1,6 +1,6 @@
 /*
  * GuideXML Plugin for Beacon
- * 
+ *
  * Copyright Beacon Dev Team
  * Licensed under GPLv3
  *
@@ -8,143 +8,144 @@
  * create a plugin for Beacon.
  *
  */
- 
-/*
- * This is the default init function that Beacon
- * will use. Specify this in your resources.txt
- *
- * Arguments:
- * container - The display on which your document resides.
- * action - Type of action. Like "new", "edit", etc.
- *
- * Return Type:
- * A new instance of the Document Object
- *
- */
-function guidexml(container, action) {
-    
-    // THIS IS WAY INCOMPLETE!!!
-    
-    var opts = {
-        container: container,
-        action: action
+
+function guidexml_dtd() {
+    var dtd = {
+        guideParagraph: {
+            type: "block",
+            inlineChildren: ["guideCode", "guideEm", "guideBold", "guideLink",
+                             "guideIdentifier", "guideKeyWord",
+                             "guideConstant", "guideStatement",
+                             "guideVariable", "guideSub", "guideSup",
+                             "guideCodeInput", "guideCodePath"],
+            blockChildren: false,
+            standAlone: true,
+            siblings: ["guideParagraph", "guidePre", "guideNote",
+                       "guideList", "guideUnorderedList",
+                       "guideImportant", "guideWarning",
+                       "guideEpigraph"],
+            editorType: "richText",
+            markup: {
+                tag: "p",
+                attributes: false
+            }
+        },
+
+        guideTitle: {
+            type: "block",
+            inlineChildren: false,
+            blockChildren: false,
+            standAlone: false,
+            siblings: false,
+            editorType: "lineedit"
+        },
+
+        guideChapterTitle: {
+            type: "block",
+            inlineChildren: false,
+            blockChildren: false,
+            standAlone: false,
+            siblings: ["guideChapter"],
+            editorType: "lineedit"
+        },
+
+        guideSectionTitle: {
+            type: "block",
+            inlineChildren: false,
+            blockChildren: false,
+            standAlone: false,
+            siblings: ["guideSection"],
+            editorType: "lineedit"
+        },
+
+        guideAbstractValue: {
+            type: "block",
+            inlineChildren: false,
+            blockChildren: false,
+            standAlone: false,
+            siblings: false,
+            editorType: "plaintext"
+        },
+
+        guideBold: {
+            type: "inline",
+            inlineType: "generic",
+            markup: {
+                tag: "span",
+                attributes: {
+                    className: "boldtext"
+                }
+            }
+        },
+
+        guideEm: {
+            type: "inline",
+            inlineType: "generic",
+            markup: {
+                tag: "span",
+                attributes: {
+                    className: "emphasis"
+                }
+            }
+        },
+
+        guideCode: {
+            type: "inline",
+            inlineType: "generic",
+            markup: {
+                tag: "span",
+                attributes: {
+                    className: "code",
+                    dir: "ltr"
+                }
+            }
+        },
+
+        guideCodeInput: {
+            type: "inline",
+            inlineType: "generic",
+            markup: {
+                tag: "span",
+                attributes: {
+                    className: "code-input"
+                }
+            }
+        },
+
+        guideCodePath: {
+            type: "inline",
+            inlineType: "generic",
+            markup: {
+                tag: "span",
+                attributes: {
+                    className: "path",
+                    dir: "ltr"
+                }
+            }
+        },
+
+        guideSub: {
+            type: "inline",
+            inlineType: "generic",
+            markup: {
+                tag: "span",
+                attributes: {
+                    className: "subspan"
+                }
+            }
+        },
+
+        guideSup: {
+            type: "inline",
+            inlineType: "generic",
+            markup: {
+                tag: "span",
+                attributes: {
+                    className: "supspan"
+                }
+            }
+        },
     };
-    
-    return new GuideXML(opts);
+
+    return dtd;
 };
-
-/*
- * This is the document object for the plugin.
- * 
- */
-function GuideXML(opts) {
-    
-    $.extend(this, opts);
-    if (this.action === "NEW") {
-        this.newDoc("plugins/guidexml/xml/template1.html");
-        //alert("hello")
-    }
-};
-
-GuideXML.prototype.newDoc = function(src) {
-    // Create an editor
-    var editor = new BeaconEditor({
-        container: this.container,
-        src: src,
-    });
-    
-    // Set the flagger for the styler tool
-    editor.toolbar.setFlagger("styler", nodecheck.attach(editor.iframe.id));
-    
-    // Add a row to the toolbar
-    editor.toolbar.addRow();
-    
-    // Add the Bold Button
-    editor.toolbar.addButton({
-        row: 0,
-        name: "Bold",
-        tooltip: "Bold the Selected Text",
-        type: "styler",
-        icon: "plugins/guidexml/img/bold.png",
-        //onclick: nodecheck;
-        markup: {
-            nodeName: "span",
-            className: "boldtext",
-            title: "guideBold",
-            
-        }
-    });
-    
-    // Add a separator
-    editor.toolbar.addSeparator(0);
-    
-    editor.toolbar.addButton({
-        row: 0,
-        name: "XML",
-        tooltip: "Convert current document to XML",
-        handler: getSource,
-        icon: "plugins/guidexml/img/xml.png",
-        markup: {}
-    });
-    
-    editor.toolbar.addSeparator(0);
-    
-    // Send an array of nodes to check
-    editor.iframe.setInlineEditors([
-        "guideChapterTitle", 
-        "guideSectionTitle",
-        "guideParagraph",
-        "guideAbstractValue", 
-        "guideDateValue",
-        "guideTitle",
-        "guidePreTitle",
-        "guideCodeBox",
-        "guideWarnValue"
-    ]);
-    
-    // Send an object containing type of inline editor to be generated
-    editor.iframe.setInlineTypes({
-        guideChapterTitle: "textbox",
-        guideSectionTitle: "textbox",
-        guideParagraph: "richtext",
-        guideAbstractValue: "textarea",
-        guideDateValue: "textbox",
-        guideTitle: "textbox",
-        guidePreTitle: "textbox",
-        guideCodeBox: "richtext",
-        guideWarnValue: "richtext"
-    });
-
-};
-
-
-function getSource() {
-    
-}
-
-// Check whether the nodes are allowed or not
-function nodecheck() {
-
-    var allowed = new Array("guideParagraph", 
-                            "guideList",
-                            "guideNoteValue",
-                            "guideWarnValue",
-                            "guideImpoValue",
-                            "guideCodeBox");
-                            
-    var iframe = document.getElementById(this).contentWindow;
-    
-    var theSelection = iframe.getSelection();
-    var theRange = theSelection.getRangeAt(0);
-
-    var text = theRange.commonAncestorContainer;  
-                   
-    var path = checkNodePath(text, allowed);       
-    
-    if (path == null)
-        return false;
-    else
-        return true;
-}
-
-

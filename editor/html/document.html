@@ -1,49 +1,98 @@
 <div  id="{id}Document">
 
     <div id="{id}Sidebar" class="BeaconSideBar ui-corner-all">
-         <div class="BeaconTopBar">
-             <ul id="{id}RightToolBar" class="BeaconRightToolBar">
-                 <li class="ui-state-default ui-corner-all">
-                     <a  id="{id}CloseButton" href="#" title="Close This Tab">
-                         <span class="ui-icon ui-icon-circle-close"></span>
-                     </a>
-                 </li>
-             </ul>
-         </div>
+        <div class="BeaconTopBar">
+            <ul id="{id}RightToolBar" class="BeaconRightToolBar">
+                <li class="ui-state-default ui-corner-all">
+                    <a  id="{id}CloseButton" href="#" title="Close This Tab">
+                        <span class="ui-icon ui-icon-circle-close"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
 
-         <div id="{id}Accordion" class="BeaconAccordion">
-             <h4><a href="#">Common Tasks</a></h4>
-             <div class="BeaconAccordionItem">
-                <p><a id="{id}SaveButton" class="BeaconButton ui-corner-all">{Save}</a></p>
-                <p><a id="{id}ViewSourceButton" class="BeaconButton ui-corner-all">{View Source}</a></p>
-                <p><a id="{id}DownloadButton" class="BeaconButton ui-corner-all">{Download}</a></p>
-                <p>Last saved: <abbr id="{id}TimeStamp"></abbr></p>
-             </div>
-             <h4><a href="#">Document Tree</a></h4>
-             <div class="BeaconAccordionItem">
-             </div>
-         </div>
+        <div id="{id}Accordion" class="BeaconAccordion">
+            <!-- Menu to insert inline elements -->
+            <h4><a href="#">{Insert Inline Element}</a></h4>
+            <div class="BeaconAccordionItem">
+                <p>{Select type:}</p>
+                <p>
+                    <select multiple style="width: 100%; height: 100px;" id="{id}InsertInlineList">
+                        <option value="-1">{Select Any One}</option>
+                    </select>
+                </p>
+                <p><a id="{id}InsertInlineButton" class="BeaconButton ui-corner-all">{Insert Inline Element}</a></p>
+                <p>
+                    <small>{Highlight some text while editing rich text type nodes,}
+                    {and then choose a type of inline element and click}
+                    '{Insert Inline Element}'.
+                    {This will highlight the selected text as that inline element style.}</small>
+                </p>
+            </div>
 
-     </div>
+            <!-- Menu to insert block elements -->
+            <h4><a href="#">{Insert Block Element}</a></h4>
+            <div class="BeaconAccordionItem">
+                <p>{Insert around a Node:}</p>
+                <p>
+                    <input id="{id}InsertBefore" type="radio" name="insertAt" value="0" />
+                    <label>{Before}</label>
+                </p>
+                <p>
+                    <input id="{id}InsertAfter" type="radio" name="insertAt" value="1" />
+                    <label>{After}</label>
+                </p>
+                <p>
+                    <select multiple style="width: 100%; height: 100px;" id="{id}InsertBlockList">
+                        <option value="-1">{Select Any One}</option>
+                    </select>
+                </p>
+                <p><a id="{id}InsertBlockButton" class="BeaconButton ui-corner-all">{Insert Block Element}</a></p>
+            </div>
 
-     <div id="{id}Content" class="BeaconContent ui-corner-all">
-          <div class="BeaconToolBar">
-              <div id="{id}ToolHolder" class="BeaconToolHolder">
-              </div>
-          </div>
+            <!-- Menu to insert document tree -->
+            <h4><a href="#">{Document Tree}</a></h4>
+            <div class="BeaconAccordionItem">
+            </div>
+        </div>
+    </div>
 
-          <iframe id="{id}Iframe" src="{src}" class="BeaconIframe ui-corner-all">
-          </iframe>
+    <div id="{id}Content" class="BeaconContent ui-corner-all">
+        <div class="BeaconToolBar">
+            <div class="BeaconToolHolder">
+                <div style="float:left">
+                    <a id="{id}ViewSourceButton" class="BeaconToolButton" title="{Show/Hide Source View}">
+                        <img src="img/sourceview.png" border="none" />
+                    </a>
+                    <a id="{id}SaveButton" class="BeaconToolButton" title="{Save the document}">
+                        <img src="img/save.png" border="none" />
+                    </a>
+                    <a id="{id}DeleteButton" class="BeaconToolButton" title="{Delete the node}">
+                        <img src="img/cancel.png" border="none" />
+                    </a>
+                </div>
+                <div style="float:right">
+                    <div id="editBar" class="editBar">
+                        <p>
+                            <span>{Last saved:} <abbr id="{id}TimeStamp"></abbr></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-          <textarea id="{id}SourceView" class="BeaconSourceView ui-corner-all"></textarea>
+        <iframe id="{id}Iframe" src="{src}" class="BeaconIframe ui-corner-all">
+        </iframe>
 
-          <div id="{id}Loading" style="display:none; text-align:center; margin-top: 30px">
-              <p class="BeaconLoading">
-                  <span>Please wait. Loading...</span>
-                  <br />
-                  <img src="img/loading.gif" />
-              </p>
-          </div>
-     </div>
+        <textarea id="{id}SourceView" class="BeaconSourceView ui-corner-all"></textarea>
+
+        <div id="{id}Loading" style="display:none; text-align:center; margin-top: 30px">
+            <p class="BeaconLoading">
+                <span>{Please wait. Loading...}</span>
+                <br />
+                <img src="img/loading.gif" />
+            </p>
+        </div>
+    </div>
 
 </div>

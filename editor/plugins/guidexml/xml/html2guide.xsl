@@ -119,18 +119,13 @@
   <version><xsl:apply-templates /></version>
 </xsl:template>
 
-
-<xsl:template match="div[@title='guideBlock']">
-  <xsl:apply-templates />
-</xsl:template>
-
-<xsl:template match="ul[@title='guideList']">
+<xsl:template match="ul[@title='guideUnorderedList']">
     <ul>
       <xsl:apply-templates />
   </ul>
 </xsl:template>
 
-<xsl:template match="ol[@title='guideList']">
+<xsl:template match="ol[@title='guideOrderedList']">
     <ol>
       <xsl:apply-templates />
   </ol>
@@ -140,6 +135,10 @@
   <li>
     <xsl:apply-templates />
   </li>
+</xsl:template>
+
+<xsl:template match="div[@title='guidePre']">
+    <xsl:apply-templates select="div[@title='guidePreCode']" />
 </xsl:template>
 
 <xsl:template match="div[@title='guidePreCode']">

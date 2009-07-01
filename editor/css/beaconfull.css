@@ -113,6 +113,12 @@ a.BeaconButton:hover {
 }
 
 
+.BeaconButton:active
+{
+    background: #9aa4c1;
+    border: 1px solid #17357b;
+    outline: none;
+}
 
 .BeaconToolBar {
     overflow: none;
@@ -122,8 +128,14 @@ a.BeaconButton:hover {
 
 .BeaconToolHolder {
     margin-bottom: 3px;
-    height: 28px;
+    height: 23px;
+    padding: 5px;
     background: #E1EFFB;
+}
+
+
+.BeaconToolHolder label,input[type="radio"]{
+    vertical-align: middle;
 }
 
 .BeaconToolButton {
@@ -154,22 +166,4 @@ a.BeaconButton:hover {
     border: 1px solid #999;
     cursor: pointer;
     outline: none;
-}
-
-.BeaconButton:active
-{
-    background: #9aa4c1;
-    border: 1px solid #17357b;
-    outline: none;
-}
-
-.CodeMirror-line-numbers {
-  width: 2.2em;
-  color: #aaa;
-  background-color: #eee;
-  text-align: right;
-  padding-right: .3em;
-  font-size: 10pt;
-  font-family: monospace;
-  padding-top: .4em;
 }
