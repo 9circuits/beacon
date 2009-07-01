@@ -192,7 +192,7 @@ BeaconAPI.prototype.initEditor = function(o) {
     }
 
     return true;
-}
+};
 
 BeaconAPI.prototype.cleanEditor = function(o) {
     var nodeDef = this.dtd[o.title] || null;
@@ -315,6 +315,11 @@ BeaconAPI.prototype.buildHTML = function(title, markup, text) {
     // Add the title attribute so it can be parse back
     html += ' title="' + title + '"';
 
+    // If our HTML is empty and sampleText exists then add that instead
+    if (markup.sampleText && $.trim(text) === "") {
+        text = markup.sampleText;
+    }
+
     // Add text and close tag
     html += '>' + text + '</' + markup.tag + '>';
 
@@ -346,7 +351,77 @@ BeaconAPI.prototype.buildBlockInsertMenu = function(nodeDef) {
 };
 
 BeaconAPI.prototype.insertBlock = function() {
+    if (!this.state["editing"]) {
+        $.jGrowl("You are not editing anything!");
+        return;
+    }
 
+    var name = $(this.ui["InsertBlockList"].id).val();
+
+    var position = $('input[name=insertAt]:checked').val();
+
+    if (name === "-1") {
+        $.jGrowl("Select Something!");
+        return;
+    }
+
+    var editingNodeDef = this.dtd[this.editingNode.title];
+
+    if (editingNodeDef.standAlone) {
+        var html = "";
+
+        html = this.buildNodeStructure(name);
+
+        var o = this.editingNode;
+
+        if (position[0] === "before") {
+            $(html).insertBefore(o);
+        } else if (position[0] === "after") {
+            $(html).insertAfter(o);
+        }
+    } else {
+        var html = "";
+
+        html = this.buildNodeStructure(name);
+
+        var o = this.editingNode;
+
+        while (o.nodeName.toLowerCase() !== "body") {
+            o = o.parentNode;
+
+            if (o.title === name[0]) {
+                break;
+            }
+        }
+
+        if (o.title !== name[0]) {
+            return;
+        }
+
+        alert(html);
+
+        if (position === "before") {
+            $(html).insertBefore(o);
+        } else if (position === "after") {
+            $(html).insertAfter(o);
+        }
+    }
+};
+
+BeaconAPI.prototype.buildNodeStructure = function(title) {
+    var nodeDef = this.dtd[title];
+
+    var html = "";
+
+    if (nodeDef.markup.requiredChildNodes) {
+        for (var i = 0; i < nodeDef.markup.requiredChildNodes.length; i++) {
+            html += this.buildNodeStructure(nodeDef.markup.requiredChildNodes[i]);
+        }
+    }
+
+    html = this.buildHTML(title, nodeDef.markup, html);
+
+    return html;
 };
 
 // Emergency Restore Function

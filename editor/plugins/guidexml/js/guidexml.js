@@ -19,15 +19,16 @@ function guidexml_dtd() {
                              "guideVariable", "guideSub", "guideSup",
                              "guideCodeInput", "guideCodePath"],
             blockChildren: false,
-            standAlone: true,
             siblings: ["guideParagraph", "guidePre", "guideNote",
                        "guideList", "guideUnorderedList",
                        "guideImportant", "guideWarning",
                        "guideEpigraph"],
             editorType: "richText",
+            standAlone: true,
             markup: {
                 tag: "p",
-                attributes: false
+                attributes: false,
+                sampleText: "This is a sample paragraph."
             }
         },
 
@@ -35,9 +36,23 @@ function guidexml_dtd() {
             type: "block",
             inlineChildren: false,
             blockChildren: false,
-            standAlone: false,
+            standAlone: true,
             siblings: false,
-            editorType: "lineedit"
+            editorType: "lineedit",
+            deletable: false
+        },
+
+        guideChapter: {
+            type: "block",
+            inlineChildren: false,
+            blockChildren: ["guideChapterTitle", "guideSection"],
+            siblings: ["guideChapter"],
+            standAlone: true,
+            markup: {
+                requiredChildNodes: ["guideChapterTitle", "guideSection"],
+                tag: "div",
+                attributes: false
+            }
         },
 
         guideChapterTitle: {
@@ -46,7 +61,27 @@ function guidexml_dtd() {
             blockChildren: false,
             standAlone: false,
             siblings: ["guideChapter"],
-            editorType: "lineedit"
+            editorType: "lineedit",
+            markup: {
+                tag: "p",
+                attributes: {
+                    className: "chaphead"
+                },
+                sampleText: "Sample Chapter"
+            }
+        },
+
+        guideSection: {
+            type: "block",
+            inlineChildren: false,
+            blockChildren: ["guideSectionTitle"],
+            siblings: ["guideSection"],
+            standAlone: true,
+            markup: {
+                requiredChildNodes: ["guideSectionTitle", "guideBody"],
+                tag: "div",
+                attributes: false
+            }
         },
 
         guideSectionTitle: {
@@ -55,7 +90,29 @@ function guidexml_dtd() {
             blockChildren: false,
             standAlone: false,
             siblings: ["guideSection"],
-            editorType: "lineedit"
+            editorType: "lineedit",
+            markup: {
+                tag: "p",
+                attributes: {
+                    className: "secthead"
+                },
+                sampleText: "Sample Section"
+            }
+        },
+
+        guideBody: {
+            type: "block",
+            inlineChildren: false,
+            blockChildren: ["guideParagraph", "guidePre", "guideEpigraph",
+                            "guideNote", "guideList", "guideUnorderedList",
+                            "guideImportant", "guideWarning"],
+            siblings: false,
+            standAlone: false,
+            markup: {
+                requiredChildNodes: ["guideParagraph"],
+                tag: "div",
+                attributes: false
+            }
         },
 
         guideAbstractValue: {
