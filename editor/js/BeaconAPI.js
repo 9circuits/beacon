@@ -374,9 +374,9 @@ BeaconAPI.prototype.insertBlock = function() {
 
         var o = this.editingNode;
 
-        if (position[0] === "before") {
+        if (position === "before") {
             $(html).insertBefore(o);
-        } else if (position[0] === "after") {
+        } else if (position === "after") {
             $(html).insertAfter(o);
         }
     } else {
@@ -397,8 +397,6 @@ BeaconAPI.prototype.insertBlock = function() {
         if (o.title !== name[0]) {
             return;
         }
-
-        alert(html);
 
         if (position === "before") {
             $(html).insertBefore(o);
