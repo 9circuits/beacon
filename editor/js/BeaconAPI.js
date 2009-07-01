@@ -75,6 +75,7 @@ var BeaconAPI = function(o, beacon) {
 
         // Make the iframe clickable
         $(this.ui["Iframe"].id).contents().bind("click", this.frameClick.attach(this));
+        $(this.ui["Iframe"].id).contents().bind("keydown", this.frameKeyDown.attach(this));
 
     }.attach(this));
 };
@@ -119,11 +120,11 @@ BeaconAPI.prototype.frameKeyDown = function(e) {
                     this.state["editing"] = false;
                 }
             }
+
+            if (e.preventDefault) e.preventDefault();
+            if (e.stopPropagation) e.stopPropagation();
         break;
     }
-
-    if (e.preventDefault) e.preventDefault();
-    if (e.stopPropagation) e.stopPropagation();
 };
 
 BeaconAPI.prototype.initEditor = function(o) {
@@ -578,7 +579,7 @@ BeaconRichTextEditor.prototype.restoreNode = function() {
     this.node.style.background = this.style.oldBackground;
 
     // Make it uneditable
-    this.contentEditable = false;
+    this.node.contentEditable = false;
 };
 
 BeaconRichTextEditor.prototype.insertText =  function(html) {
