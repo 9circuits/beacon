@@ -104,39 +104,39 @@
 <!-- ********************** -->
 
 <xsl:template match="sgmltag">
-    <code title="docbookSGMLTag" class="sgmltag-{@class}">
+    <span title="docbookSGMLTag" class="sgmltag-{@class}">
         <xsl:apply-templates />
-    </code>
+    </span>
 </xsl:template>
 
 <xsl:template match="filename">
-    <code title="docbookFileName" class="filename">
+    <span title="docbookFileName" class="filename">
         <xsl:apply-templates />
-    </code>
+    </span>
 </xsl:template>
 
 <xsl:template match="command">
-    <code title="docbookCommand" class="command">
+    <span title="docbookCommand" class="command">
         <xsl:apply-templates />
-    </code>
+    </span>
 </xsl:template>
 
 <xsl:template match="option">
-    <code title="docbookOption" class="option">
+    <span title="docbookOption" class="option">
         <xsl:apply-templates />
-    </code>
+    </span>
 </xsl:template>
 
 <xsl:template match="userinput">
-    <code title="docbookUserInput" class="userinput">
+    <span title="docbookUserInput" class="userinput">
         <xsl:apply-templates />
-    </code>
+    </span>
 </xsl:template>
 
 <xsl:template match="computeroutput">
-    <code title="docbookComputerOutput" class="computeroutput">
+    <span title="docbookComputerOutput" class="computeroutput">
         <xsl:apply-templates />
-    </code>
+    </span>
 </xsl:template>
 
 
