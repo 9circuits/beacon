@@ -245,6 +245,16 @@ Beacon.prototype.newDoc = function() {
         flag = false;
     }
 
+	if (filename.substring(filename.length - 4)=== ".xml") {
+		var lengthOfName = filename.length - 4;
+		filename = filename.substring(0,lengthOfName);
+	}
+
+	if ((filename.indexOf(".")!= -1) && (filename.substring(filename.length - 4) !== ".xml")) {
+		$.jGrowl("Invalid File Name. Do NOT Give File Extension");
+		flag = false;
+	}
+
     if (!flag) {
         return;
     }
@@ -286,6 +296,16 @@ Beacon.prototype.editDoc = function() {
         $.jGrowl(this.strings.messages["noFileName"]);
         flag = false;
     }
+	
+	if (filename.substring(filename.length - 4)=== ".xml") {
+		var lengthOfName = filename.length - 4;
+		filename = filename.substring(0,lengthOfName);
+	}
+
+	if ((filename.indexOf(".")!= -1) && (filename.substring(filename.length - 4) !== ".xml")) {
+		$.jGrowl("Invalid File Name. Do NOT Give File Extension");
+		flag = false;
+	}
 
     if (!flag) {
         return;
