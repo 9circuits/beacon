@@ -85,38 +85,38 @@
 
 
 
-<xsl:template match="code[@title='docbookSGMLTag']">
+<xsl:template match="span[@title='docbookSGMLTag']">
     <xsl:variable name="classname" select="substring(@class, 9)" />
     <sgmltag class="{$classname}">
         <xsl:apply-templates />
     </sgmltag>
 </xsl:template>
 
-<xsl:template match="code[@title='docbookFileName']">
+<xsl:template match="span[@title='docbookFileName']">
     <filename>
         <xsl:apply-templates />
     </filename>
 </xsl:template>
 
-<xsl:template match="code[@title='docbookCommand']">
+<xsl:template match="span[@title='docbookCommand']">
     <command>
         <xsl:apply-templates />
     </command>
 </xsl:template>
 
-<xsl:template match="code[@title='docbookOption']">
+<xsl:template match="span[@title='docbookOption']">
     <option>
         <xsl:apply-templates />
     </option>
 </xsl:template>
 
-<xsl:template match="code[@title='docbookUserInput']">
+<xsl:template match="span[@title='docbookUserInput']">
     <userinput>
         <xsl:apply-templates />
     </userinput>
 </xsl:template>
 
-<xsl:template match="code[@title='docbookComputerOutput']">
+<xsl:template match="span[@title='docbookComputerOutput']">
     <computeroutput>
         <xsl:value-of select="." />
     </computeroutput>
