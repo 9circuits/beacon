@@ -1,6 +1,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-<xsl:output method="html" encoding="UTF-8" indent="yes"/>
+<xsl:output method="html" encoding="UTF-8" indent="no"/>
 
 <xsl:strip-space elements="*"/>
 <xsl:preserve-space elements="screen"/>
@@ -11,6 +11,9 @@
 
 <xsl:template match="article">
     <div id="{@id}" title="docbookArticle">
+        <h1 class="title" title="docbookArticleTitle">
+            <xsl:value-of select="title" />
+        </h1>
         <xsl:apply-templates select="section"/>
     </div>
 </xsl:template>
@@ -67,10 +70,42 @@
     </p>
 </xsl:template>
 
-<xsl:template match="itemizedlist">
-    <ul title="docbookItemizedList" class="itemizedlist">
+<xsl:template match="note">
+    <div class="note" title="docbookNote">
+        <h2 class="label" title="docbookNoteTitle">
+            <xsl:value-of select="title" />
+        </h2>
         <xsl:apply-templates />
-    </ul>
+    </div>
+</xsl:template>
+
+<xsl:template match="important">
+    <div class="important" title="docbookImportant">
+        <h2 class="label" title="docbookImportantTitle">
+            <xsl:value-of select="title" />
+        </h2>
+        <xsl:apply-templates />
+    </div>
+</xsl:template>
+
+<xsl:template match="warning">
+    <div class="warning" title="docbookWarning">
+        <h2 class="label" title="docbookWarningTitle">
+            <xsl:value-of select="title" />
+        </h2>
+        <xsl:apply-templates />
+    </div>
+</xsl:template>
+
+<xsl:template match="itemizedlist">
+    <div title="docbookItemizedListContainer">
+        <p class="itemizedlistitle" title="docbookItemizedListTitle">
+            <xsl:value-of select="title" />
+        </p>
+        <ul title="docbookItemizedList" class="itemizedlist">
+            <xsl:apply-templates />
+        </ul>
+    </div>
 </xsl:template>
 
 <xsl:template match="listitem">
@@ -109,8 +144,68 @@
     </span>
 </xsl:template>
 
+<xsl:template match="emphasis">
+    <span title="docbookEmphasis" class="emphasis">
+        <xsl:apply-templates />
+    </span>
+</xsl:template>
+
 <xsl:template match="filename">
-    <span title="docbookFileName" class="filename">
+    <code title="docbookFileName" class="filename">
+        <xsl:apply-templates />
+    </code>
+</xsl:template>
+
+<xsl:template match="classname">
+    <code title="docbookClassName" class="classname">
+        <xsl:apply-templates />
+    </code>
+</xsl:template>
+
+<xsl:template match="constant">
+    <code title="docbookConstant" class="constant">
+        <xsl:apply-templates />
+    </code>
+</xsl:template>
+
+<xsl:template match="function">
+    <code title="docbookFunction" class="function">
+        <xsl:apply-templates />
+    </code>
+</xsl:template>
+
+<xsl:template match="parameter">
+    <code title="docbookParameter" class="parameter">
+        <xsl:apply-templates />
+    </code>
+</xsl:template>
+
+<xsl:template match="replaceable">
+    <code title="docbookReplaceable" class="replaceable">
+        <xsl:apply-templates />
+    </code>
+</xsl:template>
+
+<xsl:template match="varname">
+    <code title="docbookVarname" class="varname">
+        <xsl:apply-templates />
+    </code>
+</xsl:template>
+
+<xsl:template match="structfield">
+    <code title="docbookStructfield" class="structfield">
+        <xsl:apply-templates />
+    </code>
+</xsl:template>
+
+<xsl:template match="systemitem">
+    <code title="docbookSystemItem" class="systemitem">
+        <xsl:apply-templates />
+    </code>
+</xsl:template>
+
+<xsl:template match="package">
+    <span title="docbookPackage" class="package">
         <xsl:apply-templates />
     </span>
 </xsl:template>
@@ -128,15 +223,33 @@
 </xsl:template>
 
 <xsl:template match="userinput">
-    <span title="docbookUserInput" class="userinput">
+    <code title="docbookUserInput" class="userinput">
         <xsl:apply-templates />
-    </span>
+    </code>
 </xsl:template>
 
 <xsl:template match="computeroutput">
-    <span title="docbookComputerOutput" class="computeroutput">
+    <code title="docbookComputerOutput" class="computeroutput">
         <xsl:apply-templates />
-    </span>
+    </code>
+</xsl:template>
+
+<xsl:template match="prompt">
+    <code title="docbookPrompt" class="prompt">
+        <xsl:apply-templates />
+    </code>
+</xsl:template>
+
+<xsl:template match="subscript">
+    <sub title="docbookSubscript">
+        <xsl:apply-templates />
+    </sub>
+</xsl:template>
+
+<xsl:template match="superscript">
+    <sup title="docbookSuperscript">
+        <xsl:apply-templates />
+    </sup>
 </xsl:template>
 
 
