@@ -396,10 +396,6 @@ pre .keycap {
   color:white;
 }
 
-code {
-  white-space: nowrap;
-}
-
 /*Notifications*/
 div.note, div.important, div.warning {
   padding:1em;
