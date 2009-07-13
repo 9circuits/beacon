@@ -215,7 +215,7 @@ function docbook_dtd() {
                 requiredChildNodes: ["docbookImportantTitle", "docbookPara"],
                 tag: "div",
                 attributes: {
-                    className: "warning"
+                    className: "important"
                 },
             }
         },
