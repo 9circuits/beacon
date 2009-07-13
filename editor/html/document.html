@@ -12,6 +12,13 @@
         </div>
 
         <div id="{id}Accordion" class="BeaconAccordion">
+            <!-- Document Tree Display-->
+            <h4><a href="#">{Document Tree}</a></h4>
+            <div class="BeaconAccordionItem">
+                <div id="{id}BeaconTreeContainer">
+                </div>
+            </div>
+
             <!-- Menu to insert inline elements -->
             <h4><a href="#">{Insert Inline Element}</a></h4>
             <div class="BeaconAccordionItem">
@@ -30,30 +37,6 @@
                 </p>
             </div>
 
-            <!-- Menu to insert block elements -->
-            <h4><a href="#">{Insert Block Element}</a></h4>
-            <div class="BeaconAccordionItem">
-                <p>{Insert around a Node:}</p>
-                <p>
-                    <input id="{id}InsertBefore" checked="true" type="radio" name="insertAt" value="before" />
-                    <label>{Before}</label>
-                </p>
-                <p>
-                    <input id="{id}InsertAfter" type="radio" name="insertAt" value="after" />
-                    <label>{After}</label>
-                </p>
-                <p>
-                    <select multiple style="width: 100%; height: 100px;" id="{id}InsertBlockList">
-                        <option value="-1">{Select Any One}</option>
-                    </select>
-                </p>
-                <p><a id="{id}InsertBlockButton" class="BeaconButton ui-corner-all">{Insert Block Element}</a></p>
-            </div>
-
-            <!-- Menu to insert document tree -->
-            <h4><a href="#">{Document Tree}</a></h4>
-            <div class="BeaconAccordionItem">
-            </div>
         </div>
     </div>
 

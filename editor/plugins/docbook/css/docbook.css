@@ -228,6 +228,10 @@ ul.languages {
     font-weight: bold;
 }
 
+.procedurelistitle {
+    font-weight: bold;
+}
+
 ul {
   padding-left:1.6em;
   list-style-image:url(../images/dot.png);

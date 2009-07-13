@@ -95,13 +95,19 @@
     </title>
 </xsl:template>
 
-<xsl:template match="div[@title='docbookItemizedListContainer']">
+<xsl:template match="div[@title='docbookItemizedList']">
     <itemizedlist>
         <xsl:apply-templates />
     </itemizedlist>
 </xsl:template>
 
-<xsl:template match="ul[@title='docbookItemizedList']">
+<xsl:template match="p[@title='docbookItemizedListTitle']">
+    <title>
+        <xsl:apply-templates />
+    </title>
+</xsl:template>
+
+<xsl:template match="ul[@title='docbookItemizedListContainer']">
     <xsl:apply-templates />
 </xsl:template>
 
@@ -111,16 +117,20 @@
     </listitem>
 </xsl:template>
 
-<xsl:template match="p[@title='docbookItemizedListTitle']">
+<xsl:template match="div[@title='docbookProcedure']">
+    <procedure>
+        <xsl:apply-templates />
+    </procedure>
+</xsl:template>
+
+<xsl:template match="p[@title='docbookProcedureTitle']">
     <title>
         <xsl:apply-templates />
     </title>
 </xsl:template>
 
-<xsl:template match="ol[@title='docbookProcedure']">
-    <procedure>
-        <xsl:apply-templates />
-    </procedure>
+<xsl:template match="ol[@title='docbookProcedureContainer']">
+    <xsl:apply-templates />
 </xsl:template>
 
 <xsl:template match="li[@title='docbookStep']">

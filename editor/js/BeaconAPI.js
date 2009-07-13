@@ -42,6 +42,8 @@ var BeaconAPI = function(o, beacon) {
     this.editingNode = null;
     this.currentEditor = null;
 
+    this.tree = {};
+    this.nodeCounter = 0;
 
     // Init the UI storage
     this.ui = {};
@@ -71,15 +73,15 @@ var BeaconAPI = function(o, beacon) {
         $(this.ui["ViewSourceButton"].id).bind("click", this.viewSource.attach(this));
 
         $(this.ui["InsertInlineButton"].id).bind("click", this.insertInline.attach(this));
-        $(this.ui["InsertBlockButton"].id).bind("click", this.insertBlock.attach(this));
 
         // Make the iframe clickable
         $(this.ui["Iframe"].id).contents().bind("click", this.frameClick.attach(this));
         $(this.ui["Iframe"].id).contents().bind("keydown", this.frameKeyDown.attach(this));
 
+        this.buildTree();
+
     }.attach(this));
 };
-
 
 BeaconAPI.prototype.frameClick = function(e) {
      // Get the node which was clicked
@@ -161,7 +163,6 @@ BeaconAPI.prototype.initEditor = function(o) {
                 this.editingNode = o;
 
                 this.buildInlineInsertMenu(nodeDef);
-                this.buildBlockInsertMenu(nodeDef);
                 break;
 
             case "lineedit":
@@ -170,8 +171,6 @@ BeaconAPI.prototype.initEditor = function(o) {
 
                 // Store the object we are editing
                 this.editingNode = o;
-
-                this.buildBlockInsertMenu(nodeDef);
                 break;
 
             case "plaintext":
@@ -180,8 +179,6 @@ BeaconAPI.prototype.initEditor = function(o) {
 
                 // Store the object we are editing
                 this.editingNode = o;
-
-                this.buildBlockInsertMenu(nodeDef);
                 break;
 
             default:
@@ -212,7 +209,6 @@ BeaconAPI.prototype.cleanEditor = function(o) {
         }
 
         this.buildInlineInsertMenu(false);
-        this.buildBlockInsertMenu(false);
         this.currentEditor.restoreNode();
         this.currentEditor = {};
     } else if (editorType === "lineedit") {
@@ -220,7 +216,6 @@ BeaconAPI.prototype.cleanEditor = function(o) {
             return false;
         }
 
-        this.buildBlockInsertMenu(false);
         this.currentEditor.restoreNode();
         this.currentEditor = {}
     } else if (editorType === "plaintext") {
@@ -228,7 +223,6 @@ BeaconAPI.prototype.cleanEditor = function(o) {
             return false;
         }
 
-        this.buildBlockInsertMenu(false);
         this.currentEditor.restoreNode();
         this.currentEditor = {}
     } else {
@@ -347,7 +341,7 @@ BeaconAPI.prototype.buildBlockInsertMenu = function(nodeDef) {
         html += '</option>';
     }
 
-    $(this.ui["InsertBlockList"].id).html(html);
+    return html;
 };
 
 BeaconAPI.prototype.insertBlock = function() {
@@ -552,6 +546,7 @@ BeaconAPI.prototype.getSource = function(displayFlag) {
             } else {
                 this.getSource(false);
             }
+            $(this.ui["BeaconTreeContainer"].id).html("You cannot view the document tree while viewing source.");
         }.attach(this)
     });
 
@@ -603,19 +598,346 @@ BeaconAPI.prototype.getHTML = function(displayFlag) {
             } else {
                 this.getHTML(false);
             }
+            this.buildTree();
         }.attach(this)
     });
 };
+
 
 
 BeaconAPI.prototype.getUIList = function() {
     var list = ["Document", "Content", "Sidebar", "RightToolBar", "Accordion",
               "ToolHolder", "Iframe", "SourceView", "CloseButton", "SaveButton",
               "ViewSourceButton", "DownloadButton", "TimeStamp", "Loading",
-              "InsertInlineButton", "InsertBlockButton", "InsertInlineList",
-              "InsertBlockList", "InsertAfter", "InserBefore", "DeleteButton"];
+              "InsertInlineButton", "InsertInlineList", "DeleteButton",
+              "BeaconTreeContainer"];
 
     return list;
+};
+
+BeaconAPI.prototype.generateTreeNodeID = function() {
+    var randomID = this.id + "_node_" + this.nodeCounter;
+
+    if (!this.tree[randomID]) {
+        this.nodeCounter++;
+        return randomID;
+    } else {
+        return this.generateTreeNodeID();
+    }
+};
+
+BeaconAPI.prototype.buildTree = function() {
+    var html = "";
+
+    var root = this.iframe.document.body;
+
+    html = "<ul>" + this.walkDOM(root) + "</ul>";
+
+    $(this.ui["BeaconTreeContainer"].id).html(html);
+
+    $(this.ui["BeaconTreeContainer"].id).tree({
+        ui : {
+            context : [
+            {
+                id    : this.id + "addSiblingBefore",
+                icon  : "img/create.png",
+                label  : "Add Sibling Before This Node",
+                visible  : function (node) {
+                    var name = $(this.tree[node.attr("id")].node).attr("title");
+
+                    if (!this.dtd[name]) {
+                        return false;
+                    }
+
+                    if (!this.dtd[name].siblings) {
+                        return false;
+                    }
+
+                    return true;
+
+                }.attach(this),
+                action  : function (node) {
+                    var iframeNode = this.tree[node.attr("id")].node;
+
+                    $(this.ui["Iframe"].id).scrollTo(iframeNode, {
+                        duration: 600
+                    });
+
+                    var name = iframeNode.title;
+
+                    var randomID = this.generateTreeNodeID();
+
+                    var html = this.buildBlockInsertMenu(this.dtd[name]);
+                    html = '<select id="' + this.id + 'nodeInsertBefore">' + html + '</select>';
+                    html = '<li id="' + randomID + '">' + html + '</li>';
+
+                    $(html).insertBefore(node);
+
+                    var obj = {
+                        api: this,
+                        newNodeID: randomID,
+                        existingNodeID: node.attr("id"),
+                        iframeNode: iframeNode
+                    };
+
+                    $("#" + this.id + "nodeInsertBefore").change(function() {
+                        var val = $("#" + this.api.id + "nodeInsertBefore").val();
+
+                        if (val === "-1") {
+                            $.jGrowl("Select something!");
+                            return;
+                        }
+
+                        var html = this.api.buildNodeStructure(val);
+
+                        var n = $(html).hide();
+                        n.insertBefore(this.iframeNode);
+                        n.show("slow");
+                        n.attr("id", this.newNodeID + "_newNode");
+
+                        var nDOM = this.api.iframe.document.getElementById(this.newNodeID + "_newNode");
+
+                        var text = '<a href="#">' + val + '</a>';
+
+                        if (nDOM.childNodes.length > 0) {
+                            for (var i=0; i<nDOM.childNodes.length; i++) {
+                                var t = "<ul>" + this.api.walkDOM(nDOM.childNodes[i]) + "</ul>";
+                                if (t == "<ul></ul>") {
+                                    t = "";
+                                }
+                                text += t;
+                            }
+                        }
+
+                        $("#" + this.newNodeID).html(text);
+
+                        this.api.tree[this.newNodeID] = {};
+                        this.api.tree[this.newNodeID].node = nDOM;
+
+                        $(this.api.ui["Iframe"].id).scrollTo(n, {
+                            duration: 600
+                        });
+
+                    }.attach(obj));
+
+                    return true;
+
+                }.attach(this)
+            },
+            {
+                id    : this.id + "addSiblingAfter",
+                label  : "Add Sibling After This Node",
+                icon  : "img/create.png",
+                visible  : function (node) {
+                    var name = $(this.tree[node.attr("id")].node).attr("title");
+
+                    if (!this.dtd[name]) {
+                        return false;
+                    }
+
+                    if (!this.dtd[name].siblings) {
+                        return false;
+                    }
+
+                    return true;
+
+                }.attach(this),
+                action  : function (node) {
+                    var iframeNode = this.tree[node.attr("id")].node;
+
+                    $(this.ui["Iframe"].id).scrollTo(iframeNode, {
+                        duration: 600
+                    });
+
+                    var name = iframeNode.title;
+
+                    var randomID = this.generateTreeNodeID();
+
+                    var html = this.buildBlockInsertMenu(this.dtd[name]);
+                    html = '<select id="' + this.id + 'nodeInsertAfter">' + html + '</select>';
+                    html = '<li id="' + randomID + '">' + html + '</li>';
+
+                    $(html).insertAfter(node);
+
+                    var obj = {
+                        api: this,
+                        newNodeID: randomID,
+                        existingNodeID: node.attr("id"),
+                        iframeNode: iframeNode
+                    };
+
+                    $("#" + this.id + "nodeInsertAfter").change(function() {
+                        var val = $("#" + this.api.id + "nodeInsertAfter").val();
+
+                        if (val === "-1") {
+                            $.jGrowl("Select something!");
+                            return;
+                        }
+
+                        var html = this.api.buildNodeStructure(val);
+
+                        var n = $(html).hide();
+                        n.insertAfter(this.iframeNode);
+                        n.show("slow");
+                        n.attr("id", this.newNodeID + "_newNode");
+
+                        var nDOM = this.api.iframe.document.getElementById(this.newNodeID + "_newNode");
+
+                        var text = '<a href="#">' + val + '</a>';
+
+                        if (nDOM.childNodes.length > 0) {
+                            for (var i=0; i<nDOM.childNodes.length; i++) {
+                                var t = "<ul>" + this.api.walkDOM(nDOM.childNodes[i]) + "</ul>";
+                                if (t == "<ul></ul>") {
+                                    t = "";
+                                }
+                                text += t;
+                            }
+                        }
+
+                        $("#" + this.newNodeID).html(text);
+
+                        this.api.tree[this.newNodeID] = {};
+                        this.api.tree[this.newNodeID].node = nDOM;
+
+                        $(this.api.ui["Iframe"].id).scrollTo(n, {
+                            duration: 600
+                        });
+
+                    }.attach(obj));
+
+                    return true;
+
+                }.attach(this)
+            },
+            {
+                 id    : this.id + "removeNode",
+                 label  : "Delete this Node",
+                 icon  : "img/remove.png",
+                 visible  : function (node) {
+                     var name = $(this.tree[node.attr("id")].node).attr("title");
+
+                     if (!this.dtd[name]) {
+                         return false;
+                     }
+
+                     if (this.dtd[name].removable) {
+                         if (this.dtd[name].removable === false) {
+                             return false;
+                         }
+                     }
+
+                     return true;
+
+                 }.attach(this),
+                 action  : function (node) {
+                     $(this.ui["Iframe"].id).scrollTo(node, {
+                         duration: 600
+                     });
+
+                     var id = node.attr("id");
+
+                     if (!this.tree[id]) {
+                         $.jGrowl("Boohoo! Something b0rked. :( Blame the devs...");
+                         return;
+                     }
+
+                     var n = this.tree[id].node;
+
+                     delete this.tree[id];
+
+                     var nParent = n.parentNode;
+                     nParent.removeChild(n);
+
+                     var tN = document.getElementById(id);
+                     var tParent = tN.parentNode;
+                     tParent.removeChild(tN);
+
+                     return true;
+                 }.attach(this)
+            }
+            ],
+        },
+
+        callback : {
+            beforechange: function() {  },
+            beforeopen  : function() {  },
+            beforeclose : function() {  },
+            beforemove  : function() {  },
+            beforecreate: function() {  },
+            beforerename: function() {  },
+            beforedelete: function() {  },
+            onselect    : function() {  },
+            ondeselect  : function() {  },
+            onchange    : function() {  },
+            onrename    : function() {  },
+            onmove      : function() {  },
+            oncopy      : function() {  },
+            oncreate    : function() {  },
+            ondelete    : function() {  },
+            onopen      : function() {  },
+            onopen_all  : function() {  },
+            onclose     : function() {  },
+            error       : function() {  },
+
+            ondblclk    : function(node) {
+                var id = node.id;
+
+                $(this.ui["Iframe"].id).scrollTo(this.tree[id].node, {
+                    duration: 600
+                });
+
+            }.attach(this),
+
+            onrgtclk    : function() {  },
+            onload      : function() {  },
+            onfocus     : function() {  },
+            ondrop      : function() {  }
+        }
+    });
+};
+
+BeaconAPI.prototype.walkDOM = function(root) {
+    var html = "";
+
+    var name = root.title || "foo";
+
+    if (name != "foo") {
+        if (this.dtd[name]) {
+            if (this.dtd[name].type === "inline") {
+                return html;
+            }
+        }
+
+        var randomID = this.generateTreeNodeID();
+
+        this.tree[randomID] = {};
+        this.tree[randomID].node = root;
+
+        html += '<li id="' + randomID + '">';
+
+        html += '<a href="#">' + root.title + "</a>";
+
+        if (root.childNodes.length > 0) {
+            for (var i=0; i<root.childNodes.length; i++) {
+               var text = "<ul>" + this.walkDOM(root.childNodes[i]) + "</ul>";
+               if (text == "<ul></ul>") {
+                   text = "";
+               }
+               html += text;
+            }
+        }
+
+        html += "</li>";
+    } else {
+        if (root.childNodes.length > 0) {
+            for (var i=0; i<root.childNodes.length; i++) {
+               html += this.walkDOM(root.childNodes[i]);
+            }
+        }
+    }
+
+    return html;
 };
 
 

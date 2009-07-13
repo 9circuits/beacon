@@ -98,11 +98,11 @@
 </xsl:template>
 
 <xsl:template match="itemizedlist">
-    <div title="docbookItemizedListContainer">
+    <div title="docbookItemizedList">
         <p class="itemizedlistitle" title="docbookItemizedListTitle">
             <xsl:value-of select="title" />
         </p>
-        <ul title="docbookItemizedList" class="itemizedlist">
+        <ul title="docbookItemizedListContainer" class="itemizedlist">
             <xsl:apply-templates />
         </ul>
     </div>
@@ -115,9 +115,14 @@
 </xsl:template>
 
 <xsl:template match="procedure">
-    <ol title="docbookProcedure" class="procedure">
-        <xsl:apply-templates />
-    </ol>
+    <div title="docbookProcedure">
+        <p class="procedurelistitle" title="docbookProcedureTitle">
+            <xsl:value-of select="title" />
+        </p>
+        <ol title="docbookProcedureContainer" class="procedure">
+            <xsl:apply-templates />
+        </ol>
+    </div>
 </xsl:template>
 
 <xsl:template match="step">
