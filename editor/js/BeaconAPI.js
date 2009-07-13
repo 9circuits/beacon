@@ -711,6 +711,8 @@ BeaconAPI.prototype.buildTree = function() {
 
                         $("#" + this.newNodeID).html(text);
 
+                        $.tree_reference(this.api.id + "BeaconTreeContainer").refresh();
+
                         this.api.tree[this.newNodeID] = {};
                         this.api.tree[this.newNodeID].node = nDOM;
 
@@ -797,6 +799,8 @@ BeaconAPI.prototype.buildTree = function() {
 
                         $("#" + this.newNodeID).html(text);
 
+                        $.tree_reference(this.api.id + "BeaconTreeContainer").refresh();
+
                         this.api.tree[this.newNodeID] = {};
                         this.api.tree[this.newNodeID].node = nDOM;
 
@@ -830,7 +834,7 @@ BeaconAPI.prototype.buildTree = function() {
                      return true;
 
                  }.attach(this),
-                 action  : function (node) {
+                 action  : function (node, tree) {
                      $(this.ui["Iframe"].id).scrollTo(node, {
                          duration: 600
                      });
@@ -852,6 +856,8 @@ BeaconAPI.prototype.buildTree = function() {
                      var tN = document.getElementById(id);
                      var tParent = tN.parentNode;
                      tParent.removeChild(tN);
+
+                     tree.refresh();
 
                      return true;
                  }.attach(this)
