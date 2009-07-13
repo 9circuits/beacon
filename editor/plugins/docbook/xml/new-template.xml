@@ -166,6 +166,7 @@
 ]>
 
 <article id="example-tutorial">
+    <title>Example Article</title>
 <!-- As mentioned before, DocBook XML is a particular schema used to -->
 <!-- organize content for technical documentation.  The schema is -->
 <!-- described by a DTD, which lays out the rules for organizing -->
@@ -360,6 +361,7 @@ intelligibility = 0</computeroutput></screen>
       element as below. -->
 
       <procedure>
+        <title>bar</title>
         <step>
           <para>
             Click the <guibutton>New</guibutton> button.
@@ -404,6 +406,7 @@ intelligibility = 0</computeroutput></screen>
         <secondary>feeding</secondary>
       </indexterm>
       <itemizedlist>
+        <title>Foo List</title>
         <listitem>
           <para>
             Candied yams
@@ -413,6 +416,9 @@ intelligibility = 0</computeroutput></screen>
           <para>
             Marshmallows
           </para>
+              <para>
+                  Bumble bee
+              </para>
         </listitem>
         <listitem>
           <para>
@@ -420,6 +426,58 @@ intelligibility = 0</computeroutput></screen>
           </para>
         </listitem>
       </itemizedlist>
+
+
+      <note>
+          <title>Sample Note</title>
+          <para>Sample Para</para>
+      </note>
+      <important>
+          <title>Sample Important</title>
+          <para>Sample Para</para>
+      </important>
+      <warning>
+          <title>Sample Warning</title>
+          <para>Sample Note Body</para>
+      </warning>
+
+
+      <para><package>Package</package></para>
+
+      <para><filename>Filename</filename></para>
+
+      <para><systemitem>SystemItem</systemitem></para>
+
+      <para><computeroutput>Computerouput</computeroutput></para>
+
+      <para><userinput>Userinput</userinput></para>
+
+      <para><prompt>Prompt</prompt></para>
+
+      <para><emphasis>Emphasis</emphasis></para>
+
+      <para>sadasdasd <subscript>Subscript</subscript> sadasdasd</para>
+
+      <para>sadasdsadasd <superscript>Superscript</superscript> sadasdasdasd</para>
+
+      <para><classname>Classname</classname></para>
+
+      <para><constant>Constant</constant></para>
+
+      <para><function>Function</function></para>
+
+
+      <para><parameter>Parameter</parameter></para>
+
+
+      <para><replaceable>Replaceable</replaceable></para>
+
+
+      <para><structfield>Structfield</structfield></para>
+
+      <para><varname>Varname</varname></para>
+
+
     </section>
   </section>
 
