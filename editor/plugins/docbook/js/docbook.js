@@ -139,7 +139,7 @@ function docbook_dtd() {
         docbookProcedureContainer: {
             type: "block",
             markup: {
-                requiredChildNodes: ["docbookListItem"],
+                requiredChildNodes: ["docbookStep"],
                 tag: "ol",
                 attributes: {
                     className: "procedure"
