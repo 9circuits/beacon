@@ -138,7 +138,9 @@ class DocumentManager(models.Manager):
 
 
 	def create_document(self, document, id=None, doc_key=None):
-	
+
+		doc = None
+		
 		document = document.copy()
 		chapters = document['chapters']
 		del document['chapters']
@@ -146,16 +148,21 @@ class DocumentManager(models.Manager):
 		del document['authors']
 
 		if doc_key is not None and id is None:
+			# todo put a try around this get (check permissions?)
 			id = self.get(doc_key=doc_key).id
 			document['doc_key'] = doc_key
 
 		if id is not None:
+			# todo put a try around this get (check permissions?)
 			doc = self.get(id=id)
 			doc.author_set.all().delete()
 			doc.chapter_set.all().delete()
 			document['id'] = id
-		
-		doc = self.create(**document)
+
+		#doc = self.create(**document)
+		# let django decide whether to insert or update
+		doc = Document(**document)
+		doc.save()
 
 		for a in authors:
 			(first_name, middle_name, last_name) = self.split_name(a['name'])
