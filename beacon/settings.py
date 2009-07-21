@@ -1,4 +1,19 @@
+
+# New way of doing base directories.
+# Create a file called "base_directory.py" in your project directory 
+# (the same directory in which settings.py resides) with one line of code 
+#	which sets the BASE_DIRECTORY variable.
+#		BASE_DIRECTORY = "/home/someuser/beacon/django_port/beacon/"
+# Also add base_directory.py to your .gitignore.
+
+try:
+	from base_directory import BASE_DIRECTORY
+except:
+	print "If you're seeing this message, you should set up your base_directory.py file in the project directory."
+	BASE_DIRECTORY = "" 
+
 DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -12,6 +27,7 @@ DATABASE_USER = 'beacon'
 DATABASE_PASSWORD = 'beacon'
 DATABASE_HOST = ''
 DATABASE_PORT = ''
+
 
 DATABASE_OPTIONS = {
 	"init_command": "SET storage_engine=INNODB",
@@ -36,7 +52,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = BASE_DIRECTORY+'media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -77,6 +93,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 ROOT_URLCONF = 'beacon.urls'
 
 TEMPLATE_DIRS = (
+	BASE_DIRECTORY + "templates/",
 )
 
 INSTALLED_APPS = (
@@ -89,7 +106,7 @@ INSTALLED_APPS = (
 	'beacon.editor',
 )
 
-XSLT_DIR = "/home/randerson/liquidus/beacon/beacon-django/xsl"
+XSLT_DIR = BASE_DIRECTORY + "xsl/"
 
 DOJO_LOCAL = False
 
@@ -99,12 +116,4 @@ LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_URL = "/logout/"
 
-import sys, os
-try:
-	val = os.environ['MYSETTINGS_DIR_BEACON']
-	if val != "" and val != None:
-		sys.path.append(val)
-	from mysettings import *
-except:
-	pass
 

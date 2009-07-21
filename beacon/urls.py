@@ -36,8 +36,6 @@ urlpatterns = patterns('',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )
 
-try:
-	from mypatterns import mypatterns
-	urlpatterns += mypatterns
-except:
-	pass
+# Static Media.  FOR TESTING PURPOSES ONLY.
+if settings.DEBUG:
+	urlpatterns += patterns('', (r'^media_files/(?P<path>.*)$', 'django.views.static.serve', {'document_root' : settings.MEDIA_ROOT, 'show_indexes' : True}))
