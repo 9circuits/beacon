@@ -70,7 +70,9 @@ function initEditor(flag)
 
 function autoSave() 
 {
-    var doc_key = getVar('doc_key');
+		/* we don't have qs var doc_key */
+    //var doc_key = getVar('doc_key');
+		var doc_key = document.getElementById("doc_key").value;
 
     // Add the missing style
     var style= '<?xml version="1.0" encoding="UTF-8"?><style type="text/css" media="all">';
