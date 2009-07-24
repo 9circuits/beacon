@@ -192,8 +192,16 @@ Beacon.prototype.init = function() {
             $("#BeaconEditFetchType").bind("change", this.toggleEditForm.attach(this));
 
             //$("#BeaconEditButton").bind("click", this.editDoc.attach(this));
+
+            window.onbeforeunload = this.beaconExit.attach(this)
         }.attach(this)
     });
+};
+
+Beacon.prototype.beaconExit = function() {
+    var str = "You are leaving Beacon. All unsaved documents will be lost.";
+
+    return str;
 };
 
 // Keep this global

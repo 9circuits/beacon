@@ -1,11 +1,10 @@
-TODO (As on 19th April, 2009)
+TODO (As on 3rd July, 2009)
 
 - See the code and inline comments on most of the TODOs
 
 A few are:
 
-1. Complete the GuideXML plugin
-2. Make an API for plugin development
- - This API should handle tasks like creating UI elements and using the core Beacon functions through an abstraction. (Come to #beacon (freenode) for more discussions on this)
-3. Avoid Javascript based page layout. Get a CSS solution working.
-4. Plug in the storage API in the new framework.
+1. Complete the GuideXML and Docbook plugins.
+2. Avoid Javascript based page layout. Get a CSS solution working.
+3. Add a code editor.
+4. Make it more embeddable in a page.
