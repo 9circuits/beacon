@@ -1,6 +1,6 @@
-Beacon 0.5.01
-~~~~~~~~~~~~~
+Beacon 0.5.01 alpha
+~~~~~~~~~~~~~~~~~~~
 
 Read INSTALL on how to INSTALL.
 
-This version makes it possible to edit GuideXML documents in a text box and immediately see the results. The Saving and Download buttons do not work currently.
+The User Guide and Developer documents are present in the docs/ folder. Use Beacon to read them. :)

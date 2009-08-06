@@ -5,8 +5,8 @@
 <abstract>
 A guide to Installing, developing and hacking on beacon.
 </abstract>
-<date>2009-04-30</date>
-<version>1.0</version>
+<date>2009-08-06</date>
+<version>1.0.1</version>
 <chapter>
 <title>Introduction</title>
 <section>
@@ -155,19 +155,7 @@ Switched to branch "django"
 <section>
 <title>PHP Specific settings</title>
 <body>
-<p>There is one more variable you need to set in index.php file in <path>beacon/editor/index.php</path>. Open <path>index.php</path> in your favorite editor and navigate to around line number 18 which says:</p>
-<pre caption="index.php">
-.
-.
-.
-<comment>// Set the full path here</comment>
-<ident>$fullPath</ident> = <const>"/some/path/"</const>;
-.
-.
-.
-</pre>
-<p>Change this to the absolute path of beacon folder on your system.</p>
-<p>Now navigate to <path>beacon/editor/php/storage/</path> and set the permissions of <path>tmp/</path> folder (if doesn't exist create one) so that the webserver can write to it. This is used to write the documents to server. Beacon(PHP) doesn't support any other method of storage except flatfiles.</p>
+<p>Navigate to <path>beacon/editor/php/storage/</path> and set the permissions of <path>tmp/</path> folder (if doesn't exist create one) so that the webserver can write to it. This is used to write the documents to server. Beacon(PHP) doesn't support any other method of storage except flatfiles.</p>
 </body>
 </section>
 

@@ -1,10 +1,7 @@
-TODO (As on 3rd July, 2009)
+TODO (As on 6th August, 2009)
 
-- See the code and inline comments on most of the TODOs
-
-A few are:
-
-1. Complete the GuideXML and Docbook plugins.
-2. Avoid Javascript based page layout. Get a CSS solution working.
-3. Add a code editor.
-4. Make it more embeddable in a page.
+1. Copy paste handling to prevent crappy HTML generation.
+2. Revision history and being able to revert back to other revisions.
+3. Undo redo stack
+4. Be able to add media like pictures.
+5. Be able to download the file in various formats.
