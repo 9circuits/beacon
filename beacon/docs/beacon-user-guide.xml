@@ -37,7 +37,7 @@ options.</para>
 options on top along with last saved information. </para>
       </listitem>
     </itemizedlist>
-    <para>Beacon has a very simple UI. In the next section we’ll
+    <para>Beacon has a very simple UI. In the next section we'll
 describe how to edit a document. When you create a new document it
 opens in a new tab. You can navigate between different tabs and work
 on multiple documents simultaneously.</para>
@@ -87,17 +87,17 @@ the document. When clicked a tree node will appear with a drop down
 select box. This select box will contain the list of node that can be
 added here. Choose one and you will see it appear in the design
 view.</para>
-    <para>Below the Document Tree there is a block called ‘Insert
-Inline Child’. This is used to insert inline nodes on selected text in
+    <para>Below the Document Tree there is a block called Ã«Insert
+Inline ChildÃ­. This is used to insert inline nodes on selected text in
 the document. Select a piece of text when using a rich text editor
 (say on a paragraph, usually headings do not allow it) and move to the
 select box to choose inline type. Select one and click Insert. This
 will cause the highlighted text to be wrapped with that particular
 inline type.</para>
-	<note>
-		<title>Populating Lists</title>
-		<para>To maintain the sanity of the document, only those child 
+  <note>
+    <title>Populating Lists</title>
+    <para>To maintain the sanity of the document, only those child
 and sibling nodes are shown which are allowed by the DocBook DTD for that node.</para>
-	</note>
+  </note>
   </section>
 </article>

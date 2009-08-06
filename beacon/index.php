@@ -8,7 +8,7 @@
  *
  */
 
-ini_set("display_errors", 0);
+//ini_set("display_errors", 0);
 
 // Include the API
 require "php/beacon.php";
