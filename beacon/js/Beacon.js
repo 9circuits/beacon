@@ -97,7 +97,7 @@ Beacon.prototype.init = function() {
 
     // List of scripts
     var scripts = ["BeaconAPI.js",
-                    "jquery-ui-1.7.1.js",
+                    "jquery.ui.js",
                     "jquery.hotkeys.js",
                     "jquery.jgrowl.js",
                     "jquery.jstree.js",

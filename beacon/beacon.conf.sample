@@ -14,7 +14,7 @@
 
 {
     // Complete URL of your Beacon installation
-    "url": "http://localhost/beacon/beacondev/trunk/editor/",
+    "url": "http://localhost/beacon/",
 
     // This option chooses the backend to be used
     // Possible options: php, python
