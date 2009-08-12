@@ -54,6 +54,9 @@ if (!$auth->check_session()) {
                 $beacon_db_instance->add_user($username,
                                               $password,
                                               "foo@example.com");
+            } else {
+                // Let's move on normally
+                header("Location: beacon.php");
             }
 
             // Try again
