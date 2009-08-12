@@ -40,7 +40,7 @@ if (!$auth->check_session()) {
 }
 
 // Set the conf file path here
-$confFile = "../beacon/beacon.conf";
+$confFile = $beacon_conf_path;
 
 // Set the full path here
 $fullPath = getcwd() . "/../";

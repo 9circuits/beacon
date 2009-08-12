@@ -4,14 +4,11 @@
  *
  */
 
-// Choose the theme to load
-$beacon_theme = "redmond";
-
 // Choose whether new user registration is allowed
 $beacon_create_user = false;
 
-$beacon_conf_path = "http://localhost/beaconnew/beacon/beacon.conf";
-
+// Path to conf file
+$beacon_conf_path = "../beacon/beacon.conf";
 
 // Choose what DB engine is to be used
 $beacon_db_type = "mysql";

@@ -193,9 +193,17 @@ Beacon.prototype.init = function() {
 
             $("#BeaconRefreshDocumentList").bind("click", this.refreshDocumentList.attach(this));
 
+            $("#BeaconLogOut").bind("click", this.logout.attach(this));
+
             window.onbeforeunload = this.beaconExit.attach(this)
         }.attach(this)
     });
+};
+
+Beacon.prototype.logout = function() {
+    if (confirm("Are you sure you want to log out?")) {
+        window.location = "logout.php";
+    }
 };
 
 Beacon.prototype.beaconExit = function() {

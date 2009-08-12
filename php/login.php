@@ -39,7 +39,7 @@ if (!$auth->check_session()) {
 
 
         /* BEGIN: Code for external auth */
-        $output = "AAA";
+        /*$output = "AAA";
         $return = false;
 
         exec("python auth.py " . $username . " " . $password, $output, $return);
@@ -71,18 +71,18 @@ if (!$auth->check_session()) {
         } else {
             echo '<h3>Login Error. $output <a href="index.php">Try Again.</a></h3>';
             @session_destroy();
-        }
+        }*/
         /* END: Code for external auth */
 
 
 
         /* BEGIN: MySQL Login */
-        /*if (!$auth->login($username, md5($password))) {
+        if (!$auth->login($username, md5($password))) {
             echo '<h3>Incorrect Login. <a href="index.php">Go Back.</a></h3>';
             @session_destroy();
         } else {
             header("Location: beacon.php");
-        }*/
+        }
         /* END: MySQL Login */
 
     }

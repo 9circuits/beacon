@@ -47,6 +47,8 @@ switch ($beacon_db_instance->init_db($beacon_mysql_hostname,
         break;
 }
 
+$request = json_decode(file_get_contents($beacon_conf_path));
+
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -59,7 +61,7 @@ switch ($beacon_db_instance->init_db($beacon_mysql_hostname,
     <link rel="stylesheet" href="css/main.css" type="text/css" />
 
     <!-- Jquery theming -->
-    <link rel="stylesheet" href="../beacon/css/<?php echo $beacon_theme; ?>/jquery.ui.css" type="text/css" />
+    <link rel="stylesheet" href="../beacon/css/<?php echo $request->theme; ?>/jquery.ui.css" type="text/css" />
 
 </head>
 

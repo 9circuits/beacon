@@ -32,6 +32,9 @@ if (!$auth->check_session()) {
     echo '<h3>You are not authorized to view this page. <a href="index.php">Login Here.</a></h3>';
     @session_destroy();
 } else {
+
+$request = json_decode(file_get_contents($beacon_conf_path));
+
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -48,8 +51,8 @@ if (!$auth->check_session()) {
         <link rel="stylesheet" href="../beacon/css/jquery.jgrowl.css" type="text/css" />
         <link rel="stylesheet" href="../beacon/css/jquery.tree.css" type="text/css" />
         <!-- Will be loaded by the theme selected in conf file -->
-        <link rel="stylesheet" href="../beacon/css/<?php echo $beacon_theme; ?>/jquery.ui.css" type="text/css" />
-        <link rel="stylesheet" href="../beacon/css/<?php echo $beacon_theme; ?>/beacon.css" type="text/css" />
+        <link rel="stylesheet" href="../beacon/css/<?php echo $request->theme; ?>/jquery.ui.css" type="text/css" />
+        <link rel="stylesheet" href="../beacon/css/<?php echo $request->theme; ?>/beacon.css" type="text/css" />
 
 </head>
 
@@ -70,7 +73,7 @@ if (!$auth->check_session()) {
 
         $(document).ready(function() {
             // Start up Beacon by showing the Container
-            beacon = new Beacon("#BeaconContainer", "<?php echo $beacon_conf_path; ?>");
+            beacon = new Beacon("#BeaconContainer", "<?php echo $request->url . 'beacon/beacon.conf'; ?>");
         });
 
     </script>
