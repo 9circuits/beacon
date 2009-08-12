@@ -43,7 +43,6 @@ if (!$auth->check_session()) {
         $return = false;
 
         exec("python auth.py " . $username . " " . $password, $output, $return);
-        echo "sadasd.".$output."\n";
 
         if ($output[0] == "no") {
             echo '<h3>Incorrect Login. <a href="index.php">Go Back.</a></h3>';
