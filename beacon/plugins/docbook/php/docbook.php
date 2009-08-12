@@ -1,32 +1,39 @@
 <?
 
-function newdoc($beacon) {
-    $text = file_get_contents($beacon->path . "xml/new-template.xml");
+class BeaconDocbook {
 
-    $text = $beacon->parser->xslParse($text,
-                        $beacon->path . "xml/docbook2html.xsl", true,
-                        $beacon->url . "css/docbook.css");
+    var $new_template = "xml/new-template.xml";
+    var $html2xml = "xml/html2docbook.xsl";
+    var $xml2html = "xml/docbook2html.xsl";
+    var $css_path = "css/docbook.css";
 
-    return $text;
-}
+    function newdoc($beacon) {
+        $text = file_get_contents($beacon->path . $this->new_template);
 
-function getsrc($beacon) {
-    $text = $beacon->parser->xslParse($beacon->html,
-                        $beacon->path . "xml/html2docbook.xsl");
+        $text = $beacon->parser->xslParse($text,
+                                          $beacon->path . $this->xml2html);
 
-    return $text;
-}
-
-function gethtml($beacon) {
-    if ($beacon->wrap) {
-        $text = $beacon->parser->xslParse($beacon->src,
-                        $beacon->path . "xml/docbook2html.xsl", true,
-                        $beacon->url . "css/docbook.css");
-    } else {
-        $text = $beacon->parser->xslParse($beacon->src,
-                        $beacon->path . "xml/docbook2html.xsl", true);
+        return $text;
     }
-    return $text;
+
+    function getsrc($beacon) {
+        $text = $beacon->parser->xslParse($beacon->html,
+                                          $beacon->path . $this->html2xml);
+
+        return $text;
+    }
+
+    function gethtml($beacon) {
+        $text = $beacon->parser->xslParse($beacon->src,
+                                          $beacon->path . $this->xml2html);
+
+        return $text;
+    }
+
+    function get_css_path() {
+        return $this->css_path;
+    }
 }
 
-?>
+
+return new BeaconDocbook();

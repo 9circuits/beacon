@@ -8,32 +8,37 @@
                         <span class="ui-icon ui-icon-circle-close"></span>
                     </a>
                 </li>
+                <li class="ui-state-default ui-corner-all">
+                    <a  id="{id}SaveButton" href="#" title="Save the Document">
+                        <span class="ui-icon ui-icon-disk"></span>
+                    </a>
+                </li>
             </ul>
         </div>
 
         <div id="{id}Accordion" class="BeaconAccordion">
             <!-- Document Tree Display-->
-            <h4><a href="#">{Document Tree}</a></h4>
+            <h4><a href="#">Document Tree</a></h4>
             <div class="BeaconAccordionItem">
                 <div id="{id}BeaconTreeContainer">
                 </div>
             </div>
 
             <!-- Menu to insert inline elements -->
-            <h4><a href="#">{Insert Inline Element}</a></h4>
+            <h4><a href="#">Insert Inline Element</a></h4>
             <div class="BeaconAccordionItem">
-                <p>{Select type:}</p>
+                <p>Select type:</p>
                 <p>
                     <select multiple style="width: 100%; height: 100px;" id="{id}InsertInlineList">
-                        <option value="-1">{Select Any One}</option>
+                        <option value="-1">Select Any One</option>
                     </select>
                 </p>
-                <p><a id="{id}InsertInlineButton" class="BeaconButton ui-corner-all">{Insert Inline Element}</a></p>
+                <p><a id="{id}InsertInlineButton" class="BeaconButton ui-corner-all">Insert Inline Element</a></p>
                 <p>
-                    <small>{Highlight some text while editing rich text type nodes,}
-                    {and then choose a type of inline element and click}
-                    '{Insert Inline Element}'.
-                    {This will highlight the selected text as that inline element style.}</small>
+                    <small>Highlight some text while editing rich text type nodes,
+                    and then choose a type of inline element and click
+                    'Insert Inline Element'.
+                    This will highlight the selected text as that inline element style.</small>
                 </p>
             </div>
 
@@ -41,41 +46,48 @@
     </div>
 
     <div id="{id}Content" class="BeaconContent ui-corner-all">
-        <div class="BeaconToolBar">
-            <div class="BeaconToolHolder">
-                <div style="float:left">
-                    <a id="{id}ViewSourceButton" class="BeaconToolButton" title="{Show/Hide Source View}">
-                        <img src="img/sourceview.png" border="none" />
-                    </a>
-                    <a id="{id}SaveButton" class="BeaconToolButton" title="{Save the document}">
-                        <img src="img/save.png" border="none" />
-                    </a>
-                    <a id="{id}DeleteButton" class="BeaconToolButton" title="{Delete the node}">
-                        <img src="img/cancel.png" border="none" />
-                    </a>
-                </div>
-                <div style="float:right">
-                    <div id="editBar" class="editBar">
-                        <p>
-                            <span>{Last saved:} <abbr id="{id}TimeStamp"></abbr></span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <iframe id="{id}Iframe" src="{src}" class="BeaconIframe ui-corner-all">
-        </iframe>
+        <ul id="{id}TabList">
+            <li><a href="#{id}DesignView">Design</a></li>
+            <li><a href="#{id}SourceView">Source</a></li>
+            <li><a href="#{id}RevisionsView">Revisions</a></li>
+        </ul>
 
-        <textarea id="{id}SourceView" class="BeaconSourceView ui-corner-all"></textarea>
-
-        <div id="{id}Loading" style="display:none; text-align:center; margin-top: 30px">
-            <p class="BeaconLoading">
-                <span>{Please wait. Loading...}</span>
+        <div id="{id}DesignView">
+            <iframe id="{id}Iframe" src="{src}" class="BeaconIframe ui-corner-all">
+            </iframe>
+            <p id="{id}DesignViewLoading" style="display:none">
+                <span>{Loading...}</span>
                 <br />
-                <img src="img/loading.gif" />
+                <img src="{imgpath}/loading.gif" />
             </p>
         </div>
+
+        <div id="{id}SourceView">
+            <textarea id="{id}TextBox" class="BeaconSourceView ui-corner-all"></textarea>
+            <p id="{id}SourceViewLoading" style="display:none">
+                <span>{Loading...}</span>
+                <br />
+                <img src="{imgpath}/loading.gif" />
+            </p>
+        </div>
+
+        <div id="{id}RevisionsView">
+            <div id="{id}RevisionContainer" style="float: left; width: 30%;">
+                <p>Select a revision to restore to: </p>
+                <p><a id="{id}Restore" class="BeaconButton ui-corner-all">Restore to this revision</a></p>
+                <div id="{id}RevisionList">
+                </div>
+            </div>
+            <iframe id="{id}RevisionFrame" name="{id}RevisionFrame" class="RevisionFrame" style="float: right; width: 67%; border: none;">
+            </iframe>
+            <p id="{id}RevisionsViewLoading" style="display:none">
+                <span>{Loading...}</span>
+                <br />
+                <img src="{imgpath}/loading.gif" />
+            </p>
+        </div>
+
     </div>
 
 </div>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Example Article</title><meta name="generator" content="DocBook XSL Stylesheets V1.74.3" /></head><body><div class="article" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="example-tutorial"></a>Example Article</h2></div></div><hr /></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#sn-small-section">A Small Section</a></span></dt><dt><span class="section"><a href="#sn-about-ShmooMaker">About ShmooMaker</a></span></dt><dd><dl><dt><span class="section"><a href="#sn-installing-ShmooMaker">Installing ShmooMaker</a></span></dt><dt><span class="section"><a href="#sn-configuring-ShmooMaker">Configuring ShmooMaker</a></span></dt><dt><span class="section"><a href="#sn-using-ShmooMaker">Using ShmooMaker</a></span></dt><dt><span class="section"><a href="#sn-creating-shmoos">Creating Shmoos</a></span></dt></dl></dd><dt><span class="index"><a href="#id382388">Index</a></span></dt></dl></div><span style="color: red">&lt;xi:include&gt;
+    <span style="color: red">&lt;xi:fallback&gt;CHECK "rpm-info.xml"!&lt;/xi:fallback&gt;</span>
+  &lt;/xi:include&gt;</span><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sn-small-section"></a>A Small Section</h2></div></div></div><a id="id381844" class="indexterm"></a><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Sample Note</h3><p>Sample Para</p></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Sample Important</h3><p>Sample Para</p></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Sample Warning</h3><p>Sample Note Body</p></div><p><span class="application">Application</span></p><p><span class="package">Package</span></p><p><code class="filename">Filename</code></p><p><code class="systemitem">SystemItem</code></p><p><code class="computeroutput">Computerouput</code></p><p><strong class="userinput"><code>Userinput</code></strong></p><p><code class="prompt">Prompt</code></p><p><span class="emphasis"><em>Emphasis</em></span></p><p>“<span class="quote">Quote</span>”</p><p>Link</p><p>sadasdasd <sub>Subscript</sub> sadasdasd</p><p>sadasdsadasd <sup>Superscript</sup> sadasdasdasd</p><p><span class="action">Action</span></p><p><code class="classname">Classname</code></p><p><code class="constant">Constant</code></p><p><code class="function">Function</code></p><p><span class="interface">Interface</span></p><p><em class="parameter"><code>Parameter</code></em></p><p><span class="property">Property</span></p><p><em class="replaceable"><code>Replaceable</code></em></p><p><span class="returnvalue">Return value</span></p><p><em class="structfield"><code>Structfield</code></em></p><p><span class="structname">Structname</span></p><p><span class="symbol">Symbol</span></p><p><span class="token">Token</span></p><p><span class="type">Type</span></p><p><code class="varname">Varname</code></p><p>
+      This is an example section. You should not use
+      <code class="sgmltag-element">sect1</code>
+      ,
+      <code class="sgmltag-element">sect2</code>
+      , and
+      <code class="sgmltag-element">sect3</code>
+      , since those tags will make sections less modular and harder to
+      relocate without changing a lot of other markup.
+    </p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sn-about-ShmooMaker"></a>About <span class="application">ShmooMaker</span></h2></div></div></div><p>
+      <span class="application">ShmooMaker</span> is a utility for making
+      <em class="firstterm">shmoos</em>. A shmoo is a lovable, globular
+      beastie with a penchant for turning himself into other objects.
+      Everyone loves shmoos due to their warm and cuddly nature.
+    </p><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="sn-installing-ShmooMaker"></a>Installing <span class="application">ShmooMaker</span></h3></div></div></div><p>
+        To install <span class="application">ShmooMaker</span>, use
+        <span class="command"><strong>yum</strong></span> to install the
+        <span class="package">ShmooMaker</span>
+        RPM package:
+      </p><pre class="screen"><span class="command"><strong>yum install ShmooMaker</strong></span></pre></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="sn-configuring-ShmooMaker"></a>Configuring <span class="application">ShmooMaker</span></h3></div></div></div><p>
+        <span class="application">ShmooMaker</span> creates a basic system
+        configuration template for shmoos in the
+        <code class="filename">/etc/</code> folder. The
+        configuration file is called <code class="filename">/etc/shmoos</code>.
+        You can add your own user-specific shmoo information by creating
+        a file in your home directory called
+        <code class="filename">~/.shmoos</code>. The
+        <code class="filename">/etc/shmoos</code> file resembles the following:
+      </p><pre class="screen"><strong class="userinput"><code>cat /etc/shmoos</code></strong>
+<code class="computeroutput">[shmoo]
+size = medium
+lovable = True
+
+[add-ons]
+intelligibility = 0</code></pre><p>
+        To edit the system configuration template, use the
+        <code class="systemitem">root</code> account.
+      </p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="sn-using-ShmooMaker"></a>Using <span class="application">ShmooMaker</span></h3></div></div></div><p>
+        To run <span class="application">ShmooMaker</span>, select it from the
+        GUI menu under <span class="guimenu">Applications</span> → <span class="guisubmenu">Entertainment</span> → <span class="guimenuitem">ShmooMaker</span>.
+      </p><p>
+        If you want to run <span class="application">ShmooMaker</span> as a
+        daemon process, use the command <span class="command"><strong>shmoo-maker
+        <code class="option">-d</code></strong></span>.
+      </p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="sn-creating-shmoos"></a>Creating Shmoos</h3></div></div></div><p>
+        To create a shmoo, do the following:
+      </p><div class="procedure"><ol type="1"><li><p>
+            Click the <span class="guibutton">New</span> button.
+          </p></li><li><p>
+            Select the desired shmoo from the list in the dialog.
+          </p></li><li><p>
+            When the shmoo appears, feed it and give it a hug.
+          </p></li></ol></div><p>
+        To put away your shmoo for safe-keeping, hit
+        <span class="keycap"><strong>Ctrl</strong></span>+<span class="keycap"><strong>Q</strong></span>
+        .
+      </p><p>
+        Shmoos love the following kinds of food:
+      </p><a id="id382338" class="indexterm"></a><div class="itemizedlist"><p class="title"><b>Foo List</b></p><ul type="disc"><li><p>
+            Candied yams
+          </p></li><li><p>
+            Marshmallows
+          </p><p>
+                  Bumble bee
+              </p></li><li><p>
+            Gummi bears
+          </p></li></ul></div></div></div><div class="index"><div class="titlepage"><div><div><h2 class="title"><a id="id382388"></a>Index</h2></div></div></div><div class="index"><div class="indexdiv"><h3>S</h3><dl><dt>sect1, sect2, and sect3, <a class="indexterm" href="#sn-small-section">A Small Section</a></dt><dt>shmoo</dt><dd><dl><dt>feeding, <a class="indexterm" href="#sn-creating-shmoos">Creating Shmoos</a></dt></dl></dd></dl></div></div></div></div></body></html>

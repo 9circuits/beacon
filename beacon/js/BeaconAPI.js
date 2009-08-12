@@ -29,11 +29,15 @@ var BeaconAPI = function(o, beacon) {
     this.src = "";
     this.html = "";
 
+    // Revisions
+    this.revisions = [];
+
     // Our state object.
     this.state = {
         viewingSource: false,
         fetchingSource: false,
         fetchingHTML: false,
+        fetchingRevisions: false,
         saving: false,
         editing: false
     };
@@ -57,8 +61,16 @@ var BeaconAPI = function(o, beacon) {
     // Save the iframe separately
     this.iframe = document.getElementById(this.id + "Iframe").contentWindow;
 
+    // Tabify
+    this.tabs = $(this.ui["Content"].id).tabs({
+        select: this.viewChange.attach(this)
+    });
+
+    this.tabIndex = 0;
+
     // Show the pretty accordion
     $(this.ui["Accordion"].id).accordion();
+
 
     // Init the time stamps
     $(this.ui["TimeStamp"].id).attr("title", iso8601(new Date()));
@@ -70,9 +82,15 @@ var BeaconAPI = function(o, beacon) {
 
         // Let us attach the events
         $(this.ui["SaveButton"].id).bind("click", this.saveDocument.attach(this));
-        $(this.ui["ViewSourceButton"].id).bind("click", this.viewSource.attach(this));
+
+        //window.setInterval(this.autoSave.attach(this), 6000);
+
+        // Set the close button
+        $(this.ui["CloseButton"].id).bind("click", this.closeDocument.attach(this));
 
         $(this.ui["InsertInlineButton"].id).bind("click", this.insertInline.attach(this));
+
+        $(this.ui["Restore"].id).bind("click", this.restoreTo.attach(this));
 
         // Make the iframe clickable
         $(this.ui["Iframe"].id).contents().bind("click", this.frameClick.attach(this));
@@ -81,6 +99,18 @@ var BeaconAPI = function(o, beacon) {
         this.buildTree();
 
     }.attach(this));
+};
+
+BeaconAPI.prototype.getUIList = function() {
+    var list = ["Document", "Content", "Sidebar", "RightToolBar", "Accordion",
+              "ToolHolder", "Iframe", "SourceView", "CloseButton", "SaveButton",
+              "ViewSourceButton", "DownloadButton", "TimeStamp", "Loading",
+              "InsertInlineButton", "InsertInlineList", "BeaconTreeContainer",
+              "TextBox", "RevisionsView", "TabList", "DesignViewLoading",
+              "SourceViewLoading", "RevisionsViewLoading", "RevisionFrame",
+              "Restore", "RestoreTo", "RevisionList", "RevisionContainer"];
+
+    return list;
 };
 
 BeaconAPI.prototype.frameClick = function(e) {
@@ -416,6 +446,104 @@ BeaconAPI.prototype.buildNodeStructure = function(title) {
     return html;
 };
 
+
+
+
+// --------------------- Save and close Functions ------------------------------
+
+BeaconAPI.prototype.closeDocument = function() {
+    if (confirm("Do you want to save the current changes?")) {
+        this.saveDocument();
+    }
+
+    this.beacon.closeDoc(this.id);
+};
+
+BeaconAPI.prototype.autoSave = function() {
+    if (this.state["fetchingSource"] || this.state["fetchingHTML"] || this.state["saving"]) {
+        return;
+    }
+
+    if (this.state["editing"]) {
+        return;
+    }
+
+    this.saveDocument();
+};
+
+BeaconAPI.prototype.saveDocument = function() {
+    if (this.state["fetchingSource"] || this.state["fetchingHTML"] || this.state["saving"]) {
+        $.jGrowl("Please Wait for the current operation to be completed!");
+        return;
+    }
+
+    if (this.state["editing"]) {
+        $.jGrowl("Please finish editing before saving.");
+        return;
+    }
+
+    this.state["saving"] = true;
+
+    var html = $(this.ui["Iframe"].id).contents().find("body").html();
+    html = encodeURIComponent(html);
+
+    var o = {
+        action: "savedoc",
+        payload: {
+            id: this.id,
+            plugin: this.plugin,
+            html: html
+        }
+    };
+
+    $.ajax({
+        url: this.beacon.getURL("handler"),
+        type: "POST",
+        data: JSON.stringify(o),
+        success: function(result) {
+            $.jGrowl("Save done!");
+            this.state["saving"] = false;
+        }.attach(this)
+    });
+};
+
+
+
+// --------------------- Views (source, html, revisions) -----------------------
+
+BeaconAPI.prototype.viewChange = function(event, ui) {
+    if (this.state["fetchingSource"] ||
+        this.state["fetchingHTML"] ||
+        this.state["saving"] ||
+        this.state["fetchingRevisions"]) {
+
+        $.jGrowl("Please let the current operation complete!");
+        return false;
+    }
+
+    var index = ui.index;
+
+    switch(index) {
+        case 0:
+            if (this.tabIndex === 1)
+                this.getHTML();
+            else if (this.tabIndex === 2)
+                this.buildTree();
+            break;
+
+        case 1:
+            if (this.tabIndex === 0 || this.tabIndex === 2)
+                this.getSource();
+            break;
+
+        case 2:
+            this.getRevisions();
+            break;
+    }
+
+    this.tabIndex = index;
+};
+
 // Emergency Restore Function
 BeaconAPI.prototype.restoreDocument = function() {
     $.jGrowl("The server could not parse! Restoring back to last known stable document.");
@@ -430,14 +558,19 @@ BeaconAPI.prototype.restoreDocument = function() {
         editing: false
     };
 
-    $(this.ui["SourceView"].id).hide();
-    $(this.ui["Loading"].id).hide();
+    $(this.ui["TextBox"].id).show();
+    $(this.ui["SourceViewLoading"].id).hide();
     $(this.ui["Iframe"].id).show();
+
+    this.tabs.tabs('select', 0);
 };
 
 // Emergency Restore Function
 BeaconAPI.prototype.restoreSourceView = function() {
-    $.jGrowl("The server could not parse the XML! Please check for any formatting errors.");
+    $.jGrowl("The server could not parse the XML! Please check for any formatting errors. \
+    Restoring back to last known stable document.");
+
+    $(this.ui["TextBox"].id).val(this.src);
 
     this.state = {
         viewingSource: true,
@@ -447,72 +580,18 @@ BeaconAPI.prototype.restoreSourceView = function() {
         editing: false
     };
 
-    $(this.ui["SourceView"].id).show();
-    $(this.ui["Loading"].id).hide();
-    $(this.ui["Iframe"].id).hide();
+    $(this.ui["TextBox"].id).show();
+    $(this.ui["DesignViewLoading"].id).hide();
+    $(this.ui["Iframe"].id).show();
+
+    this.tabs.tabs('select', 1);
 };
-
-BeaconAPI.prototype.closeDocument = function() {
-};
-
-BeaconAPI.prototype.saveDocument = function() {
-    if (this.state["fetchingSource"] || this.state["fetchingHTML"] || this.state["saving"]) {
-        $.jGrowl("Please Wait for the current operation to be completed!");
-        return;
-    }
-
-    if (this.state["editing"]) {
-        $.jGrowl("Please finish editing before saving.");
-        return;
-    }
-
-    $(this.ui["TimeStamp"].id).attr("title", iso8601(new Date()));
-    $(this.ui["TimeStamp"].id).timeago();
-};
-
-BeaconAPI.prototype.viewSource = function() {
-    if (this.state["fetchingSource"] || this.state["fetchingHTML"] || this.state["saving"]) {
-        $.jGrowl("Please Wait for the current operation to be completed!");
-        return;
-    }
-
-    if (this.state["editing"]) {
-        $.jGrowl("Please finish editing before saving.");
-        return;
-    }
-
-    if (!this.state["viewingSource"]) {
-        $(this.ui["Iframe"].id).hide();
-        $(this.ui["Loading"].id).show()
-
-        this.state["viewingSource"] = true;
-
-        this.getSource(true);
-    } else {
-        $(this.ui["SourceView"].id).hide();
-        $(this.ui["Loading"].id).show();
-
-        this.state["viewingSource"] = false;
-
-        this.getHTML(true);
-    }
-};
-
 
 BeaconAPI.prototype.getSource = function(displayFlag) {
+    this.state["fetchingSource"] = true;
 
-    if (!displayFlag) {
-        if (!this.state["fetchingSource"]) {
-            return this.src;
-        }
-    } else {
-        if (!this.state["fetchingSource"]) {
-            this.state["fetchingSource"] = true;
-        } else {
-            $.jGrowl("Please Wait for the current operation to be completed!");
-            return;
-        }
-    }
+    $(this.ui["TextBox"].id).hide();
+    $(this.ui["SourceViewLoading"].id).show();
 
     var html = $(this.ui["Iframe"].id).contents().find("body").html();
 
@@ -531,21 +610,23 @@ BeaconAPI.prototype.getSource = function(displayFlag) {
         url: this.beacon.getURL("handler"),
         type: "POST",
         data: JSON.stringify(o),
+        error: function() {
+            this.restoreDocument();
+        },
         success: function(src) {
-            if (src === "FAIL") {
+            if ($.trim(src) === "FAIL") {
                 this.restoreDocument();
                 return;
             }
             src = decodeURIComponent(src);
+
             this.state["fetchingSource"] = false;
             this.src = src;
-            if (displayFlag) {
-                $(this.ui["SourceView"].id).val($.trim(src));
-                $(this.ui["Loading"].id).hide();
-                $(this.ui["SourceView"].id).show();
-            } else {
-                this.getSource(false);
-            }
+            $(this.ui["TextBox"].id).val($.trim(src));
+
+            $(this.ui["TextBox"].id).show();
+            $(this.ui["SourceViewLoading"].id).hide();
+
             $(this.ui["BeaconTreeContainer"].id).html("You cannot view the document tree while viewing source.");
         }.attach(this)
     });
@@ -553,20 +634,12 @@ BeaconAPI.prototype.getSource = function(displayFlag) {
 };
 
 BeaconAPI.prototype.getHTML = function(displayFlag) {
-    if (!displayFlag) {
-        if (!this.state["fetchingHTML"]) {
-            return this.html;
-        }
-    } else {
-        if (!this.state["fetchingHTML"]) {
-            this.state["fetchingHTML"] = true;
-        } else {
-            $.jGrowl("Please Wait for the current operation to be completed!");
-            return;
-        }
-    }
+    this.state["fetchingHTML"] = true;
 
-    var src = $(this.ui["SourceView"].id).val();
+    $(this.ui["Iframe"].id).hide();
+    $(this.ui["DesignViewLoading"].id).show();
+
+    var src = $(this.ui["TextBox"].id).val();
 
     src = encodeURIComponent(src);
 
@@ -583,37 +656,92 @@ BeaconAPI.prototype.getHTML = function(displayFlag) {
         url: this.beacon.getURL("handler"),
         type: "POST",
         data: JSON.stringify(o),
+        error: function() {
+            this.restoreSourceView();
+        },
         success: function(html) {
             if ($.trim(html) === "FAIL") {
                 this.restoreSourceView();
                 return;
             }
             html = decodeURIComponent(html);
+
             this.state["fetchingHTML"] = false;
+
             this.html = html;
-            if (displayFlag) {
-                document.getElementById(this.id+"Iframe").contentWindow.document.body.innerHTML = html;
-                $(this.ui["Loading"].id).hide();
-                $(this.ui["Iframe"].id).show();
-            } else {
-                this.getHTML(false);
-            }
+            document.getElementById(this.id+"Iframe").contentWindow.document.body.innerHTML = html;
+
+            $(this.ui["DesignViewLoading"].id).hide();
+            $(this.ui["Iframe"].id).show();
+
             this.buildTree();
         }.attach(this)
     });
 };
 
+BeaconAPI.prototype.getRevisions = function() {
+    this.state["fetchingRevisions"] = true;
 
+    $(this.ui["RevisionContainer"].id).hide();
+    $(this.ui["RevisionFrame"].id).hide();
 
-BeaconAPI.prototype.getUIList = function() {
-    var list = ["Document", "Content", "Sidebar", "RightToolBar", "Accordion",
-              "ToolHolder", "Iframe", "SourceView", "CloseButton", "SaveButton",
-              "ViewSourceButton", "DownloadButton", "TimeStamp", "Loading",
-              "InsertInlineButton", "InsertInlineList", "DeleteButton",
-              "BeaconTreeContainer"];
+    $(this.ui["RevisionsViewLoading"].id).show();
 
-    return list;
+    var o = {
+        action: "getrevisions",
+        payload: {
+            id: this.id,
+        }
+    };
+
+    $.ajaxq("beaconapi", {
+        url: this.beacon.getURL("handler"),
+        type: "POST",
+        data: JSON.stringify(o),
+        dataType: "json",
+        error: function() {
+
+        },
+        success: function(json) {
+            this.revisions = json.revisions;
+
+            if (json.revisions.length === 0) {
+                $.jGrowl("No Revisions Found!");
+                this.state["fetchingRevisions"] = false;
+
+                $(this.ui["RevisionsViewLoading"].id).hide();
+            } else {
+                var html = "", url = "";
+
+                for (i = 0; i < json.revisions.length; i++) {
+                    url = "ajax.php?type=revision&plugin="+this.plugin+"&id=" + json.revisions[i].id;
+                    html += '<p><a href="'+url+'" target="';
+                    html += this.id+'RevisionFrame">Rev. ';
+                    html += json.revisions[i].num+'</a>';
+                    html += '</p>';
+                }
+
+                $(this.ui["RevisionList"].id).html(html);
+
+                this.state["fetchingRevisions"] = false;
+
+                $(this.ui["RevisionContainer"].id).show();
+                $(this.ui["RevisionFrame"].id).show();
+
+                $(this.ui["RevisionsViewLoading"].id).hide();
+            }
+        }.attach(this)
+    });
 };
+
+BeaconAPI.prototype.restoreTo = function() {
+    var html = document.getElementById(this.id+"RevisionFrame").contentWindow.document.body.innerHTML;
+    document.getElementById(this.id+"Iframe").contentWindow.document.body.innerHTML = html;
+    alert(document.getElementById(this.id+"Iframe").contentWindow.document.body.innerHTML);
+    this.tabs.tabs('select', 0);
+};
+
+//------------------------ Tree Functions --------------------------------------
 
 BeaconAPI.prototype.generateTreeNodeID = function() {
     var randomID = this.id + "_node_" + this.nodeCounter;
@@ -903,6 +1031,10 @@ BeaconAPI.prototype.buildTree = function() {
     });
 };
 
+
+
+//------------------------------- Utility functions ----------------------------
+
 BeaconAPI.prototype.walkDOM = function(root) {
     var html = "";
 
@@ -947,6 +1079,9 @@ BeaconAPI.prototype.walkDOM = function(root) {
 };
 
 
+
+
+//-----------------------------Different Editors -------------------------------
 
 var BeaconRichTextEditor = function(o, iframe) {
     // Store this node

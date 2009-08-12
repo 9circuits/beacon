@@ -1,31 +1,3 @@
- * {margin: 0; padding: 0; }
-
-html, body {
-    overflow: hidden;
-    font-family: "Trebuchet MS", "Arial";
-
-    font: 75% "Trebuchet MS", sans-serif;
-
-    margin:0;
-  padding:0;
-  height:100%; /* needed for container min-height */
-  background: gray;
-
-  color:#666;
-}
-
-div#BeaconContainer {
-  margin:0px; /* center, not in IE5 */
-  background:#fff;
-
-  height:auto !important; /* real browsers */
-  height:98%; /* IE6: treaded as min-height*/
-
-  min-height:98%; /* real browsers */
-
-  border: 4px solid #395B8E;
-}
-
 #BeaconTabList {
     font-size: 12px;
 }
@@ -89,7 +61,6 @@ div#BeaconContainer {
     margin: 0px 7px;
     width: 98%;
     border: 1px solid #a6c9e2;
-    display: none;
 }
 
 ul.BeaconRightToolBar {margin: 0; padding: 0;}

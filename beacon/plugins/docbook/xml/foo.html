@@ -1,0 +1,143 @@
+<style>
+        @import "../css/docbook.css";
+    </style><div id="example-tutorial" title="docbookArticle">
+<h1 class="title" title="docbookArticleTitle">Example Article</h1>
+<div id="sn-small-section" title="docbookSection" class="section">
+<h2 title="docbookSectionTitle">A Small Section</h2>
+<p title="docbookPara">
+      This is an example section. You should not use
+      <span title="docbookSGMLTag" class="sgmltag-element">sect1</span>
+      ,
+      <span title="docbookSGMLTag" class="sgmltag-element">sect2</span>
+      , and
+      <span title="docbookSGMLTag" class="sgmltag-element">sect3</span>
+      , since those tags will make sections less modular and harder to
+      relocate without changing a lot of other markup.
+    </p>
+</div>
+<div id="sn-about-ShmooMaker" title="docbookSection" class="section">
+<h2 title="docbookSectionTitle">About ShmooMaker</h2>
+<p title="docbookPara">ShmooMaker is a utility for making
+      shmoos. A shmoo is a lovable, globular
+      beastie with a penchant for turning himself into other objects.
+      Everyone loves shmoos due to their warm and cuddly nature.
+    </p>
+<div id="sn-installing-ShmooMaker" title="docbookSection" class="section">
+<h3 title="docbookSectionTitle">Installing ShmooMaker</h3>
+<p title="docbookPara">
+        To install ShmooMaker, use
+        <span title="docbookCommand" class="command">yum</span> to install the
+        <span title="docbookPackage" class="package">ShmooMaker</span>
+        RPM package:
+      </p>
+<pre title="docbookScreen" class="screen"><span title="docbookCommand" class="command">yum install ShmooMaker</span></pre>
+</div>
+<div id="sn-configuring-ShmooMaker" title="docbookSection" class="section">
+<h3 title="docbookSectionTitle">Configuring ShmooMaker</h3>
+<p title="docbookPara">ShmooMaker creates a basic system
+        configuration template for shmoos in the
+        <code title="docbookFileName" class="filename">/etc/</code> folder. The
+        configuration file is called <code title="docbookFileName" class="filename">/etc/shmoos</code>.
+        You can add your own user-specific shmoo information by creating
+        a file in your home directory called
+        <code title="docbookFileName" class="filename">~/.shmoos</code>. The
+        <code title="docbookFileName" class="filename">/etc/shmoos</code> file resembles the following:
+      </p>
+<pre title="docbookScreen" class="screen"><code title="docbookUserInput" class="userinput">cat /etc/shmoos</code>
+<code title="docbookComputerOutput" class="computeroutput">[shmoo]
+size = medium
+lovable = True
+
+[add-ons]
+intelligibility = 0</code></pre>
+<p title="docbookPara">
+        To edit the system configuration template, use the
+        <code title="docbookSystemItem" class="systemitem">root</code> account.
+      </p>
+</div>
+<div id="sn-using-ShmooMaker" title="docbookSection" class="section">
+<h3 title="docbookSectionTitle">Using ShmooMaker</h3>
+<p title="docbookPara">
+        To run ShmooMaker, select it from the
+        GUI menu under ApplicationsEntertainmentShmooMaker.
+      </p>
+<p title="docbookPara">
+        If you want to run ShmooMaker as a
+        daemon process, use the command <span title="docbookCommand" class="command">shmoo-maker
+        <span title="docbookOption" class="option">-d</span></span>.
+      </p>
+</div>
+<div id="sn-creating-shmoos" title="docbookSection" class="section">
+<h3 title="docbookSectionTitle">Creating Shmoos</h3>
+<p title="docbookPara">
+        To create a shmoo, do the following:
+      </p>
+<ol title="docbookProcedure" class="procedure">
+<li title="docbookStep"><p title="docbookPara">
+            Click the New button.
+          </p></li>
+<li title="docbookStep"><p title="docbookPara">
+            Select the desired shmoo from the list in the dialog.
+          </p></li>
+<li title="docbookStep"><p title="docbookPara">
+            When the shmoo appears, feed it and give it a hug.
+          </p></li>
+</ol>
+<p title="docbookPara">
+        To put away your shmoo for safe-keeping, hit
+        CtrlQ
+        .
+      </p>
+<p title="docbookPara">
+        Shmoos love the following kinds of food:
+      </p>
+<div title="docbookItemizedListContainer">
+<p class="itemizedlistitle" title="docbookItemizedListTitle">Foo List</p>
+<ul title="docbookItemizedList" class="itemizedlist">
+<li title="docbookListItem"><p title="docbookPara">
+            Candied yams
+          </p></li>
+<li title="docbookListItem">
+<p title="docbookPara">
+            Marshmallows
+          </p>
+<p title="docbookPara">
+                  Bumble bee
+              </p>
+</li>
+<li title="docbookListItem"><p title="docbookPara">
+            Gummi bears
+          </p></li>
+</ul>
+</div>
+<div class="note" title="docbookNote">
+<h2 class="label" title="docbookNoteTitle">Sample Note</h2>
+<p title="docbookPara">Sample Para</p>
+</div>
+<div class="important" title="docbookImportant">
+<h2 class="label" title="docbookImportantTitle">Sample Important</h2>
+<p title="docbookPara">Sample Para</p>
+</div>
+<div class="warning" title="docbookWarning">
+<h2 class="label" title="docbookWarningTitle">Sample Warning</h2>
+<p title="docbookPara">Sample Note Body</p>
+</div>
+<p title="docbookPara"><span title="docbookPackage" class="package">Package</span></p>
+<p title="docbookPara"><code title="docbookFileName" class="filename">Filename</code></p>
+<p title="docbookPara"><code title="docbookSystemItem" class="systemitem">SystemItem</code></p>
+<p title="docbookPara"><code title="docbookComputerOutput" class="computeroutput">Computerouput</code></p>
+<p title="docbookPara"><code title="docbookUserInput" class="userinput">Userinput</code></p>
+<p title="docbookPara"><code title="docbookPrompt" class="prompt">Prompt</code></p>
+<p title="docbookPara"><span title="docbookEmphasis" class="emphasis">Emphasis</span></p>
+<p title="docbookPara">sadasdasd <sub title="docbookSubscript">Subscript</sub> sadasdasd</p>
+<p title="docbookPara">sadasdsadasd <sup title="docbookSuperscript">Superscript</sup> sadasdasdasd</p>
+<p title="docbookPara"><code title="docbookClassName" class="classname">Classname</code></p>
+<p title="docbookPara"><code title="docbookConstant" class="constant">Constant</code></p>
+<p title="docbookPara"><code title="docbookFunction" class="function">Function</code></p>
+<p title="docbookPara"><code title="docbookParameter" class="parameter">Parameter</code></p>
+<p title="docbookPara"><code title="docbookReplaceable" class="replaceable">Replaceable</code></p>
+<p title="docbookPara"><code title="docbookStructfield" class="structfield">Structfield</code></p>
+<p title="docbookPara"><code title="docbookVarname" class="varname">Varname</code></p>
+</div>
+</div>
+</div>
