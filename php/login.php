@@ -39,15 +39,16 @@ if (!$auth->check_session()) {
 
 
         /* BEGIN: Code for external auth */
-        $output = "";
+        $output = "AAA";
         $return = false;
 
         exec("python auth.py " . $username . " " . $password, $output, $return);
+        echo "sadasd.".$output."\n";
 
-        if ($output == "no") {
+        if ($output[0] == "no") {
             echo '<h3>Incorrect Login. <a href="index.php">Go Back.</a></h3>';
             @session_destroy();
-        } else if ($output == "yes") {
+        } else if ($output[0] == "yes") {
             // Check if the user exists in DB
             if (!$auth->login($username, md5($password))) {
                 // Add the user (TODO: add email)
@@ -66,7 +67,7 @@ if (!$auth->check_session()) {
                 header("Location: beacon.php");
             }
         } else {
-            echo '<h3>Login Error. <a href="index.php">Try Again.</a></h3>';
+            echo '<h3>Login Error. $output <a href="index.php">Try Again.</a></h3>';
             @session_destroy();
         }
         /* END: Code for external auth */
