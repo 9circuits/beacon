@@ -428,7 +428,6 @@ Beacon.prototype.initDoc = function(filename, id, action, plugin) {
                 id: obj.payload.id
             };
 
-            alert(ooo.id);
             this.beacon.tabs[ooo.id] = ooo;
 
             this.beacon.pluginManager.initDocument(ooo);

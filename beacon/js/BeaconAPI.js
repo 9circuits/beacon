@@ -83,7 +83,7 @@ var BeaconAPI = function(o, beacon) {
         // Let us attach the events
         $(this.ui["SaveButton"].id).bind("click", this.saveDocument.attach(this));
 
-        //window.setInterval(this.autoSave.attach(this), 6000);
+        window.setInterval(this.autoSave.attach(this), 300000);
 
         // Set the close button
         $(this.ui["CloseButton"].id).bind("click", this.closeDocument.attach(this));
@@ -737,7 +737,6 @@ BeaconAPI.prototype.getRevisions = function() {
 BeaconAPI.prototype.restoreTo = function() {
     var html = document.getElementById(this.id+"RevisionFrame").contentWindow.document.body.innerHTML;
     document.getElementById(this.id+"Iframe").contentWindow.document.body.innerHTML = html;
-    alert(document.getElementById(this.id+"Iframe").contentWindow.document.body.innerHTML);
     this.tabs.tabs('select', 0);
 };
 
