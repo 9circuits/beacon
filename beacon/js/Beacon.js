@@ -445,7 +445,6 @@ Beacon.prototype.deleteDoc = function(e) {
     var id = obj.title;
 
     if (this.tabs[id]) {
-        alert(this.tabs[id].plugin)
         $.jGrowl("You are already editing this document! Close before deleting.");
         // Let's prevent default action and propagation
         if (e.preventDefault) e.preventDefault();
