@@ -69,8 +69,6 @@ ul.BeaconRightToolBar span.ui-icon {float: left; margin: 0 4px;}
 
 ul.BeaconRightToolBar li:hover { border: 1px solid #79b7e7; background: #d0e5f5; font-weight: bold; color: #1d5987; outline: none; }
 
-ul.BeaconRightToolBar span.ui-icon:hover {background-image: url(redmond/images/ui-icons_217bc0_256x240.png);  }
-
 
 a.BeaconButton {
     cursor: pointer;
