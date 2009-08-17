@@ -67,7 +67,8 @@ ul.BeaconRightToolBar {margin: 0; padding: 0;}
 ul.BeaconRightToolBar li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: right;  list-style: none;}
 ul.BeaconRightToolBar span.ui-icon {float: left; margin: 0 4px;}
 
-ul.BeaconRightToolBar li:hover { border: 1px solid #79b7e7; background: #d0e5f5 url(redmond/images/ui-bg_glass_75_d0e5f5_1x400.png) 50% 50% repeat-x; font-weight: bold; color: #1d5987; outline: none; }
+ul.BeaconRightToolBar li:hover { border: 1px solid #79b7e7; background: #d0e5f5; font-weight: bold; color: #1d5987; outline: none; }
+
 ul.BeaconRightToolBar span.ui-icon:hover {background-image: url(redmond/images/ui-icons_217bc0_256x240.png);  }
 
 
