@@ -157,14 +157,6 @@
 <!-- kind of entity that load additional files containing the actual -->
 <!-- general entities. -->
 
-<!ENTITY % FDP-ENTITIES SYSTEM "fdp-entities.ent">
-%FDP-ENTITIES;
-
-<!ENTITY % DOC-ENTITIES SYSTEM "doc-entities.ent">
-%DOC-ENTITIES;
-
-]>
-
 <article id="example-tutorial">
     <title>Example Article</title>
 <!-- As mentioned before, DocBook XML is a particular schema used to -->
