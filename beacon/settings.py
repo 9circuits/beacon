@@ -1,16 +1,9 @@
+# Django settings for Beacon GuideXML project
+import os
+import sys
 
-# New way of doing base directories.
-# Create a file called "base_directory.py" in your project directory 
-# (the same directory in which settings.py resides) with one line of code 
-#	which sets the BASE_DIRECTORY variable.
-#		BASE_DIRECTORY = "/home/someuser/beacon/django_port/beacon/"
-# Also add base_directory.py to your .gitignore.
-
-try:
-	from base_directory import BASE_DIRECTORY
-except:
-	print "If you're seeing this message, you should set up your base_directory.py file in the project directory."
-	BASE_DIRECTORY = "" 
+# path to installation
+BASE_DIRECTORY = sys.path[0] + os.path.sep 
 
 DEBUG = False
 DEBUG = True
@@ -21,17 +14,12 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'mysql'
-DATABASE_NAME = 'beacon'
-DATABASE_USER = 'beacon'
-DATABASE_PASSWORD = 'beacon'
+DATABASE_ENGINE = 'sqlite3'
+DATABASE_NAME = './beacon.db'
+DATABASE_USER = ''
+DATABASE_PASSWORD = ''
 DATABASE_HOST = ''
 DATABASE_PORT = ''
-
-
-DATABASE_OPTIONS = {
-	"init_command": "SET storage_engine=INNODB",
-}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -115,5 +103,3 @@ BEACON_VERSION = "1.0"
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_URL = "/logout/"
-
-
