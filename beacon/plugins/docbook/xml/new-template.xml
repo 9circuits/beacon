@@ -116,9 +116,6 @@
 <!-- Document Type Declaration, or DTD, which will inform any capable -->
 <!-- editor program how to treat the XML content. -->
 
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
-"http://www.docbook.org/xml/4.4/docbookx.dtd" [
-
 <!-- Here is the meaning of each attribute in the DTD pointer: -->
 <!-- DOCTYPE : This is a DOCTYPE element that points to a DTD. -->
 <!-- article : The root, or top, element in this document is <article>. -->

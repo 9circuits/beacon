@@ -5,7 +5,7 @@
 
 session_start();
 
-ini_set("display_errors", 0);
+//ini_set("display_errors", 0);
 
 require_once("lib/BeaconAPI.php");
 require_once("lib/BeaconAuthenticator.php");

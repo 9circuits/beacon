@@ -24,6 +24,7 @@ class BeaconXSLTransformer
         $ret = $tXSL->transformToXML(DOMDocument::loadXML($raw));
 
         return $ret;
+
     }
 }
 

@@ -49,10 +49,15 @@ class BeaconMySQL implements BeaconStorage
     // Create a new document
     public function create_document($filename, $html, $source, $time, $user, $plugin)
     {
+        $source = addslashes($source);
+        $html = addslashes($html);
+
         $fields = "`name`, `username`, `source`, `html`, `created`, `plugin`";
         $vals = "'$filename', '$user', '$source', '$html', '$time', '$plugin'";
         $dump = @mysql_query("INSERT INTO `beacon_documents` (".$fields.")
                               VALUES (".$vals.")", $this->beacon_db_connection);
+
+        //echo "INSERT INTO `beacon_documents` (".$fields.") VALUES (".$vals.")";
 
         return mysql_insert_id();
     }

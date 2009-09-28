@@ -1,32 +1,40 @@
 <?
 
-function newdoc($beacon) {
-    $text = file_get_contents($beacon->path . "xml/new-template.xml");
+class BeaconGuideXML {
 
-    $text = $beacon->parser->xslParse($text,
-                        $beacon->path . "xml/guide2html.xsl", true,
-                        $beacon->url . "css/guide.css");
+    var $new_template = "xml/new-template.xml";
+    var $html2xml = "xml/html2guide.xsl";
+    var $xml2html = "xml/guide2html.xsl";
+    var $css_path = "css/guide.css";
 
-    return $text;
-}
+    function newdoc($beacon) {
+        $text = file_get_contents($beacon->path . $this->new_template);
 
-function getsrc($beacon) {
-    $text = $beacon->parser->xslParse($beacon->html,
-                        $beacon->path . "xml/html2guide.xsl");
+        $text = $beacon->parser->xslParse($text,
+                                          $beacon->path . $this->xml2html);
 
-    return $text;
-}
-
-function gethtml($beacon) {
-    if ($beacon->wrap) {
-        $text = $beacon->parser->xslParse($beacon->src,
-                        $beacon->path . "xml/guide2html.xsl", true,
-                        $beacon->url . "css/guide.css");
-    } else {
-        $text = $beacon->parser->xslParse($beacon->src,
-                        $beacon->path . "xml/guide2html.xsl", true);
+        return $text;
     }
-    return $text;
+
+    function getsrc($beacon) {
+        $text = $beacon->parser->xslParse($beacon->html,
+                                          $beacon->path . $this->html2xml);
+
+        return $text;
+    }
+
+    function gethtml($beacon) {
+        $text = $beacon->parser->xslParse($beacon->src,
+                                          $beacon->path . $this->xml2html);
+
+        return $text;
+    }
+
+    function get_css_path() {
+        return $this->css_path;
+    }
 }
 
-?>
+
+return new BeaconGuideXML();
+

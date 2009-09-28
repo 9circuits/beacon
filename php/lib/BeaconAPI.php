@@ -76,6 +76,9 @@ class BeaconAPI
         $id = $this->db->create_document($filename, $html, $source, date('Y-m-d'),
                                     $_SESSION['auth_username'], $plugin);
 
+        //echo $id;
+        //exit();
+
         $url = "ajax.php?plugin=$plugin&id=$id&type=html";
 
         // Get the UI of the document

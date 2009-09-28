@@ -215,7 +215,7 @@ Beacon.prototype.beaconExit = function() {
 Beacon.prototype.refreshDocumentList = function() {
     $("#BeaconDocumentList").html("Fetching...");
 
-    obj = {
+    var obj = {
         action: "getdoclist"
     };
 
@@ -389,7 +389,7 @@ Beacon.prototype.editDoc = function(e) {
 };
 
 Beacon.prototype.initDoc = function(filename, id, action, plugin) {
-    container = '#' + filename + id;
+    var container = '#' + filename + id;
 
     $(this.container).tabs("add", container, filename);
     $(container).addClass('BeaconDocumentTab');
