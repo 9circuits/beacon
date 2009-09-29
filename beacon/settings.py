@@ -1,9 +1,19 @@
 # Django settings for Beacon GuideXML project
-import os
-import sys
 
-# path to installation
-BASE_DIRECTORY = sys.path[0] + os.path.sep 
+# New way of doing base directories.
+# Create a file called "base_directory.py" in your project directory 
+# (the same directory in which settings.py resides) with one line of code 
+#   which sets the BASE_DIRECTORY variable.
+#       BASE_DIRECTORY = "/home/someuser/beacon/django_port/beacon/"
+# Also add base_directory.py to your .gitignore.
+
+try:
+    from base_directory import BASE_DIRECTORY
+except:
+    import os
+    import sys
+    # path to installation
+    BASE_DIRECTORY = sys.path[0] + os.path.sep 
 
 DEBUG = False
 DEBUG = True
