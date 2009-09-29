@@ -12,7 +12,7 @@ try:
 except:
     import os
     import sys
-    # path to installation
+    # automagic path to installation
     BASE_DIRECTORY = sys.path[0] + os.path.sep 
 
 DEBUG = False
@@ -25,7 +25,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'sqlite3'
-DATABASE_NAME = './beacon.db'
+DATABASE_NAME = BASE_DIRECTORY + 'beacon.db'
 DATABASE_USER = ''
 DATABASE_PASSWORD = ''
 DATABASE_HOST = ''
