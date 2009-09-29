@@ -8,12 +8,32 @@ from django.template import RequestContext
 from django.conf import settings
 from datetime import date
 import simplejson
+from beacon.logger import log
 
+@login_required
+def handler(request):
+    if request.POST:
+        json = request.POST.keys()[0]
+        log.debug("received json request: " + json)
+        try:
+            action = simplejson.loads(json)['action']
+        except Exception,e:
+            log.error(e)
+            return HttpResponse("error parsing action from request")
+        log.debug('action = ' + action)
+        if action == "beaconui":
+            return beaconui(request)
+        return HttpResponse(action)
+    else:
+        return HttpResponse('You wanna GET me eh?')
+
+@login_required
+def beaconui(request):
+    return direct_to_template(request, template="editor/beaconui.html")
 
 @login_required
 def index(request):
 	return direct_to_template(request, template="editor/index.html")
-
 
 @login_required
 def form(request, template):
