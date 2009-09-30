@@ -52,16 +52,21 @@ def handler(request):
 @login_required
 def view_document(request):
     log.debug("request.GET = %s" % request.GET)
-    plugin=request.GET.get('type')
+    type=request.GET.get('type')
+    plugin=request.GET.get('plugin')
     docid=request.GET.get('id')
     nocss=request.GET.get('nocss')
+
     if plugin is None:
         return HttpResponse('plugin is NONE!')
+
     #log.debug("viewing doc: type=%(type)s id=%(id)s nocss=%(nocss)s" % request.GET)
     # below will ALL change to a db query to fetch the doc and grab the xml/html
     # for now it's a good test of xsl/xml -> html conversion 
     stylesheet = settings.XSLT_DIR + '%s2html.xsl' % plugin
     xmltemplate = settings.XML_DIR + 'new-%s-template.xml' % plugin
+    log.debug('stylesheet = %s' % stylesheet)
+    log.debug('xmltemplate = %s' % xmltemplate)
 
     styuri = OsPathToUri(stylesheet)
     srcuri = OsPathToUri(xmltemplate)
@@ -72,9 +77,10 @@ def view_document(request):
     proc = Processor.Processor()
     proc.appendStylesheet(sty)
 
-    #this also needs to be wrapped in css like in php code
-    output = proc.run(src)
-    return HttpResponse(output)
+    document = proc.run(src)
+
+    return render_to_response('editor/view-document-html.html',
+    {'document': document, 'plugin': plugin, 'MEDIA_URL': settings.MEDIA_URL})
 
 @login_required
 def beaconui(request):
@@ -89,24 +95,24 @@ def newdoc(request):
     payload = json_dict['payload']
     plugin = payload['plugin']
     filename = payload['filename']
-    stylesheet = settings.XSLT_DIR + '%s2html.xsl' % plugin
-    xmltemplate = settings.XML_DIR + 'new-%s-template.xml' % plugin
+    #stylesheet = settings.XSLT_DIR + '%s2html.xsl' % plugin
+    #xmltemplate = settings.XML_DIR + 'new-%s-template.xml' % plugin
 
-    styuri = OsPathToUri(stylesheet)
-    srcuri = OsPathToUri(xmltemplate)
+    #styuri = OsPathToUri(stylesheet)
+    #srcuri = OsPathToUri(xmltemplate)
 
-    sty = InputSource.DefaultFactory.fromUri(styuri)
-    src = InputSource.DefaultFactory.fromUri(srcuri)
+    #sty = InputSource.DefaultFactory.fromUri(styuri)
+    #src = InputSource.DefaultFactory.fromUri(srcuri)
 
-    proc = Processor.Processor()
-    proc.appendStylesheet(sty)
-    output = proc.run(src)
+    #proc = Processor.Processor()
+    #proc.appendStylesheet(sty)
+    #output = proc.run(src)
 
     # create doc here instead of below non-sense
     docid = 1
 
     html = render_to_string('editor/document.html', {'id':docid,
-    'src':'handler?type=%s&id=%s' % (plugin, docid), 'MEDIA_URL':settings.MEDIA_URL})
+    'src':'handler?plugin=%s&id=%s&type=html' % (plugin, docid), 'MEDIA_URL':settings.MEDIA_URL})
 
     response = {}
     response['result'] = 'success'
