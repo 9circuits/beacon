@@ -1,26 +1,26 @@
-<div  id="{id}Document">
+<div  id="{{id}}Document">
 
-    <div id="{id}Sidebar" class="BeaconSideBar ui-corner-all">
+    <div id="{{id}}Sidebar" class="BeaconSideBar ui-corner-all">
         <div class="BeaconTopBar">
-            <ul id="{id}RightToolBar" class="BeaconRightToolBar">
+            <ul id="{{id}}RightToolBar" class="BeaconRightToolBar">
                 <li class="ui-state-default ui-corner-all">
-                    <a  id="{id}CloseButton" href="#" title="Close This Tab">
+                    <a  id="{{id}}CloseButton" href="#" title="Close This Tab">
                         <span class="ui-icon ui-icon-circle-close"></span>
                     </a>
                 </li>
                 <li class="ui-state-default ui-corner-all">
-                    <a  id="{id}SaveButton" href="#" title="Save the Document">
+                    <a  id="{{id}}SaveButton" href="#" title="Save the Document">
                         <span class="ui-icon ui-icon-disk"></span>
                     </a>
                 </li>
             </ul>
         </div>
 
-        <div id="{id}Accordion" class="BeaconAccordion">
+        <div id="{{id}}Accordion" class="BeaconAccordion">
             <!-- Document Tree Display-->
             <h4><a href="#">Document Tree</a></h4>
             <div class="BeaconAccordionItem">
-                <div id="{id}BeaconTreeContainer">
+                <div id="{{id}}BeaconTreeContainer">
                 </div>
             </div>
 
@@ -29,11 +29,11 @@
             <div class="BeaconAccordionItem">
                 <p>Select type:</p>
                 <p>
-                    <select multiple style="width: 100%; height: 100px;" id="{id}InsertInlineList">
+                    <select multiple style="width: 100%; height: 100px;" id="{{id}}InsertInlineList">
                         <option value="-1">Select Any One</option>
                     </select>
                 </p>
-                <p><a id="{id}InsertInlineButton" class="BeaconButton ui-corner-all">Insert Inline Element</a></p>
+                <p><a id="{{id}}InsertInlineButton" class="BeaconButton ui-corner-all">Insert Inline Element</a></p>
                 <p>
                     <small>Highlight some text while editing rich text type nodes,
                     and then choose a type of inline element and click
@@ -45,46 +45,46 @@
         </div>
     </div>
 
-    <div id="{id}Content" class="BeaconContent ui-corner-all">
+    <div id="{{id}}Content" class="BeaconContent ui-corner-all">
 
-        <ul id="{id}TabList">
-            <li><a href="#{id}DesignView">Design</a></li>
-            <li><a href="#{id}SourceView">Source</a></li>
-            <li><a href="#{id}RevisionsView">Revisions</a></li>
+        <ul id="{{id}}TabList">
+            <li><a href="#{{id}}DesignView">Design</a></li>
+            <li><a href="#{{id}}SourceView">Source</a></li>
+            <li><a href="#{{id}}RevisionsView">Revisions</a></li>
         </ul>
 
-        <div id="{id}DesignView">
-            <iframe id="{id}Iframe" src="{src}" class="BeaconIframe ui-corner-all">
+        <div id="{{id}}DesignView">
+            <iframe id="{{id}}Iframe" src="{{src}}" class="BeaconIframe ui-corner-all">
             </iframe>
-            <p id="{id}DesignViewLoading" style="display:none">
+            <p id="{{id}}DesignViewLoading" style="display:none">
                 <span>{Loading...}</span>
                 <br />
-                <img src="{imgpath}/loading.gif" />
+                <img src="{{ MEDIA_URL }}beacon/img/loading.gif" />
             </p>
         </div>
 
-        <div id="{id}SourceView">
-            <textarea id="{id}TextBox" class="BeaconSourceView ui-corner-all"></textarea>
-            <p id="{id}SourceViewLoading" style="display:none">
+        <div id="{{id}}SourceView">
+            <textarea id="{{id}}TextBox" class="BeaconSourceView ui-corner-all"></textarea>
+            <p id="{{id}}SourceViewLoading" style="display:none">
                 <span>{Loading...}</span>
                 <br />
-                <img src="{imgpath}/loading.gif" />
+                <img src="{{ MEDIA_URL }}beacon/img/loading.gif" />
             </p>
         </div>
 
-        <div id="{id}RevisionsView">
-            <div id="{id}RevisionContainer" style="float: left; width: 30%;">
+        <div id="{{id}}RevisionsView">
+            <div id="{{id}}RevisionContainer" style="float: left; width: 30%;">
                 <p>Select a revision to restore to: </p>
-                <p><a id="{id}Restore" class="BeaconButton ui-corner-all">Restore to this revision</a></p>
-                <div id="{id}RevisionList">
+                <p><a id="{{id}}Restore" class="BeaconButton ui-corner-all">Restore to this revision</a></p>
+                <div id="{{id}}RevisionList">
                 </div>
             </div>
-            <iframe id="{id}RevisionFrame" name="{id}RevisionFrame" class="RevisionFrame" style="float: right; width: 67%; border: none;">
+            <iframe id="{{id}}RevisionFrame" name="{{id}}RevisionFrame" class="RevisionFrame" style="float: right; width: 67%; border: none;">
             </iframe>
-            <p id="{id}RevisionsViewLoading" style="display:none">
+            <p id="{{id}}RevisionsViewLoading" style="display:none">
                 <span>{Loading...}</span>
                 <br />
-                <img src="{imgpath}/loading.gif" />
+                <img src="{{ MEDIA_URL}}beacon/img/loading.gif" />
             </p>
         </div>
 

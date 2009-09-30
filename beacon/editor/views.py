@@ -2,6 +2,7 @@ from django.views.generic.simple import direct_to_template
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
+from django.template.loader import render_to_string
 from beacon.editor.models import Document, Section
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError
 from django.template import RequestContext
@@ -10,30 +11,151 @@ from datetime import date
 import simplejson
 from beacon.logger import log
 
+from Ft.Lib.Uri import OsPathToUri
+from Ft.Xml.Xslt import Processor
+from Ft.Xml import InputSource
+
 @login_required
 def handler(request):
     if request.POST:
         json = request.POST.keys()[0]
         log.debug("received json request: " + json)
+        json_dict = simplejson.loads(json)
         try:
-            action = simplejson.loads(json)['action']
+            action = json_dict['action']
         except Exception,e:
             log.error(e)
             return HttpResponse("error parsing action from request")
         log.debug('action = ' + action)
         if action == "beaconui":
             return beaconui(request)
+        elif action == "newdoc":
+            return newdoc(request)
+        elif action == "savedoc":
+            return savedoc(request)
+        elif action == "getsrc":
+            return getsrc(request)
+        elif action == "gethtml":
+            return gethtml(request)
+        elif action == "getrevisions":
+            return getrevisions(request)
+        elif action == "getdoclist":
+            return getdoclist(request)
+        elif action == "editdoc":
+            return editdoc(request)
+        elif action == "deletedoc":
+            return deletedoc(request)
         return HttpResponse(action)
     else:
-        return HttpResponse('You wanna GET me eh?')
+        return view_document(request)
+
+@login_required
+def view_document(request):
+    log.debug("request.GET = %s" % request.GET)
+    plugin=request.GET.get('type')
+    docid=request.GET.get('id')
+    nocss=request.GET.get('nocss')
+    if plugin is None:
+        return HttpResponse('plugin is NONE!')
+    #log.debug("viewing doc: type=%(type)s id=%(id)s nocss=%(nocss)s" % request.GET)
+    # below will ALL change to a db query to fetch the doc and grab the xml/html
+    # for now it's a good test of xsl/xml -> html conversion 
+    stylesheet = settings.XSLT_DIR + '%s2html.xsl' % plugin
+    xmltemplate = settings.XML_DIR + 'new-%s-template.xml' % plugin
+
+    styuri = OsPathToUri(stylesheet)
+    srcuri = OsPathToUri(xmltemplate)
+
+    sty = InputSource.DefaultFactory.fromUri(styuri)
+    src = InputSource.DefaultFactory.fromUri(srcuri)
+
+    proc = Processor.Processor()
+    proc.appendStylesheet(sty)
+
+    #this also needs to be wrapped in css like in php code
+    output = proc.run(src)
+    return HttpResponse(output)
 
 @login_required
 def beaconui(request):
+    #{"action":"beaconui"}
     return direct_to_template(request, template="editor/beaconui.html")
+
+@login_required
+def newdoc(request):
+    #{"action":"newdoc","payload":{"id":"tester1820","plugin":"guidexml"}}
+    json = request.POST.keys()[0]
+    json_dict = simplejson.loads(json)
+    payload = json_dict['payload']
+    plugin = payload['plugin']
+    filename = payload['filename']
+    stylesheet = settings.XSLT_DIR + '%s2html.xsl' % plugin
+    xmltemplate = settings.XML_DIR + 'new-%s-template.xml' % plugin
+
+    styuri = OsPathToUri(stylesheet)
+    srcuri = OsPathToUri(xmltemplate)
+
+    sty = InputSource.DefaultFactory.fromUri(styuri)
+    src = InputSource.DefaultFactory.fromUri(srcuri)
+
+    proc = Processor.Processor()
+    proc.appendStylesheet(sty)
+    output = proc.run(src)
+
+    # create doc here instead of below non-sense
+    docid = 1
+
+    html = render_to_string('editor/document.html', {'id':docid,
+    'src':'handler?type=%s&id=%s' % (plugin, docid), 'MEDIA_URL':settings.MEDIA_URL})
+
+    response = {}
+    response['result'] = 'success'
+    response['payload'] = {'ui':html, 'id':docid}
+
+    json = simplejson.dumps(response)
+
+    return HttpResponse(json)
+
+
+@login_required
+def savedoc(request):
+    return HttpResponse("savedoc")
+
+@login_required
+def getsrc(request):
+    #{"action":"getsrc","payload":{"id":"tester1820","plugin":"guidexml","html":""}}
+    return HttpResponse("getsrc")
+
+@login_required
+def gethtml(request):
+    #{"action":"gethtml","payload":{"id":"tester8495","plugin":"guidexml","src":"xml code" }
+    return HttpResponse("gethtml")
+
+@login_required
+def getrevisions(request):
+    return HttpResponse("getrevisions")
+
+@login_required
+def getdoclist(request):
+    #{"action":"getdoclist"}
+    return HttpResponse("getdoclist")
+
+@login_required
+def editdoc(request):
+    return HttpResponse("editdoc")
+
+@login_required
+def deletedoc(request):
+    #{"action":"deletedoc","payload":{"id":"tester1820","plugin":"guidexml"}}
+    return HttpResponse("deletedoc")
 
 @login_required
 def index(request):
 	return direct_to_template(request, template="editor/index.html")
+
+##################################
+# BELOW IS CODE FOR OLDER BEACON #
+##################################
 
 @login_required
 def form(request, template):
