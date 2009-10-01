@@ -104,7 +104,7 @@ INSTALLED_APPS = (
 )
 
 XSLT_DIR = os.path.join(BASE_DIRECTORY,"xsl")
-XML_DIR = os.path.join(BASE_DIRECTORY,"xml/")
+XML_DIR = os.path.join(BASE_DIRECTORY,"xml")
 
 DOJO_LOCAL = False
 

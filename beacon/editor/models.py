@@ -25,13 +25,22 @@ class ParseException(Exception):
 
 class DocumentManager(models.Manager):
 
-    def apply_xsl_to_src(self, stylesheet, src):
+    def apply_xsl_to_src(self, stylesheet, src, debug=False):
         """ Convert src doc according to xsl stylesheet 
         expects stylesheet and xmltemplate to be file paths
         """
-        print src
+        if debug:
+            srcfile = os.path.join(tempfile.gettempdir(), 'srcfile.txt')
+            open(srcfile,'w').write(src)
+
+        # below needed for guidexml...docbook doesn't SEEM to need it
+        # (although it may in other edge-cases i haven't checked yet)
+        # compliments of Cheater McCheaterson ;)
+        src = src.replace("<br>", "<br />").replace("<hr>", "<hr />")
+        src = re.sub(r'<style.*>.*</style>', '', src)
+
         sty = InputSource.DefaultFactory.fromString(stylesheet, uri='file:///stylesheet')
-        src = InputSource.DefaultFactory.fromString(src,uri='file:///fart')
+        src = InputSource.DefaultFactory.fromString(str(src),uri='file:///src')
 
         proc = Processor.Processor()
         proc.appendStylesheet(sty)

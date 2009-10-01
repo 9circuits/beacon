@@ -21,11 +21,8 @@ from beacon.logger import log
 @login_required
 def handler(request):
     if request.POST:
-        json = request.POST.keys()[0]
-        log.debug("received json request: " + json)
-        decoder = simplejson.JSONDecoder(strict=False)
-        json_dict = decoder.decode(json)
-        #json_dict = simplejson.loads(json)
+        json_dict = get_json(request)
+        log.debug("received json response: %s" % json_dict.keys())
         try:
             action = json_dict['action']
         except Exception,e:
@@ -54,10 +51,51 @@ def handler(request):
     else:
         return view_document(request)
 
+def get_json(request, debug=False):
+    try:
+        json = request.POST.keys()[0]
+        if debug:
+            jsonfile = os.path.join(tempfile.gettempdir(),
+            'json-data.txt')
+            log.debug('writing json response to file: %s' % jsonfile)
+            open(jsonfile, 'w').write(json)
+        json = escape_quotes_in_json_html(json)
+        #log.debug('json = %s' % json)
+        json_dict = simplejson.loads(json)
+    except Exception,e:
+        log.error('Error: %s' % e)
+        json_dict = {}
+    return json_dict
+
+def escape_quotes_in_json_html(json_string):
+    """ 
+        This is a NASTY HACK that should really be taken care of on Beacon JS
+        side:
+
+        simplejson can't parse things like {"html":"this has <div id="quotes"> in it</div>"}
+        because it's technically not valid JSON:
+
+        [~]|3> simplejson.loads('{"html":"this has <div id="quotes"> in it</div>"} ')
+        ....
+        ValueError: Expecting , delimiter: line 1 column 27 (char 27)
+
+        This method goes through Beacon's ajax requests looking for
+        "html" and "src" identifiers  and properly escapes their content 
+        so that it can later be parsed with simplejson
+    """
+
+    identifiers = ['"html":"','"src":"']
+    for ident in identifiers:
+        loc = json_string.rfind(ident)
+        if loc != -1:
+            content = json_string[loc+len(ident):-3]
+            escapedcontent = content.replace('"','\\"').replace("\n","\\n")
+            json_string = json_string.replace(content, escapedcontent)
+    return json_string
+
 def get_payload(request):
     """Get payload data from ajax request"""
-    json = request.POST.keys()[0]
-    json_dict = simplejson.loads(json)
+    json_dict = get_json(request)
     payload = json_dict['payload']
     return payload
 
@@ -118,9 +156,9 @@ def getsrc(request):
     id = payload['id']
     format = payload['plugin']
     html = payload['html']
-    #src = Document.objects.html_to_xml(html,format)
-    #return HttpResponse(src)
-    return HttpResponse('getsrc')
+    src = Document.objects.html_to_xml(html,format)
+    return HttpResponse(src)
+    #return HttpResponse('getsrc')
 
 @login_required
 def gethtml(request):
