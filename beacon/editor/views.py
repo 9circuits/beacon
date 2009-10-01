@@ -1,19 +1,22 @@
+import os
+import simplejson
+from datetime import date
+
+from Ft.Lib.Uri import OsPathToUri
+from Ft.Xml.Xslt import Processor
+from Ft.Xml import InputSource
+
 from django.views.generic.simple import direct_to_template
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from beacon.editor.models import Document, Section
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError
 from django.template import RequestContext
 from django.conf import settings
-from datetime import date
-import simplejson
-from beacon.logger import log
 
-from Ft.Lib.Uri import OsPathToUri
-from Ft.Xml.Xslt import Processor
-from Ft.Xml import InputSource
+from beacon.editor.models import Document, Section
+from beacon.logger import log
 
 @login_required
 def handler(request):
@@ -63,8 +66,8 @@ def view_document(request):
     #log.debug("viewing doc: type=%(type)s id=%(id)s nocss=%(nocss)s" % request.GET)
     # below will ALL change to a db query to fetch the doc and grab the xml/html
     # for now it's a good test of xsl/xml -> html conversion 
-    stylesheet = settings.XSLT_DIR + '%s2html.xsl' % plugin
-    xmltemplate = settings.XML_DIR + 'new-%s-template.xml' % plugin
+    stylesheet = os.path.join(settings.XSLT_DIR,'%s2html.xsl' % plugin)
+    xmltemplate = os.path.join(settings.XML_DIR,'new-%s-template.xml' % plugin)
     log.debug('stylesheet = %s' % stylesheet)
     log.debug('xmltemplate = %s' % xmltemplate)
 
@@ -109,7 +112,7 @@ def newdoc(request):
     #output = proc.run(src)
 
     # create doc here instead of below non-sense
-    docid = 1
+    docid = 2
 
     html = render_to_string('editor/document.html', {'id':docid,
     'src':'handler?plugin=%s&id=%s&type=html' % (plugin, docid), 'MEDIA_URL':settings.MEDIA_URL})

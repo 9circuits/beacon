@@ -7,13 +7,13 @@
 #       BASE_DIRECTORY = "/home/someuser/beacon/django_port/beacon/"
 # Also add base_directory.py to your .gitignore.
 
+import os
 try:
     from base_directory import BASE_DIRECTORY
 except:
-    import os
     import sys
     # automagic path to installation
-    BASE_DIRECTORY = sys.path[0] + os.path.sep 
+    BASE_DIRECTORY = sys.path[0]
 
 DEBUG = False
 DEBUG = True
@@ -25,7 +25,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'sqlite3'
-DATABASE_NAME = BASE_DIRECTORY + 'beacon.db'
+DATABASE_NAME = os.path.join(BASE_DIRECTORY,'beacon.db')
 DATABASE_USER = ''
 DATABASE_PASSWORD = ''
 DATABASE_HOST = ''
@@ -50,7 +50,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = BASE_DIRECTORY+'media/'
+MEDIA_ROOT = os.path.join(BASE_DIRECTORY,'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -91,7 +91,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 ROOT_URLCONF = 'beacon.urls'
 
 TEMPLATE_DIRS = (
-	BASE_DIRECTORY + "templates/",
+	os.path.join(BASE_DIRECTORY,"templates"),
 )
 
 INSTALLED_APPS = (
@@ -100,12 +100,11 @@ INSTALLED_APPS = (
 	'django.contrib.sessions',
 	'django.contrib.sites',
 	'django.contrib.admin',
-
 	'beacon.editor',
 )
 
-XSLT_DIR = BASE_DIRECTORY + "xsl/"
-XML_DIR = BASE_DIRECTORY + "xml/"
+XSLT_DIR = os.path.join(BASE_DIRECTORY,"xsl")
+XML_DIR = os.path.join(BASE_DIRECTORY,"xml/")
 
 DOJO_LOCAL = False
 
