@@ -15,7 +15,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerEr
 from django.template import RequestContext
 from django.conf import settings
 
-from beacon.editor.models import Document, Section
+from beacon.editor.models import Document #,Section
 from beacon.logger import log
 
 @login_required
@@ -23,7 +23,9 @@ def handler(request):
     if request.POST:
         json = request.POST.keys()[0]
         log.debug("received json request: " + json)
-        json_dict = simplejson.loads(json)
+        decoder = simplejson.JSONDecoder(strict=False)
+        json_dict = decoder.decode(json)
+        #json_dict = simplejson.loads(json)
         try:
             action = json_dict['action']
         except Exception,e:
@@ -52,6 +54,13 @@ def handler(request):
     else:
         return view_document(request)
 
+def get_payload(request):
+    """Get payload data from ajax request"""
+    json = request.POST.keys()[0]
+    json_dict = simplejson.loads(json)
+    payload = json_dict['payload']
+    return payload
+
 @login_required
 def view_document(request):
     log.debug("request.GET = %s" % request.GET)
@@ -60,62 +69,35 @@ def view_document(request):
     docid=request.GET.get('id')
     nocss=request.GET.get('nocss')
 
-    if plugin is None:
-        return HttpResponse('plugin is NONE!')
+    try:
+        doc = Document.objects.get(id=docid, format=plugin)
+        return render_to_response('editor/view-document-html.html',
+        {'document': doc.html, 'plugin': plugin, 'MEDIA_URL': settings.MEDIA_URL})
+    except Exception,e:
+        return HttpResponse('Error: %s' % e)
 
-    #log.debug("viewing doc: type=%(type)s id=%(id)s nocss=%(nocss)s" % request.GET)
-    # below will ALL change to a db query to fetch the doc and grab the xml/html
-    # for now it's a good test of xsl/xml -> html conversion 
-    stylesheet = os.path.join(settings.XSLT_DIR,'%s2html.xsl' % plugin)
-    xmltemplate = os.path.join(settings.XML_DIR,'new-%s-template.xml' % plugin)
-    log.debug('stylesheet = %s' % stylesheet)
-    log.debug('xmltemplate = %s' % xmltemplate)
-
-    styuri = OsPathToUri(stylesheet)
-    srcuri = OsPathToUri(xmltemplate)
-
-    sty = InputSource.DefaultFactory.fromUri(styuri)
-    src = InputSource.DefaultFactory.fromUri(srcuri)
-
-    proc = Processor.Processor()
-    proc.appendStylesheet(sty)
-
-    document = proc.run(src)
-
-    return render_to_response('editor/view-document-html.html',
-    {'document': document, 'plugin': plugin, 'MEDIA_URL': settings.MEDIA_URL})
 
 @login_required
 def beaconui(request):
     #{"action":"beaconui"}
     return direct_to_template(request, template="editor/beaconui.html")
 
+
 @login_required
 def newdoc(request):
-    #{"action":"newdoc","payload":{"id":"tester1820","plugin":"guidexml"}}
-    json = request.POST.keys()[0]
-    json_dict = simplejson.loads(json)
-    payload = json_dict['payload']
-    plugin = payload['plugin']
-    filename = payload['filename']
-    #stylesheet = settings.XSLT_DIR + '%s2html.xsl' % plugin
-    #xmltemplate = settings.XML_DIR + 'new-%s-template.xml' % plugin
+    #{"action":"newdoc","payload":{"plugin":"docbook","filename":"tester2"}}
+    payload = get_payload(request)
 
-    #styuri = OsPathToUri(stylesheet)
-    #srcuri = OsPathToUri(xmltemplate)
+    user = request.user
+    name = payload['filename']
+    format = payload['plugin']
 
-    #sty = InputSource.DefaultFactory.fromUri(styuri)
-    #src = InputSource.DefaultFactory.fromUri(srcuri)
-
-    #proc = Processor.Processor()
-    #proc.appendStylesheet(sty)
-    #output = proc.run(src)
-
-    # create doc here instead of below non-sense
-    docid = 2
+    doc = Document.objects.create_new_document(user,name,format)
+    
+    docid = doc.id
 
     html = render_to_string('editor/document.html', {'id':docid,
-    'src':'handler?plugin=%s&id=%s&type=html' % (plugin, docid), 'MEDIA_URL':settings.MEDIA_URL})
+    'src':'handler?plugin=%s&id=%s&type=html' % (format, docid), 'MEDIA_URL':settings.MEDIA_URL})
 
     response = {}
     response['result'] = 'success'
@@ -123,8 +105,7 @@ def newdoc(request):
 
     json = simplejson.dumps(response)
 
-    return HttpResponse(json)
-
+    return HttpResponse(json, mimetype="application/json")
 
 @login_required
 def savedoc(request):
@@ -133,7 +114,13 @@ def savedoc(request):
 @login_required
 def getsrc(request):
     #{"action":"getsrc","payload":{"id":"tester1820","plugin":"guidexml","html":""}}
-    return HttpResponse("getsrc")
+    payload = get_payload(request)
+    id = payload['id']
+    format = payload['plugin']
+    html = payload['html']
+    #src = Document.objects.html_to_xml(html,format)
+    #return HttpResponse(src)
+    return HttpResponse('getsrc')
 
 @login_required
 def gethtml(request):
@@ -147,7 +134,9 @@ def getrevisions(request):
 @login_required
 def getdoclist(request):
     #{"action":"getdoclist"}
-    return HttpResponse("getdoclist")
+    docs = Document.objects.get_docs_for_user(request.user)
+    log.info('user %s has %s docs' % (request.user, docs.count()))
+    return render_to_response('editor/doclist.html', {'docs': docs})
 
 @login_required
 def editdoc(request):
@@ -155,8 +144,20 @@ def editdoc(request):
 
 @login_required
 def deletedoc(request):
-    #{"action":"deletedoc","payload":{"id":"tester1820","plugin":"guidexml"}}
-    return HttpResponse("deletedoc")
+    """Deletes a document from the database by id"""
+    #{"action":"deletedoc","payload":{"id":"9"}} 
+    payload = get_payload(request)
+    id = payload['id']
+    try:
+        doc = Document.objects.get(id=id)
+        response = {}
+        response['plugin'] = doc.format
+        response['id'] = doc.id
+        doc.delete()
+        json = simplejson.dumps(response)
+        return HttpResponse(json, mimetype="application/json")
+    except Exception, e:
+        return HttpResponse("Error: %s" % e)
 
 @login_required
 def index(request):

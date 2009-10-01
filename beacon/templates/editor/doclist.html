@@ -1,0 +1,8 @@
+{% load i18n %}
+{% for doc in docs %}
+    <tr style="padding: 9px">
+    <td id="File1" style="padding: 5px">{{ doc.name }}</td>
+    <td style="padding: 5px"> <a href="#" title="{{ doc.id }}" class="BeaconEditDocumentButton">Edit</a> </td>
+    <td style="padding: 5px"> <a href="#" title="{{ doc.id }}" class="BeaconDeleteDocumentButton">Delete</a> </td>
+    </tr>
+{% endfor %}
