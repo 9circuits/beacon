@@ -1,3 +1,4 @@
+{% load i18n %}
 <div  id="{{id}}Document">
 
     <div id="{{id}}Sidebar" class="BeaconSideBar ui-corner-all">
@@ -57,7 +58,7 @@
             <iframe id="{{id}}Iframe" src="{{src}}" class="BeaconIframe ui-corner-all">
             </iframe>
             <p id="{{id}}DesignViewLoading" style="display:none">
-                <span>{Loading...}</span>
+                <span>{% trans "Loading..." %}</span>
                 <br />
                 <img src="{{ MEDIA_URL }}beacon/img/loading.gif" />
             </p>
@@ -66,7 +67,7 @@
         <div id="{{id}}SourceView">
             <textarea id="{{id}}TextBox" class="BeaconSourceView ui-corner-all"></textarea>
             <p id="{{id}}SourceViewLoading" style="display:none">
-                <span>{Loading...}</span>
+                <span>{% trans "Loading..." %}</span>
                 <br />
                 <img src="{{ MEDIA_URL }}beacon/img/loading.gif" />
             </p>
@@ -82,7 +83,7 @@
             <iframe id="{{id}}RevisionFrame" name="{{id}}RevisionFrame" class="RevisionFrame" style="float: right; width: 67%; border: none;">
             </iframe>
             <p id="{{id}}RevisionsViewLoading" style="display:none">
-                <span>{Loading...}</span>
+                <span>{% trans "Loading..." %}</span>
                 <br />
                 <img src="{{ MEDIA_URL}}beacon/img/loading.gif" />
             </p>
