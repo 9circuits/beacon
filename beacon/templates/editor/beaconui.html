@@ -1,5 +1,6 @@
+{% load i18n %}
 <ul id="BeaconTabList">
-    <li><a href="#BeaconIntroTab">{Welcome}</a></li>
+    <li><a href="#BeaconIntroTab">{% trans "Welcome" %}</a></li>
 </ul>
 
 <div id="BeaconIntroTab" class="BeaconDocumentTab">
@@ -20,50 +21,50 @@
             </ul>
         </div>
         <div id="BeaconMenu" class="BeaconAccordion">
-            <h4><a href="#">{Your Documents}</a></h4>
+            <h4><a href="#">{% trans "Your Documents" %}</a></h4>
             <div class="BeaconAccordionItem">
                 <div style="overflow: scroll; height: 250px;">
                     <p><a id="BeaconRefreshDocumentList" class="BeaconButton ui-corner-all">Refresh List</a></p>
                     <table id="BeaconDocumentList">
-                        {previousdocs}
+                        {% trans "previousdocs" %}
                     </table>
                 </div>
             </div>
-            <h4><a href="#">{Create a New Document}</a></h4>
+            <h4><a href="#">{% trans "Create a New Document" %}</a></h4>
             <div class="BeaconAccordionItem">
                 <div id="BeaconNewDocumentMenu">
-                    <p>{File Name:}</p>
+                    <p>{% trans "File Name:" %}</p>
                     <p><input id="BeaconNewFileName" type="text" /></p>
-                    <p>{Choose Document Type:}</p>
+                    <p>{% trans "Choose Document Type:" %}</p>
                     <p>
                         <select id="BeaconNewDocType">
-                            <option value="-1">{Select one}</option>
+                            <option value="-1">{% trans "Select one" %}</option>
                         </select>
                     </p>
-                    <p><a id="BeaconCreateNewButton" class="BeaconButton ui-corner-all">{Create New!}</a></p>
+                    <p><a id="BeaconCreateNewButton" class="BeaconButton ui-corner-all">{% trans "Create New!" %}</a></p>
                 </div>
             </div>
-            <h4><a href="#">{Edit a Remote Document}</a></h4>
+            <h4><a href="#">{% trans "Edit a Remote Document" %}</a></h4>
             <div class="BeaconAccordionItem">
                 <div id="BeaconEditRemoteMenu">
-                    <p>{File Name:}</p>
+                    <p>{% trans "File Name:" %}</p>
                     <p><input id="BeaconEditFileName" type="text" /></p>
-                    <p>{Choose Document Type:}</p>
+                    <p>{% trans "Choose Document Type:" %}</p>
                     <p>
                         <select id="BeaconEditDocType">
-                            <option value="-1">{Select one}</option>
+                            <option value="-1">{% trans "Select one" %}</option>
                         </select>
                     </p>
                     <div id="BeaconEditFetchFormContainer">
-                        <p>{Enter a URL to fetch from:}</p>
+                        <p>{% trans "Enter a URL to fetch from:" %}</p>
                         <p><input id="BeaconURLField" type="text" /></p>
-                        <p><a id="BeaconFetchButton" class="BeaconButton ui-corner-all">{Fetch}</a></p>
+                        <p><a id="BeaconFetchButton" class="BeaconButton ui-corner-all">{% trans "Fetch" %}</a></p>
                     </div>
                 </div>
 
                 <div id="BeaconLoading" style="display:none;">
                     <p class="BeaconLoading">
-                        <span>{Loading...}</span>
+                        <span>{% trans "Loading..." %}</span>
                         <br />
                         <img src="{{ MEDIA_URL }}beacon/img/loading.gif" />
                     </p>
@@ -76,28 +77,28 @@
         <div style="margin: 10px;">
             <div id="BeaconWelcome" style="text-align: center; margin: 5px;">
                 <img src="{{ MEDIA_URL }}beacon/img/beacon-logo.jpg" alt="Beacon Logo" />
-                <p>{Welcome to Beacon. A WYSIWYG (and much more!) Editor.}</p>
+                <p>{% trans "Welcome to Beacon. A WYSIWYG (and much more!) Editor." %}</p>
             </div>
             <hr />
-            <p>{Choose an action from the menu on the right.}</p>
-            <p><b>{1. Create a New Document:} </b>
-                {Create a new document using the plugin's template for new documents.}
+            <p>{% trans "Choose an action from the menu on the right." %}</p>
+            <p><b>{% trans "1. Create a New Document:" %} </b>
+                {% trans "Create a new document using the plugin's template for new documents." %}
             </p>
-            <p><b>{2. Edit a document:} </b>
-                {You can either fetch an existing document at a give URL or upload a file depending on the plugin.}
+            <p><b>{% trans "2. Edit a document:" %} </b>
+                {% trans "You can either fetch an existing document at a give URL or upload a file depending on the plugin." %}
             </p>
             <hr />
-            <p>{To close a tab click the top right icon having a cross.}</p>
-            <p>{Access live help by clicking the ? button which opens a tab with IRC chat in #beacon on Freenode.}</p>
+            <p>{% trans "To close a tab click the top right icon having a cross." %}</p>
+            <p>{% trans "Access live help by clicking the ? button which opens a tab with IRC chat in #beacon on Freenode." %}</p>
             <hr />
             <p><b>Beacon Version: 0.5 Beta</b></p>
-            <p><b>{Homepage:}</b> <a href="http://beacon.kix.in">http://beacon.kix.in</a></p>
-            <p><b>{Status:}</b></p>
+            <p><b>{% trans "Homepage:" %}</b> <a href="http://beacon.kix.in">http://beacon.kix.in</a></p>
+            <p><b>{% trans "Status:" %}</b></p>
             <p>
-                <b>{Configuration}</b><br />
-                {Plugins Loaded:} <span id="BeaconConfigPlugins"></span><br />
-                {Language:} <span id="BeaconConfigLanguage"></span><br />
-                {Theme:} <span id="BeaconConfigTheme"></span><br />
+                <b>{% trans "Configuration" %}</b><br />
+                {% trans "Plugins Loaded:" %} <span id="BeaconConfigPlugins"></span><br />
+                {% trans "Language:" %} <span id="BeaconConfigLanguage"></span><br />
+                {% trans "Theme:" %} <span id="BeaconConfigTheme"></span><br />
             </p>
         </div>
     </div>
