@@ -9,6 +9,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib import admin
 from django.template import Context, loader, RequestContext
+from django.template.loader import render_to_string
 
 from xml.dom.ext.reader import Sax2
 from xml import xpath
@@ -111,6 +112,11 @@ class Document(models.Model):
     def save(self, force_insert=False, force_update=False):
         log.info('Saving Document %s' % self.name)
         super(Document, self).save(force_insert, force_update)
+
+    def get_ui_html(self):
+        html = render_to_string('editor/document.html', {'id':self.id,
+        'src':'handler?plugin=%s&id=%s&type=html' % (self.format, self.id), 'MEDIA_URL':settings.MEDIA_URL})
+        return html
 
 class Revision(models.Model):
     #$beacon_create_revisions_table = "CREATE TABLE `beacon`.`beacon_revisions` (

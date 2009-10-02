@@ -10,7 +10,6 @@ from django.views.generic.simple import direct_to_template
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
-from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError
 from django.template import RequestContext
 from django.conf import settings
@@ -82,6 +81,8 @@ def escape_quotes_in_json_html(json_string):
         This method goes through Beacon's ajax requests looking for
         "html" and "src" identifiers  and properly escapes their content 
         so that it can later be parsed with simplejson
+
+        Compliments of Cheater McCheaterson ;)
     """
 
     identifiers = ['"html":"','"src":"']
@@ -120,7 +121,6 @@ def beaconui(request):
     #{"action":"beaconui"}
     return direct_to_template(request, template="editor/beaconui.html")
 
-
 @login_required
 def newdoc(request):
     #{"action":"newdoc","payload":{"plugin":"docbook","filename":"tester2"}}
@@ -132,14 +132,11 @@ def newdoc(request):
 
     doc = Document.objects.create_new_document(user,name,format)
     
-    docid = doc.id
-
-    html = render_to_string('editor/document.html', {'id':docid,
-    'src':'handler?plugin=%s&id=%s&type=html' % (format, docid), 'MEDIA_URL':settings.MEDIA_URL})
+    html = doc.get_ui_html()
 
     response = {}
     response['result'] = 'success'
-    response['payload'] = {'ui':html, 'id':docid}
+    response['payload'] = {'ui':html, 'id':doc.id}
 
     json = simplejson.dumps(response)
 
@@ -147,7 +144,21 @@ def newdoc(request):
 
 @login_required
 def savedoc(request):
-    return HttpResponse("savedoc")
+    user = request.user
+    payload = get_payload(request)
+    id = payload['id']
+    format = payload['plugin']
+    html = payload['html']
+    src = Document.objects.html_to_xml(html,format)
+    try:
+        doc = Document.objects.get(id=docid, format=plugin, user=user)
+        doc.html = html
+        doc.source = src
+        doc.save()
+        return HttpResponse("DONE")
+    except Exception,e:
+        log.error("Error: %s" % e)
+        return HttpResponse("FAIL")
 
 @login_required
 def getsrc(request):
@@ -163,7 +174,12 @@ def getsrc(request):
 @login_required
 def gethtml(request):
     #{"action":"gethtml","payload":{"id":"tester8495","plugin":"guidexml","src":"xml code" }
-    return HttpResponse("gethtml")
+    payload = get_payload(request)
+    id = payload['id']
+    format = payload['plugin']
+    xml = payload['src']
+    src = Document.objects.xml_to_html(xml,format)
+    return HttpResponse(src)
 
 @login_required
 def getrevisions(request):
@@ -178,16 +194,31 @@ def getdoclist(request):
 
 @login_required
 def editdoc(request):
-    return HttpResponse("editdoc")
+    #{"action":"editdoc","payload":{"id":"1"}}
+    user = request.user
+    payload = get_payload(request)
+    id = payload['id']
+    try:
+        doc = Document.objects.get(id=id, user=user)
+        html = doc.get_ui_html()
+        response = {}
+        response['result'] = 'success'
+        response['payload'] = {'ui':html, 'id':doc.id, 'plugin': doc.format}
+        json = simplejson.dumps(response)
+        return HttpResponse(json, mimetype="application/json")
+    except Exception,e:
+        log.error('Error: %s' % e)
+        return HttpResponse('Error: %s' % e)
 
 @login_required
 def deletedoc(request):
     """Deletes a document from the database by id"""
     #{"action":"deletedoc","payload":{"id":"9"}} 
+    user = request.user
     payload = get_payload(request)
     id = payload['id']
     try:
-        doc = Document.objects.get(id=id)
+        doc = Document.objects.get(id=id, user=user)
         response = {}
         response['plugin'] = doc.format
         response['id'] = doc.id
