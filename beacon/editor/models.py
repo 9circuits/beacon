@@ -99,7 +99,7 @@ class Document(models.Model):
         super(Document, self).save(force_insert, force_update)
         log.info('Saving Document %s' % self.name)
         # create revision
-        rev = Revision(doc=self, revid=self.revision_set.count()+1)
+        rev = Revision(doc=self, revid=self.revision_set.count())
         rev.html = self.html
         rev.source = self.source
         rev.save()
