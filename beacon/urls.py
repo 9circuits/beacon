@@ -6,7 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 		(r'^$', 'beacon.editor.views.index', {}, 'index'),
-		(r'^login/', 'django.contrib.auth.views.login', {'template_name':'login.html'}, 'login'),
+		(r'^login/', 'beacon.editor.views.login', {'template_name':'login.html'}, 'login'),
 		(r'^logout/', 'django.contrib.auth.views.logout_then_login', {}, 'logout'),
         (r'^handler$', 'beacon.editor.views.handler', {}, 'handler'),
 

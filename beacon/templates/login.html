@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
@@ -15,73 +16,40 @@
             <div style="margin: 10px;">
                 <div id="BeaconWelcome" style="text-align: center; margin: 5px;">
                     <img src="{{ MEDIA_URL }}beacon/img/beacon-logo.jpg" alt="Beacon Logo" />
-                    <p>Welcome to Beacon. A WYSIWYG (and much more!) Editor.</p>
+                    <p>{% trans "Welcome to Beacon. A WYSIWYG (and much more!) Editor." %}</p>
                     {% if form.errors %}
-                    <p>Your username and password didn't match. Please try again.</p>
+                    <p>{% trans "Your username and password didn't match. Please try again." %}</p>
                     {% endif %}
                 </div>
                 <hr />
-                <p align="right"><b>Beacon Version: {{ BEACON_VERSION }}</b></p>
-                <p><b>Status:</b></p>
-		    {% comment %}
-                    <?php
-                        $useragent = $_SERVER['HTTP_USER_AGENT'];
-                        if(preg_match('|Firefox/([0-9\.]+)|', $useragent, $matched)) {
-                            $browser_version=$matched[1];
-                            $browser = 'Firefox';
-                            if ((int)$browser_version[0] >= 3) {
-                                echo '<p><span class="ui-state-default">
-                                      Browser is Firefox 3.0+. OK. </span></p>';
-                            } else {
-                                echo '<p><span class="ui-state-error">
-                                      Error: This version of firefox may not
-                                      work well with Beacon. Use 3.0+ only.
-                                      </span></p>';
-                            }
-                        } else {
-                            echo '<p><span class="ui-state-error">Error:
-                                  This browser maybe incompatible with Beacon.
-                                  Please use Firefox 3.0+ only.</span></p>';
-                        }
-                    ?>
-		    {% endcomment %}
-
-                    <script>
-                        document.write('<p><span class="ui-state-default">Javascript is enabled. OK.</span></p>')
-                    </script>
-                    <noscript>
-                        <p><span class="ui-state-error">Error: Javascript seems to be disabled!</span></p>
-                    </noscript>
-                    {% comment %}
-                    <?php
-                        if (!$beacon_runnable) {
-                            echo '<p><span class="ui-state-error">'.$beacon_error.'</span></p>';
-                        } else {
-                            echo '<p><span class="ui-state-default">'.$beacon_error.'</span></p>';
-                        }
-                    ?>
-		    {% endcomment %}
+                <p align="right"><b>{% trans "Beacon Version" %}: {{ BEACON_VERSION }}</b></p>
+                <p><b>{% trans "Status" %}:</b></p>
+		<p><span class="{{ span_class }}">{{ browser_msg }}</span></p>
+		<script>
+		document.write('<p><span class="ui-state-default">{% trans "Javascript is enabled. OK." %}</span></p>')
+		</script>
+		<noscript>
+		<p><span class="ui-state-error">{% trans "Error: Javascript seems to be disabled!" %}</span></p>
+		</noscript>
             </div>
         </div>
 
 
         <div class="actions">
             <div id="loginDialog" title="Login">
-                <p id="validateTips2">All form fields are required.</p>
+                <p id="validateTips2">{% trans "All form fields are required." %}</p>
                 <form id="loginForm" action="." method="POST">
                     <fieldset>
-                        <label for="username">Username</label>
+                        <label for="username">{% trans "Username" %}</label>
                         <input type="text" name="username" id="username" class="text ui-widget-content ui-corner-all" />
-                        <label for="password">Password</label>
+                        <label for="password">{% trans "Password" %}</label>
                         <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" />
                     </fieldset>
                 </form>
             </div>
-            <p><button id="login" class="ui-button ui-state-default ui-corner-all">Login</button></p>
+            <p><button id="login" class="ui-button ui-state-default ui-corner-all">{% trans "Login" %}</button></p>
         </div>
-
     </div>
-
     <script src="{{ MEDIA_URL }}beacon/js/jquery.js" type="text/javascript"></script>
     <script src="{{ MEDIA_URL }}beacon/js/jquery.ui.js" type="text/javascript"></script>
     <script src="{{ MEDIA_URL }}site/js/main.js" type="text/javascript"></script>

@@ -11,6 +11,7 @@ from Ft.Xml.Xslt import Processor
 from Ft.Xml import InputSource
 
 from beacon.logger import log
+from beacon.editor.hacks import clean_src
 
 class DocumentManager(models.Manager):
 
@@ -22,13 +23,8 @@ class DocumentManager(models.Manager):
             srcfile = os.path.join(tempfile.gettempdir(), 'srcfile.txt')
             open(srcfile,'w').write(src)
 
-        # NASTY HACK needed for guidexml. docbook doesn't SEEM 
-        # to need it (doesn't hurt) but that's only testing on 
-        # new-template.xml
-        # 
-        # Compliments of Cheater McCheaterson ;)
-        src = src.replace("<br>", "<br />").replace("<hr>", "<hr />")
-        src = re.sub(r'<style.*>.*</style>', '', src)
+        # nasty hack to clean src for guidexml xslt
+        src = clean_src(src)
 
         sty = InputSource.DefaultFactory.fromString(stylesheet, uri='file:///stylesheet')
         src = InputSource.DefaultFactory.fromString(str(src),uri='file:///src')

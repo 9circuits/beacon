@@ -1,4 +1,5 @@
 import os
+import re
 import simplejson
 
 from django.views.generic.simple import direct_to_template
@@ -8,6 +9,8 @@ from django.http import HttpResponse
 
 from beacon.editor.models import Document, Revision
 from beacon.logger import log
+from beacon.editor.hacks import login as _login
+from beacon.editor.hacks import escape_json
 
 class Registry(dict):
     """Plain old python dict with a function called register for adding
@@ -64,7 +67,8 @@ def get_json(request, debug=False):
             jsonfile = os.path.join(tempfile.gettempdir(), 'json-data.txt')
             log.debug('writing json response to file: %s' % jsonfile)
             open(jsonfile, 'w').write(json)
-        json = escape_quotes_in_json_html(json)
+        # nasty hack to clean html and src json fields
+        json = escape_json(json)
         #log.debug('json = %s' % json)
         json_dict = simplejson.loads(json)
     except Exception,e:
@@ -274,3 +278,29 @@ post_registry.register("deletedoc", deletedoc)
 def index(request):
 	return direct_to_template(request, template="editor/index.html")
 
+def login(request, template_name):
+    http_user_agent = request.META['HTTP_USER_AGENT']
+    firefox_regex = re.compile(("(Firefox)/([0-9\.]+)"))
+    has_firefox = firefox_regex.search(http_user_agent)
+    span_class = "ui-state-error"
+    if has_firefox:
+        browser = has_firefox.group(1)
+        version = int(has_firefox.group(2)[0])
+        if version >= 3:
+            log.info("User %s is using Firefox 3.0+ (%s)" %
+            (request.user, http_user_agent))
+            browser_msg = """Browser is Firefox 3.0+. OK."""
+            span_class = "ui-state-default"
+        else:
+            log.info("User %s using Firefox < 3.0 (%s)" %
+            (request.user, http_user_agent))
+            browser_msg = """Error: This version of firefox may not
+            work well with Beacon.  Use 3.0+ only."""
+    else:
+        log.info("User %s is not using Firefox 3.0+ (%s)" %
+        (request.user, http_user_agent))
+        browser_msg = """Error: This browser maybe incompatible with Beacon.
+        Please use Firefox 3.0+ only."""
+    return _login(request, template_name=template_name,
+    extra_context={"browser_msg": browser_msg, "span_class":
+    span_class})
