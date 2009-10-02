@@ -714,7 +714,7 @@ BeaconAPI.prototype.getRevisions = function() {
                 var html = "", url = "";
 
                 for (i = 0; i < json.revisions.length; i++) {
-                    url = "ajax.php?type=revision&plugin="+this.plugin+"&id=" + json.revisions[i].id;
+                    url = "handler?type=revision&plugin="+this.plugin+"&id=" + json.revisions[i].id;
                     html += '<p><a href="'+url+'" target="';
                     html += this.id+'RevisionFrame">Rev. ';
                     html += json.revisions[i].num+'</a>';

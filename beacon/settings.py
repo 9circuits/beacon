@@ -83,8 +83,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	#"django.core.context_processors.debug",
 	"django.core.context_processors.i18n",
 	"django.core.context_processors.media",
-
-	"beacon.context_processors.dojo_cp",
 	"beacon.context_processors.beacon_cp",
 )
 
@@ -106,9 +104,8 @@ INSTALLED_APPS = (
 XSLT_DIR = os.path.join(BASE_DIRECTORY,"xsl")
 XML_DIR = os.path.join(BASE_DIRECTORY,"xml")
 
-DOJO_LOCAL = False
-
-BEACON_VERSION = "1.0"
+BEACON_VERSION = "9999"
+BEACON_HOMEPAGE = "http://beacon.kix.in"
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"

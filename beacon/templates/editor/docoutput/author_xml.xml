@@ -1,8 +1,0 @@
-<author{% if author.title %} title="{{ author.title }}"{% endif %}>
-{% if author.email %}
-<mail link="{{ author.email }}">{{ author.name }}</mail>
-{% else %}
-{{ author.name }}
-{% endif %}
-</author>
-

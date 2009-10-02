@@ -1,7 +1,0 @@
-<chapter>
-<title>{{ chapter.title }}</title>
-{% for section in chapter.section_set.all %}
-{% include "editor/docoutput/section_xml.xml" %}
-{% endfor %}
-</chapters>
-

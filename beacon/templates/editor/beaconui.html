@@ -26,7 +26,7 @@
                 <div style="overflow: scroll; height: 250px;">
                     <p><a id="BeaconRefreshDocumentList" class="BeaconButton ui-corner-all">Refresh List</a></p>
                     <table id="BeaconDocumentList">
-                        {% trans "previousdocs" %}
+                        {{ previousdocs }}
                     </table>
                 </div>
             </div>
@@ -91,8 +91,8 @@
             <p>{% trans "To close a tab click the top right icon having a cross." %}</p>
             <p>{% trans "Access live help by clicking the ? button which opens a tab with IRC chat in #beacon on Freenode." %}</p>
             <hr />
-            <p><b>Beacon Version: 0.5 Beta</b></p>
-            <p><b>{% trans "Homepage:" %}</b> <a href="http://beacon.kix.in">http://beacon.kix.in</a></p>
+            <p><b>Beacon Version: {{ BEACON_VERSION }}</b></p>
+            <p><b>{% trans "Homepage:" %}</b> <a href="{{ BEACON_HOMEPAGE }}">{{ BEACON_HOMEPAGE }}</a></p>
             <p><b>{% trans "Status:" %}</b></p>
             <p>
                 <b>{% trans "Configuration" %}</b><br />

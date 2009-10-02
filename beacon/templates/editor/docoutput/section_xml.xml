@@ -1,5 +1,0 @@
-<section>
-<title>{{ section.title }}</title>
-{{ self.get_body_xml|safe }}
-</section>
-
