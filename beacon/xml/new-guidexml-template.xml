@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- $Header: /var/cvsroot/gentoo/xml/htdocs/doc/en/xml-guide.xml,v 1.69 2009/02/28 01:34:20 nightmorph Exp $ -->
-<!DOCTYPE guide SYSTEM "/usr/portage/metadata/dtd/guide.dtd">
+<!-- <!DOCTYPE guide SYSTEM "/usr/portage/metadata/dtd/guide.dtd"> -->
 
 <guide>
 <title>Gentoo GuideXML Guide</title>
