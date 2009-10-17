@@ -2,6 +2,7 @@ import os
 import re
 import simplejson
 
+from django.contrib import admin
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import models
@@ -95,6 +96,9 @@ class Document(models.Model):
     html = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
 
+    def __unicode__(self):
+        return self.name
+
     def save(self, force_insert=False, force_update=False):
         super(Document, self).save(force_insert, force_update)
         log.info('Saving Document %s' % self.name)
@@ -127,6 +131,8 @@ class Document(models.Model):
             revs.append(revision)
         return simplejson.dumps(json_dict) 
 
+admin.site.register(Document)
+
 class Revision(models.Model):
     #$beacon_create_revisions_table = "CREATE TABLE `beacon`.`beacon_revisions` (
     #`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -144,6 +150,11 @@ class Revision(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     diff = models.TextField(null=True, blank=True)
 
+    def __unicode__(self):
+        return "%s-rev-%d" % (self.doc.name,self.revid)
+
     def save(self, force_insert=False, force_update=False):
         log.info('Creating Revision Point for doc: %s' % self.doc.name)
         super(Revision, self).save(force_insert, force_update)
+
+admin.site.register(Revision)
