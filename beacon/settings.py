@@ -105,7 +105,7 @@ XSLT_DIR = os.path.join(BASE_DIRECTORY,"xsl")
 XML_DIR = os.path.join(BASE_DIRECTORY,"xml")
 
 BEACON_VERSION = "9999"
-BEACON_HOMEPAGE = "http://beacon.kix.in"
+BEACON_HOMEPAGE = "http://beaconeditor.org"
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
