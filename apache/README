@@ -1,0 +1,9 @@
+django.wsgi:
+
+configure this file with the correct paths (read comments for details)
+
+example-beacon-vhost.conf:
+
+drop this virtual host configuration into your apache folder and modify paths appropriately
+
+NOTE: you will also need to modify trunk/beacon/media/beacon/beacon.conf with the correct url to beacon
