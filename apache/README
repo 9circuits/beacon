@@ -6,6 +6,13 @@ http://docs.djangoproject.com/en/dev/howto/deployment/modwsgi/
 
 After reading the docs, the below information should help jump-start getting django-beacon into production on apache
 
+# DJANGO/BEACON production settings.py
+For production, it is suggested that you set the following variables in beacon/settings.py:
+
+    BASE_DIRECTORY = '/path/to/your/beacon/' # path to your beacon folder (ie the one with settings.py, manage.py, etc in it)
+    DEBUG = False
+    USE_I18N = False
+
 # VHOST CONFIG
 example-beacon-vhost.conf:
 
@@ -18,4 +25,4 @@ django.wsgi:
 
 # BEACON JS CONFIG
 
-For production, you will also need to modify beacon/media/beacon/beacon.conf with the correct url to beacon
+    For production, you will also need to modify beacon/media/beacon/beacon.conf with the correct url to beacon

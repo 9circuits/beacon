@@ -15,7 +15,7 @@ sys.path.append('/home/user/beacon')
 # path to beacon folder (ie one with manage.py, settings.py, etc in it)
 sys.path.append('/home/user/beacon/beacon')
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'beacon.settings_production'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'beacon.settings'
 
 import django.core.handlers.wsgi
 application = django.core.handlers.wsgi.WSGIHandler()
