@@ -76,34 +76,6 @@ def get_json(request, debug=False):
         json_dict = {}
     return json_dict
 
-def escape_quotes_in_json_html(json_string):
-    """ 
-        This is a NASTY HACK that should really be taken care of on Beacon JS
-        side:
-
-        simplejson can't parse things like {"html":"this has <div id="quotes"> in it</div>"}
-        because it's technically not valid JSON:
-
-        [~]|3> simplejson.loads('{"html":"this has <div id="quotes"> in it</div>"} ')
-        ....
-        ValueError: Expecting , delimiter: line 1 column 27 (char 27)
-
-        This method goes through Beacon's ajax requests looking for
-        "html" and "src" identifiers  and properly escapes their content 
-        so that it can later be parsed with simplejson
-
-        Compliments of Cheater McCheaterson ;)
-    """
-
-    identifiers = ['"html":"','"src":"']
-    for ident in identifiers:
-        loc = json_string.rfind(ident)
-        if loc != -1:
-            content = json_string[loc+len(ident):-3]
-            escapedcontent = content.replace('"','\\"').replace("\n","\\n")
-            json_string = json_string.replace(content, escapedcontent)
-    return json_string
-
 def get_payload(request):
     """Get payload data from ajax request"""
     json_dict = get_json(request)
