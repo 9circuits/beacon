@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
+from beacon import settings
 from beacon.editor.models import Document, Revision
 from beacon.logger import log
 from beacon.editor.hacks import login as _login
@@ -248,9 +249,21 @@ post_registry.register("deletedoc", deletedoc)
 
 @login_required
 def index(request):
-	return direct_to_template(request, template="editor/index.html")
+    return direct_to_template(request, template="editor/index.html")
+
+def get_real_ip(request):
+    """ 
+    Returns the real user IP, even if behind a proxy.
+    Set BEHIND_PROXY to True in your settings if Django is
+    running behind a proxy.
+    """
+    if getattr(settings, 'BEHIND_PROXY', False):
+        return request.META['HTTP_X_FORWARDED_FOR']
+    return request.META['REMOTE_ADDR']
 
 def login(request, template_name):
+    user = request.user
+    user_ip = get_real_ip(request)
     http_user_agent = request.META['HTTP_USER_AGENT']
     firefox_regex = re.compile(("(Firefox)/([0-9\.]+)"))
     has_firefox = firefox_regex.search(http_user_agent)
@@ -259,18 +272,18 @@ def login(request, template_name):
         browser = has_firefox.group(1)
         version = int(has_firefox.group(2)[0])
         if version >= 3:
-            log.info("User %s is using Firefox 3.0+ (%s)" %
-            (request.user, http_user_agent))
+            log.info("User %s (%s) is using Firefox 3.0+ (%s)" %
+            (user, user_ip, http_user_agent))
             browser_msg = """Browser is Firefox 3.0+. OK."""
             span_class = "ui-state-default"
         else:
-            log.info("User %s using Firefox < 3.0 (%s)" %
-            (request.user, http_user_agent))
+            log.info("User %s (%s) using Firefox < 3.0 (%s)" %
+            (user, http_user_agent))
             browser_msg = """Error: This version of firefox may not
             work well with Beacon.  Use 3.0+ only."""
     else:
-        log.info("User %s is not using Firefox 3.0+ (%s)" %
-        (request.user, http_user_agent))
+        log.info("User %s (%s) is not using Firefox 3.0+ (%s)" %
+        (user, user_ip, http_user_agent))
         browser_msg = """Error: This browser maybe incompatible with Beacon.
         Please use Firefox 3.0+ only."""
     return _login(request, template_name=template_name,

@@ -15,9 +15,23 @@ except:
     # automagic path to installation
     BASE_DIRECTORY = sys.path[0]
 
+# enable/disable all logging in beacon
+LOGGING = True
+# LOG_LEVEL choices: DEBUG, INFO, WARN, ERROR, FATAL
+LOG_LEVEL = "DEBUG"
+# enable/disable logging to console (most want this for debug, not for production)
+LOG_TO_STDOUT = True
+# enable/disable logging to syslog (ie /var/log/messages)
+LOG_TO_SYSLOG = False
+# enable logging to a file (requires full path to a file to log to)
+# default is to disable logging to a file
+BEACON_LOG_FILE = None
+
 DEBUG = False
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+BEHIND_PROXY = False
 
 ADMINS = (
 )

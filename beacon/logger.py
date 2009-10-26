@@ -1,10 +1,10 @@
-# Code below from StarCluster (http://web.mit.edu/starcluster)
 
 # Beacon Logger
 # Setup logging globally (ie root logger)
 import types
 import logging
 import logging.handlers
+from beacon import settings
 
 INFO_NO_NEWLINE = logging.INFO + 1
 
@@ -37,13 +37,48 @@ class MultipleFormatHandler(logging.StreamHandler):
         except:
             self.handleError(record)
 
-log = logging.getLogger('beacon')
-log.setLevel(logging.DEBUG)
+LEVELS = {
+    'DEBUG': logging.DEBUG,
+    'INFO': logging.INFO,
+    'WARNING': logging.WARN,
+    'ERROR': logging.ERROR,
+    'FATAL': logging.FATAL,
+}
 
-mfh = MultipleFormatHandler()
-log.addHandler(mfh)
+def get_logger():
+    log = logging.getLogger('beacon')
+    
+    if settings.LOG_LEVEL:
+        try:
+            log.setLevel(LEVELS[settings.LOG_LEVEL.upper()])
+        except Exception,e:
+            print "Error setting LOG_LEVEL, available options are: \n%s" \
+            % ', '.join(LEVELS.keys())
+            print "Defaulting to DEBUG..." 
+            log.setLevel(logging.DEBUG)
+    else:
+        log.setLevel(logging.DEBUG)
 
-syslog_handler = logging.handlers.SysLogHandler(address='/dev/log')
-formatter = logging.Formatter("%(filename)s:%(lineno)d - %(levelname)s - %(message)s\n")
-syslog_handler.setFormatter(formatter)
-log.addHandler(syslog_handler)
+    if settings.LOG_TO_STDOUT:
+        log.addHandler(MultipleFormatHandler())
+
+    if settings.BEACON_LOG_FILE:
+        try:
+            mfh = MultipleFormatHandler(open(settings.BEACON_LOG_FILE, 'w'))
+            log.addHandler(mfh)
+        except Exception, e:
+            print "Problem logging to BEACON_LOG_FILE:"
+            print e
+
+    if settings.LOG_TO_SYSLOG:
+        syslog_handler = logging.handlers.SysLogHandler(address='/dev/log')
+        formatter = logging.Formatter("%(filename)s:%(lineno)d - %(levelname)s - %(message)s\n")
+        syslog_handler.setFormatter(formatter)
+        log.addHandler(syslog_handler)
+
+    if not settings.LOGGING:
+        logging.disable(logging.FATAL + 1)
+
+    return log
+
+log = get_logger()
