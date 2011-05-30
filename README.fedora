@@ -1,0 +1,8 @@
+If you have installed Beacon from the RPM then cheer up as 
+most of the work has been done for you :)
+
+Please follow the instructions given in README_DATABASE.
+
+In addition, if you wish to change the default location where
+beacon resides, please be sure to chage te settings in
+beacon.conf and also in httpd-beacon.conf.

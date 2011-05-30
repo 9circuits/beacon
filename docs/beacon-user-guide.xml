@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article id="example-tutorial">
+  <title>Beacon - User Guide</title>
+  <section id="sn-small-section">
+    <title>Introduction</title>
+    <para>Beacon is a WYSIWYM based XML editor with an emphasis on
+clean and sane output. It uses a 'fill in the blanks' approach to web-
+based editing and has a plug-in architecture to allow other documentation
+types to be integrated as well.</para>
+    <para>Currently Beacon is under development but the source can be
+obtained from our GIT repository.</para>
+    <screen>git clone git://git.tuxfamily.org/gitroot/beacon/trunk.git</screen>
+    <para>We try our best to make sure that the tree does not have broken
+code! A beta release is not far though. For a more detailed
+installation guide please have a look at https://fedoraproject.org/wiki/DocBook_Editor_Documentation.</para>
+  </section>
+  <section id="cdsfsdf8241_node_85_newNode">
+    <title>Getting Started</title>
+    <para>Once you are setup and ready to go, point your browser to the
+Beacon setup and let it load.</para>
+    <note>
+      <title>Reduce Loading Times</title>
+      <para>You can reduce loading time by loading less number of
+plug-ins.</para>
+    </note>
+    <para>When Beacon loads you can see a basic introduction page with
+a sidebar on the right. This will be the usual structure of all
+document workspaces that you will create in Beacon.</para>
+    <itemizedlist>
+      <title>Structure</title>
+      <listitem>
+        <para>A Sidebar - Has a lot of tools like trees and insert
+options.</para>
+      </listitem>
+      <listitem>
+        <para>Main Content - Shows the document itself and some
+options on top along with last saved information. </para>
+      </listitem>
+    </itemizedlist>
+    <para>Beacon has a very simple UI. In the next section we'll
+describe how to edit a document. When you create a new document it
+opens in a new tab. You can navigate between different tabs and work
+on multiple documents simultaneously.</para>
+  </section>
+  <section id="cdsfsdf8241_node_180_newNode">
+    <title>Editing a Document</title>
+    <para>Clicking anywhere on the main document will cause an editor
+to open up if the node that you have clicked allows editing. While
+editing, click anywhere else on the document except the node you are
+editing to close the editor. You can alternatively hit the return key
+to close the inline editor.</para>
+    <itemizedlist>
+      <title>The top bar above the main content has:</title>
+      <listitem>
+        <para>Save Button: Saves the document to the server.</para>
+      </listitem>
+      <listitem>
+        <para>XML View Button: This removes the design view and shows
+the raw XML. This can also be edited and the changes will reflect back
+to design view. To get back to the design view hit the XML view button again.</para>
+      </listitem>
+      <listitem>
+        <para>Last saved information: This label shows when the
+document was last saved.</para>
+      </listitem>
+    </itemizedlist>
+    <para>The side bar has two blocks in an accordion widget. Clicking
+on one collapses the other. The default open view shows a document
+tree. The document tree shows all nodes in the document. One can focus
+the design view on a particular node by double clicking that node in
+the tree.</para>
+    <itemizedlist>
+      <title>Right clicking a node brings up a context menu with the
+following options:</title>
+      <listitem>
+        <para>Add sibling before this node</para>
+      </listitem>
+      <listitem>
+        <para>Add sibling after this node</para>
+      </listitem>
+      <listitem>
+        <para>Delete this node</para>
+      </listitem>
+    </itemizedlist>
+    <para>The first and second options are used to create new nodes in
+the document. When clicked a tree node will appear with a drop down
+select box. This select box will contain the list of node that can be
+added here. Choose one and you will see it appear in the design
+view.</para>
+    <para>Below the Document Tree there is a block called ëInsert
+Inline Childí. This is used to insert inline nodes on selected text in
+the document. Select a piece of text when using a rich text editor
+(say on a paragraph, usually headings do not allow it) and move to the
+select box to choose inline type. Select one and click Insert. This
+will cause the highlighted text to be wrapped with that particular
+inline type.</para>
+  <note>
+    <title>Populating Lists</title>
+    <para>To maintain the sanity of the document, only those child
+and sibling nodes are shown which are allowed by the DocBook DTD for that node.</para>
+  </note>
+  </section>
+</article>
